@@ -4,6 +4,8 @@ import Navbar from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
 import OpeningIntro from "@/components/intro/OpeningIntro";
 import MotionProvider from "@/components/MotionProvider";
+import { CartProvider } from "@/contexts/cart/CartProvider";
+import { PromoProvider } from "@/contexts/promo/PromoProvider";
 import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
@@ -63,11 +65,15 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       </head>
       <body className="min-h-full flex flex-col">
         <MotionProvider>
-          <OpeningIntro>
-            <Navbar />
-            {children}
-            <Footer />
-          </OpeningIntro>
+          <CartProvider>
+            <PromoProvider>
+              <OpeningIntro>
+                <Navbar />
+                {children}
+                <Footer />
+              </OpeningIntro>
+            </PromoProvider>
+          </CartProvider>
         </MotionProvider>
       </body>
     </html>
