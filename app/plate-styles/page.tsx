@@ -10,13 +10,13 @@ import {
   SectionHead,
   TrustChips,
 } from "@/components/content/blocks";
-import { PRICES, WARRANTY_MONTHS, gbp, pairPrice, type StyleId } from "@/lib/site";
+import { FROM_PRICE, PRICES, WARRANTY_MONTHS, gbp, pairPrice, type StyleId } from "@/lib/site";
 import c from "@/components/content/content.module.css";
 
 export const metadata: Metadata = {
   title: { absolute: "Number Plate Styles and Prices | ReplacementPlates" },
   description:
-    "Standard, 3D gel, 4D, 5D, Ghost and Bevel number plates, priced per plate from £12.49. Compare finishes and prices, then build your plates online.",
+    `Standard, 3D gel, 4D, 5D, Ghost and Bevel number plates, priced per plate from ${gbp(FROM_PRICE)}. Compare finishes and prices, then build your plates online.`,
   alternates: { canonical: "/plate-styles" },
 };
 
@@ -43,7 +43,7 @@ export default function PlateStylesPage() {
             id="prices-title"
             eyebrow="Price list"
             title="Every style at a glance"
-            sub="All prices are per plate; a pair is two plates (front and rear) at the price shown. Also made to order: motorcycle and oversized plates."
+            sub="“From” prices are for one plate; a pair (front and rear) has its own price, shown alongside. Also made to order: motorcycle and oversized plates."
           />
           <PriceTable />
         </div>

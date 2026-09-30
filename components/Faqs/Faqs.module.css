@@ -94,7 +94,7 @@
   width: 100%;
   max-width: 1520px;
   margin: 0 auto;
-  padding: calc(var(--dusk-h) + 24px) 16px 64px;
+  padding: calc(var(--dusk-h) + 24px) 16px var(--section-y);
 }
 
 /* On small screens the aside dissolves so the list sits between its parts */
@@ -522,7 +522,7 @@
 
   .inner {
     gap: 36px;
-    padding: calc(var(--dusk-h) + 32px) 32px 96px;
+    padding: calc(var(--dusk-h) + 32px) 32px var(--section-y);
   }
 
   .intro {
@@ -593,7 +593,7 @@
     grid-template-columns: minmax(0, 0.92fr) minmax(0, 1fr);
     grid-template-areas: "aside list";
     gap: 56px;
-    padding: calc(var(--dusk-h) + 40px) 48px 120px;
+    padding: calc(var(--dusk-h) + 40px) 48px var(--section-y);
   }
 
   .aside {

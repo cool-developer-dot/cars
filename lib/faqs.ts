@@ -1,4 +1,4 @@
-import { CONTACT, DELIVERY } from "./site";
+import { CONTACT, DELIVERY, DELIVERY_EXAMPLE, FROM_PRICE, gbp } from "./site";
 
 export type FaqLink = { label: string; href: string };
 export type Faq = { id: string; q: string; a: string; links?: FaqLink[] };
@@ -48,7 +48,7 @@ export const HOME_FAQS: Faq[] = [
   {
     id: "per-plate",
     q: "Are the prices per plate or per pair?",
-    a: "Per plate. A “pair” means two plates — front and rear — at the pair price shown on each product page.",
+    a: "“From” prices are per plate. A “pair” means two plates — front and rear — and has its own pair price, shown on each product page.",
     links: [{ label: "See all prices", href: "/plate-styles" }],
   },
   {
@@ -68,7 +68,7 @@ export const FAQ_GROUPS: FaqGroup[] = [
       {
         id: "cost",
         q: "How much do number plates cost?",
-        a: "From £12.49 for one standard plate. A pair is a front and a rear plate.",
+        a: `From ${gbp(FROM_PRICE)} for one standard plate. A pair is a front and a rear plate.`,
         links: [{ label: "Price list", href: "/plate-styles" }],
       },
       {
@@ -113,7 +113,7 @@ export const FAQ_GROUPS: FaqGroup[] = [
       {
         id: "delivery-cost",
         q: "How much is delivery?",
-        a: `${DELIVERY.firstClass} ${DELIVERY.tracked} ${DELIVERY.aims} For example, one £12.49 Standard plate with First Class comes to £15.49 in total. A £24.98 Standard pair qualifies for free First Class, so it stays £24.98; with Tracked 24 it comes to £26.98.`,
+        a: `${DELIVERY.firstClass} ${DELIVERY.tracked} ${DELIVERY.aims} For example, ${DELIVERY_EXAMPLE.charAt(0).toLowerCase()}${DELIVERY_EXAMPLE.slice(1)}`,
         links: [{ label: "Delivery and dispatch", href: "/delivery-collection" }],
       },
       {

@@ -19,6 +19,7 @@ import {
   Truck,
   X,
 } from "lucide-react";
+import { useCart } from "@/contexts/cart/CartProvider";
 import styles from "./Navbar.module.css";
 
 type NavItem = {
@@ -44,6 +45,8 @@ export default function Navbar() {
   const pathname = usePathname();
   const menuId = useId();
   const [open, setOpen] = useState(false);
+  const { count } = useCart();
+  const itemsLabel = `${count} ${count === 1 ? "item" : "items"}`;
 
   const closeMenu = useCallback(() => setOpen(false), []);
   const openMenu = useCallback(() => setOpen(true), []);
@@ -126,11 +129,11 @@ export default function Navbar() {
               <Link
                 href="/cart"
                 className={styles.iconBtn}
-                aria-label="Shopping cart, 0 items"
+                aria-label={`Shopping cart, ${itemsLabel}`}
               >
                 <ShoppingCart aria-hidden="true" strokeWidth={2} />
-                <span className={styles.badge} aria-hidden="true">
-                  0
+                <span className={styles.badge} aria-hidden="true" data-count={count}>
+                  {count}
                 </span>
               </Link>
             </div>
@@ -263,7 +266,7 @@ export default function Navbar() {
             <Link
               href="/cart"
               className={styles.drawerItem}
-              aria-label="My Basket, 0 items"
+              aria-label={`My Basket, ${itemsLabel}`}
               tabIndex={open ? 0 : -1}
               onClick={closeMenu}
             >
@@ -275,7 +278,7 @@ export default function Navbar() {
                 />
                 <span>My Basket</span>
                 <span className={styles.drawerBadge} aria-hidden="true">
-                  0
+                  {count}
                 </span>
               </span>
               <ChevronRight

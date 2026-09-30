@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { m } from "framer-motion";
 import { ArrowRight, MapPin, ShieldCheck, Truck } from "lucide-react";
 import { plateFont } from "@/lib/fonts";
+import { pairPrice } from "@/lib/site";
 import { useHydrationSafeReducedMotion } from "@/lib/useHydrationSafeReducedMotion";
 import {
   BENEFITS,
@@ -13,6 +14,7 @@ import {
   PLATE_STYLES,
   type PlateSide,
 } from "./heroConfig";
+import { builderHref } from "@/components/BuildYourPlate/buildConfig";
 import styles from "./Hero.module.css";
 
 const BENEFIT_ICONS = {
@@ -46,8 +48,10 @@ export default function Hero() {
     [styleId],
   );
 
-  const pairMultiplier = side === "pair" ? 2 : 1;
-  const fromPrice = (selectedStyle.from * pairMultiplier).toFixed(2);
+  // A pair has its own price — it is not two singles
+  const fromPrice = (
+    side === "pair" ? pairPrice(selectedStyle.id) : selectedStyle.from
+  ).toFixed(2);
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 899px)");
@@ -366,7 +370,7 @@ export default function Hero() {
               initial={instant ? false : { opacity: 0, y: 8 }}
               animate={fadeUp(HERO_DELAY.cta, 8, 0.34)}
             >
-              <Link href="/build" className={styles.cta}>
+              <Link href={builderHref(reg, selectedStyle.id)} className={styles.cta}>
                 {show && !instant && (
                   <span
                     className={`${styles.ctaSweep} ${styles.ctaSweepPlay}`}

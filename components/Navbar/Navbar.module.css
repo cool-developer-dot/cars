@@ -313,6 +313,12 @@
   box-shadow: 0 0 6px rgba(30, 143, 255, 0.45);
 }
 
+/* An empty basket keeps the badge quiet */
+.badge[data-count="0"] {
+  background: rgba(120, 150, 190, 0.45);
+  box-shadow: none;
+}
+
 .cta {
   display: none;
   align-items: center;
@@ -752,8 +758,8 @@
   }
 
   .menuBtn {
-    width: 34px;
-    height: 34px;
+    width: 40px;
+    height: 40px;
   }
 
   .logoLink {

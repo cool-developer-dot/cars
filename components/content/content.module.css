@@ -39,7 +39,7 @@
 .hero {
   position: relative;
   isolation: isolate;
-  padding: 120px 0 48px;
+  padding: 112px 0 32px;
 }
 
 .heroPhoto {
@@ -104,7 +104,7 @@
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  margin: 0 0 14px;
+  margin: 0 0 10px;
   font-size: var(--eyebrow-size);
   font-weight: 600;
   letter-spacing: var(--eyebrow-tracking);
@@ -337,7 +337,7 @@ a.chipLink:focus-visible {
 
 .section {
   position: relative;
-  padding: 56px 0;
+  padding: var(--section-y) 0;
 }
 
 .sectionAlt {
@@ -346,7 +346,7 @@ a.chipLink:focus-visible {
 
 .head {
   max-width: 720px;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
 }
 
 .headCenter {
@@ -369,7 +369,7 @@ a.chipLink:focus-visible {
 }
 
 .sub {
-  margin: 14px 0 0;
+  margin: 10px 0 0;
   font-size: 16px;
   line-height: 1.6;
   color: var(--c-text);
@@ -778,11 +778,7 @@ a.cardLink:focus-visible {
   }
 
   .hero {
-    padding: 150px 0 64px;
-  }
-
-  .section {
-    padding: 72px 0;
+    padding: 132px 0 40px;
   }
 
   .grid2 {
@@ -827,10 +823,6 @@ a.cardLink:focus-visible {
   .heroGrid {
     grid-template-columns: minmax(0, 1fr) 400px;
     gap: 56px;
-  }
-
-  .section {
-    padding: 88px 0;
   }
 
   .grid3 {

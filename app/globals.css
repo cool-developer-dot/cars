@@ -43,6 +43,28 @@ html {
   --eyebrow-size: 12px;
   --eyebrow-tracking: 0.26em;
   --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* ——— Vertical rhythm ———
+     One scale for the whole site. --section-y pads the top and bottom of a
+     section, so neighbouring sections sit 2× apart. --band-h is the height
+     of a colour-transition band (dark ↔ light); a band replaces padding
+     rather than adding to it. */
+  --section-y: 32px;
+  --band-h: 56px;
+}
+
+@media (min-width: 700px) {
+  :root {
+    --section-y: 40px;
+    --band-h: 64px;
+  }
+}
+
+@media (min-width: 1100px) {
+  :root {
+    --section-y: 48px;
+    --band-h: 72px;
+  }
 }
 
 body {
