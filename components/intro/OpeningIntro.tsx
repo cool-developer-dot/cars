@@ -88,16 +88,11 @@ export default function OpeningIntro({ children }: Props) {
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
-    // Website stays hidden until large-ring hold finishes
-    const revealTimer = window.setTimeout(() => {
-      setShowWebsite(true);
-    }, TIMING.websiteReveal * 1000);
-
-    // Unmount intro only after crossfade completes
+    // The site (and the hero's entrance) waits until the intro has fully
+    // finished — nothing appears while the rings are still on screen.
     const doneTimer = window.setTimeout(finish, TIMING.complete * 1000);
 
     return () => {
-      window.clearTimeout(revealTimer);
       window.clearTimeout(doneTimer);
       document.body.style.overflow = prevOverflow;
     };
@@ -139,7 +134,11 @@ export default function OpeningIntro({ children }: Props) {
 
       {/* Always painted from the server HTML — no JS needed to see the page.
           On a first visit the opaque intro backdrop covers it, then fades away. */}
-      <div className={styles.siteReveal}>{children}</div>
+      <div
+        className={`${styles.siteReveal} ${phase === "play" ? styles.siteHidden : ""}`}
+      >
+        {children}
+      </div>
     </>
   );
 }

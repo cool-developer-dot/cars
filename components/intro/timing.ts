@@ -5,8 +5,8 @@
  * 1.10–1.25  full white hold
  * 1.25–1.70  ring group scale 1 → 1.9
  * 1.70–1.85  large rings hold
- * 1.85–2.35  rings fade 1 → 0 AND website fades 0 → 1
- * 2.35       intro unmounts
+ * 1.85–2.35  rings + backdrop fade out (site still hidden underneath)
+ * 2.35       intro unmounts; site fades in and the hero entrance starts
  */
 export const TIMING = {
   start: 0,

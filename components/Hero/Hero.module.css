@@ -616,21 +616,25 @@
     gap: 36px;
     align-items: stretch;
     padding: calc(96px + 36px) 24px 56px;
-    padding-left: 8px;
+    /* --side: free space beside the centred 1180px column. The copy and card
+       only lean outward into that space, so 900–1300px screens keep a gutter
+       instead of pushing the headline off-screen. */
+    --side: calc((100vw - 1180px) / 2);
+    padding-left: clamp(8px, calc(24px - var(--side)), 24px);
   }
 
   .copy {
     max-width: 620px;
     align-self: center;
     gap: 20px;
-    transform: translateX(-56px);
+    transform: translateX(calc(-1 * clamp(0px, var(--side) - 16px, 56px)));
   }
 
   .cardSlot {
     justify-self: end;
     align-self: end;
     margin-bottom: 24px;
-    margin-right: -28px;
+    margin-right: calc(-1 * clamp(0px, var(--side) - 4px, 28px));
   }
 
   .bg {

@@ -15,6 +15,14 @@
   flex: 1 1 auto;
   min-height: 100%;
   width: 100%;
+  /* fades in once the intro has finished */
+  transition: opacity 450ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Hidden only while the first-visit intro plays (never in the server HTML) */
+.siteHidden {
+  opacity: 0;
+  transition: none;
 }
 
 .backdrop {
