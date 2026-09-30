@@ -1,6 +1,7 @@
 import { PLATE_STYLES } from "@/components/Hero/heroConfig";
+import { PRICES } from "@/lib/site";
 
-export type PlateFinish = "standard" | "gel" | "acrylic" | "acrylicGel";
+export type PlateFinish = "standard" | "gel" | "acrylic" | "acrylicGel" | "ghost" | "bevel";
 export type PlateFace = "white" | "black" | "yellow";
 
 export type ShowcaseStyle = {
@@ -13,8 +14,7 @@ export type ShowcaseStyle = {
   featured?: boolean;
 };
 
-const priceOf = (id: ShowcaseStyle["id"]) =>
-  PLATE_STYLES.find((s) => s.id === id)?.from ?? 0;
+const priceOf = (id: ShowcaseStyle["id"]) => PRICES[id].single;
 
 export const SHOWCASE_STYLES: ShowcaseStyle[] = [
   {
@@ -49,5 +49,21 @@ export const SHOWCASE_STYLES: ShowcaseStyle[] = [
     from: priceOf("5d"),
     finish: "acrylicGel",
     face: "yellow",
+  },
+  {
+    id: "ghost",
+    title: "Ghost",
+    description: "Smoked, stealth-look characters.",
+    from: priceOf("ghost"),
+    finish: "ghost",
+    face: "yellow",
+  },
+  {
+    id: "bevel",
+    title: "Bevel / Retro",
+    description: "Angled, diamond-cut character edges.",
+    from: priceOf("bevel"),
+    finish: "bevel",
+    face: "white",
   },
 ];

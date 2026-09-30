@@ -18,7 +18,7 @@ import {
   revealV,
 } from "@/lib/motion";
 import { useHydrationSafeReducedMotion } from "@/lib/useHydrationSafeReducedMotion";
-import { PRICES } from "@/lib/site";
+import { PRICES, pairPrice } from "@/lib/site";
 import { SHOWCASE_STYLES, type ShowcaseStyle } from "./plateStylesConfig";
 import styles from "./PlateStyles.module.css";
 
@@ -27,6 +27,8 @@ const FINISH_CLASS = {
   gel: styles.finishGel,
   acrylic: styles.finishAcrylic,
   acrylicGel: styles.finishAcrylicGel,
+  ghost: styles.finishGhost,
+  bevel: styles.finishBevel,
 } as const;
 
 const FACE_CLASS = {
@@ -69,7 +71,7 @@ function ShowcaseCard({
   reduced: boolean;
 }) {
   const [shown, setShown] = useState(false);
-  const pair = item.from * 2;
+  const pair = pairPrice(item.id);
 
   // Cursor-follow spotlight + gentle plate parallax (mouse only)
   const onPointerMove = useCallback(
@@ -222,7 +224,7 @@ export default function PlateStyles() {
               Choose your finish.
             </m.h2>
             <m.p className={styles.subtitle} variants={rv} custom={0.12}>
-              Six premium styles, priced per plate.
+              Six premium styles — single plates or matching pairs.
             </m.p>
           </div>
 
