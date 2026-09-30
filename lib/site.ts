@@ -1,5 +1,9 @@
+import { headlinePrices, type PlateStyleKey } from "./pricing";
+
 /**
  * Confirmed business facts (owner-confirmed 27–28/09/2026).
+ * Prices come from lib/pricing.ts (the client's builder pricing, adopted
+ * 30/09/2026).
  * Every page reads from here so prices, terms and company details
  * never drift apart between sections.
  */
@@ -32,51 +36,43 @@ export const GOV_UK_DOCS_URL =
 
 export type StyleId = "standard" | "3d" | "4d" | "5d" | "ghost" | "bevel";
 
-/** Locked price matrix — price per plate; a pair is two plates. */
-export const PRICES: Record<
-  StyleId,
-  { name: string; what: string; single: number; href: string }
-> = {
-  standard: {
-    name: "Standard",
-    what: "Flat printed characters",
-    single: 12.49,
-    href: "/plate-styles#standard",
-  },
-  "3d": {
-    name: "3D gel",
-    what: "Raised, domed resin characters",
-    single: 19.95,
-    href: "/3d-number-plates",
-  },
-  "4d": {
-    name: "4D",
-    what: "Laser-cut acrylic characters",
-    single: 19.95,
-    href: "/4d-number-plates",
-  },
-  "5d": {
-    name: "5D",
-    what: "Acrylic characters with a gel layer (4D gel)",
-    single: 34.95,
-    href: "/5d-number-plates",
-  },
-  ghost: {
-    name: "Ghost",
-    what: "A distinctive styled character finish",
-    single: 34.95,
-    href: "/plate-styles#ghost",
-  },
-  bevel: {
-    name: "Bevel",
-    what: "Angled, diamond-cut character edges",
-    single: 39.95,
-    href: "/bevel-number-plates",
-  },
+/** Each site style and the key the order backend uses for it */
+export const STYLE_KEY: Record<StyleId, PlateStyleKey> = {
+  standard: "2D",
+  "3d": "3D",
+  "4d": "4D",
+  "5d": "4D + Gel (5D)",
+  ghost: "Ghost",
+  bevel: "Bevel/Retro",
 };
 
+const STYLE_INFO: Record<StyleId, { name: string; what: string; href: string }> = {
+  standard: { name: "Standard", what: "Flat printed characters", href: "/plate-styles#standard" },
+  "3d": { name: "3D gel", what: "Raised, domed resin characters", href: "/3d-number-plates" },
+  "4d": { name: "4D", what: "Laser-cut acrylic characters", href: "/4d-number-plates" },
+  "5d": { name: "5D", what: "Acrylic characters with a gel layer (4D gel)", href: "/5d-number-plates" },
+  ghost: { name: "Ghost", what: "A distinctive styled character finish", href: "/plate-styles#ghost" },
+  bevel: { name: "Bevel", what: "Angled, diamond-cut character edges", href: "/bevel-number-plates" },
+};
+
+/**
+ * Headline prices for a standard-size plate, from the builder's pricing
+ * (lib/pricing.ts). A pair is priced as a pair — it is not two singles.
+ */
+export const PRICES: Record<
+  StyleId,
+  { name: string; what: string; single: number; pair: number; href: string }
+> = Object.fromEntries(
+  (Object.keys(STYLE_INFO) as StyleId[]).map((id) => [
+    id,
+    { ...STYLE_INFO[id], ...headlinePrices(STYLE_KEY[id]) },
+  ]),
+) as Record<StyleId, { name: string; what: string; single: number; pair: number; href: string }>;
+
 export const gbp = (n: number) => `£${n.toFixed(2)}`;
-export const pairPrice = (id: StyleId) => PRICES[id].single * 2;
+export const pairPrice = (id: StyleId) => PRICES[id].pair;
+/** Cheapest single plate on the site — for "from £x" copy */
+export const FROM_PRICE = Math.min(...Object.values(PRICES).map((p) => p.single));
 
 /** Manufacturing-defect warranty, months from delivery/collection */
 export const WARRANTY_MONTHS: Record<StyleId, number> = {
@@ -104,6 +100,10 @@ export const DELIVERY = {
   noBranches:
     "We don't have shops or branches elsewhere — this is our one collection point, and elsewhere we deliver by Royal Mail.",
 } as const;
+
+/** Worked delivery totals from the Standard headline prices (First Class £3 under £15, Tracked 24 +£2) */
+const std = PRICES.standard;
+export const DELIVERY_EXAMPLE = `One ${gbp(std.single)} Standard plate with First Class comes to ${gbp(std.single + 3)} in total. A ${gbp(std.pair)} Standard pair qualifies for free First Class, so it stays ${gbp(std.pair)}; with Tracked 24 it comes to ${gbp(std.pair + 2)}.`;
 
 export const DOCUMENTS = {
   identity: {

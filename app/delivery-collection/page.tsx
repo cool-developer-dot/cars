@@ -3,7 +3,7 @@ import { Calculator, Clock, Globe } from "lucide-react";
 import PageHero from "@/components/content/PageHero";
 import Reveal from "@/components/content/Reveal";
 import { CtaBand, DeliveryBlock, SectionHead, TrustChips } from "@/components/content/blocks";
-import { DELIVERY } from "@/lib/site";
+import { DELIVERY, DELIVERY_EXAMPLE } from "@/lib/site";
 import c from "@/components/content/content.module.css";
 
 export const metadata: Metadata = {
@@ -27,7 +27,7 @@ const DETAILS = [
   {
     Icon: Calculator,
     title: "Example totals",
-    text: "One £12.49 Standard plate with First Class comes to £15.49 in total. A £24.98 Standard pair qualifies for free First Class, so it stays £24.98; with Tracked 24 it comes to £26.98.",
+    text: DELIVERY_EXAMPLE,
   },
 ];
 

@@ -1,5 +1,5 @@
 import type { Faq } from "./faqs";
-import { DELIVERY, type StyleId } from "./site";
+import { DELIVERY, PRICES, gbp, type StyleId } from "./site";
 
 export type ProductContent = {
   id: Extract<StyleId, "3d" | "4d" | "5d" | "bevel">;
@@ -26,6 +26,10 @@ export type ProductContent = {
   faqs: Faq[];
 };
 
+/** Headline single / pair prices, formatted — from lib/site.ts */
+const single = (id: StyleId) => gbp(PRICES[id].single);
+const pair = (id: StyleId) => gbp(PRICES[id].pair);
+
 const COMMON_SIZE =
   "A common standard car-plate size is 520mm × 111mm. Other sizes may be available for some registrations; the builder shows what is offered for this style once you enter your registration.";
 const LEGAL_CORE =
@@ -44,9 +48,9 @@ export const PRODUCTS: Record<ProductContent["id"], ProductContent> = {
   "3d": {
     id: "3d",
     path: "/3d-number-plates",
-    metaTitle: "3D Number Plates from £19.95 | 3D Gel Plates",
+    metaTitle: `3D Number Plates from ${single("3d")} | 3D Gel Plates`,
     metaDescription:
-      "3D gel number plates with raised, domed resin characters, made to order. Single plates from £19.95, pairs from £39.90. Royal Mail delivery or Ilford collection.",
+      `3D gel number plates with raised, domed resin characters, made to order. Single plates from ${single("3d")}, pairs from ${pair("3d")}. Royal Mail delivery or Ilford collection.`,
     short: "3D",
     h1: "3D Number Plates",
     lead: "Raised, domed resin characters — single plates or matching pairs, made to order.",
@@ -87,7 +91,7 @@ export const PRODUCTS: Record<ProductContent["id"], ProductContent> = {
         { label: "Characters", values: ["Domed polyurethane resin over printed characters", "Laser-cut solid acrylic, bonded to the plate"] },
         { label: "Edge", values: ["Rounded, soft", "Sharp, flat-topped"] },
         { label: "Look", values: ["Smooth and glossy", "Crisp and defined"] },
-        { label: "From", values: ["£19.95", "£19.95"] },
+        { label: "From", values: [single("3d"), single("4d")] },
       ],
       note: {
         text: "Looking for a gel finish with the depth of laser-cut acrylic underneath it?",
@@ -115,7 +119,7 @@ export const PRODUCTS: Record<ProductContent["id"], ProductContent> = {
       text: `Wash with car shampoo and a soft cloth; avoid scraping ice or dirt off the raised characters with anything hard. New orders carry a 6-month manufacturing-defect warranty from the delivery or collection date, in addition to your statutory rights. ${WARRANTY_TAIL}`,
     },
     faqs: [
-      { id: "per-plate", q: "Is the £19.95 price per plate or for a pair?", a: "Per plate. A pair (front and rear) is £39.90." },
+      { id: "per-plate", q: `Is the ${single("3d")} price per plate or for a pair?`, a: `Per plate. A pair (front and rear) is ${pair("3d")}.` },
       { id: "legal", q: "Are 3D gel number plates legal in the UK?", a: "Yes, when made correctly — see the legal section above." },
       { id: "one", q: "Can I replace just one 3D plate?", a: "Yes. Order a single front or rear plate in the size of the one you're keeping." },
       { id: "match", q: "Can you match a 3D plate made by another supplier?", a: "We'll match the size and use our 3D gel finish, but an exact visual match to a different manufacturer's plate isn't guaranteed — gel depth and finish vary between suppliers." },
@@ -132,9 +136,9 @@ export const PRODUCTS: Record<ProductContent["id"], ProductContent> = {
   "4d": {
     id: "4d",
     path: "/4d-number-plates",
-    metaTitle: "4D Number Plates from £19.95 | Laser-Cut Acrylic",
+    metaTitle: `4D Number Plates from ${single("4d")} | Laser-Cut Acrylic`,
     metaDescription:
-      "4D number plates with laser-cut acrylic characters, made to order. Single plates from £19.95, pairs from £39.90. Royal Mail delivery or Ilford collection.",
+      `4D number plates with laser-cut acrylic characters, made to order. Single plates from ${single("4d")}, pairs from ${pair("4d")}. Royal Mail delivery or Ilford collection.`,
     short: "4D",
     h1: "4D Number Plates",
     lead: "Laser-cut acrylic characters, bonded to the plate — single plates or matching pairs, made to order.",
@@ -169,7 +173,7 @@ export const PRODUCTS: Record<ProductContent["id"], ProductContent> = {
       rows: [
         { label: "Characters", values: ["Domed resin", "Laser-cut acrylic", "Laser-cut acrylic with a gel top"] },
         { label: "Edge", values: ["Rounded, soft", "Sharp, flat-topped", "Rounded over a sharp base"] },
-        { label: "From", values: ["£19.95", "£19.95", "£34.95"] },
+        { label: "From", values: [single("3d"), single("4d"), single("5d")] },
       ],
       note: {
         text: "Some suppliers call an acrylic-plus-gel finish “4D gel” — on ReplacementPlates that's our 5D product.",
@@ -194,7 +198,7 @@ export const PRODUCTS: Record<ProductContent["id"], ProductContent> = {
       text: `Wash with car shampoo and a soft cloth. New orders carry a 6-month manufacturing-defect warranty from the delivery or collection date, in addition to your statutory rights. ${WARRANTY_TAIL}`,
     },
     faqs: [
-      { id: "per-plate", q: "Is £19.95 per plate or per pair?", a: "Per plate. A pair is £39.90." },
+      { id: "per-plate", q: `Is ${single("4d")} per plate or per pair?`, a: `Per plate. A pair is ${pair("4d")}.` },
       { id: "thickness", q: "What thickness are your 4D characters?", a: "We're confirming the exact specification against our current catalogue and will update this page once it's verified." },
       { id: "gel", q: "What's the difference between 4D acrylic and 4D gel?", a: "Acrylic-only 4D has sharp, flat-topped characters. A gel-topped version — sometimes called 4D gel — is our 5D product.", links: [{ label: "5D plates", href: "/5d-number-plates" }] },
       { id: "legal", q: "Are 4D plates legal? Will they pass an MOT?", a: "They're legal when made to the current rules. Passing an MOT depends on the plate being correctly fitted, clean and undamaged, not just correctly made." },
@@ -210,9 +214,9 @@ export const PRODUCTS: Record<ProductContent["id"], ProductContent> = {
   "5d": {
     id: "5d",
     path: "/5d-number-plates",
-    metaTitle: "5D Number Plates from £34.95 | 4D Gel Plates",
+    metaTitle: `5D Number Plates from ${single("5d")} | 4D Gel Plates`,
     metaDescription:
-      "5D number plates — acrylic characters with a gel top layer, made to order. Single plates from £34.95, pairs from £69.90. Royal Mail delivery or Ilford collection.",
+      `5D number plates — acrylic characters with a gel top layer, made to order. Single plates from ${single("5d")}, pairs from ${pair("5d")}. Royal Mail delivery or Ilford collection.`,
     short: "5D",
     h1: "5D Number Plates",
     lead: "Laser-cut acrylic characters with a gel top layer — also known as 4D gel — single plates or matching pairs.",
@@ -244,7 +248,7 @@ export const PRODUCTS: Record<ProductContent["id"], ProductContent> = {
       rows: [
         { label: "Construction", values: ["Domed resin over printed characters", "Laser-cut acrylic", "Laser-cut acrylic with a gel top"] },
         { label: "Look", values: ["Smooth, glossy", "Sharp, defined", "Combines depth with a glossy top layer"] },
-        { label: "From", values: ["£19.95", "£19.95", "£34.95"] },
+        { label: "From", values: [single("3d"), single("4d"), single("5d")] },
       ],
     },
     sizes: {
@@ -267,7 +271,7 @@ export const PRODUCTS: Record<ProductContent["id"], ProductContent> = {
     faqs: [
       { id: "name", q: "Why do you call it 5D when some sites say 4D gel?", a: "It's our name for an acrylic-plus-gel construction; other suppliers use different terms for similar or different builds. Our specification is described above." },
       { id: "vs3d", q: "How is 5D different from 3D gel?", a: "3D gel domes resin over printed characters. 5D starts with laser-cut acrylic (like 4D) and adds a gel top layer." },
-      { id: "per-plate", q: "Is £34.95 per plate or per pair?", a: "Per plate. A pair is £69.90." },
+      { id: "per-plate", q: `Is ${single("5d")} per plate or per pair?`, a: `Per plate. A pair is ${pair("5d")}.` },
       { id: "match", q: "Can you match another maker's 4D gel plate?", a: "We'll match size and use our own 5D construction; an identical visual match to a plate made by a different supplier isn't guaranteed, as construction varies between manufacturers." },
       { id: "sizes", q: "What sizes are available?", a: "The builder will show what fits your registration once you enter it." },
       { id: "legal", q: "Are 5D plates legal?", a: "Yes, when made to the current rules — see the legal section above." },
@@ -280,9 +284,9 @@ export const PRODUCTS: Record<ProductContent["id"], ProductContent> = {
   bevel: {
     id: "bevel",
     path: "/bevel-number-plates",
-    metaTitle: "Bevel Number Plates from £39.95 | Diamond-Cut",
+    metaTitle: `Bevel Number Plates from ${single("bevel")} | Diamond-Cut`,
     metaDescription:
-      "Bevel number plates with angled, diamond-cut character edges, made to order. Single plates from £39.95, pairs from £79.90. Royal Mail delivery or Ilford collection.",
+      `Bevel number plates with angled, diamond-cut character edges, made to order. Single plates from ${single("bevel")}, pairs from ${pair("bevel")}. Royal Mail delivery or Ilford collection.`,
     short: "Bevel",
     h1: "Bevel Number Plates",
     lead: "Acrylic characters with an angled, diamond-cut edge — single plates or matching pairs.",
@@ -291,7 +295,7 @@ export const PRODUCTS: Record<ProductContent["id"], ProductContent> = {
       heading: "The bevelled edge explained",
       paragraphs: [
         "Bevel — also called bevelled or diamond-cut — characters are acrylic, cut with an angled edge rather than a flat or domed one. The angled edge catches light differently depending on the viewing angle, giving a faceted look.",
-        "This is our highest-priced style.",
+        "It's one of our premium styles — only 5D is priced higher.",
       ],
     },
     replacement: {
@@ -314,7 +318,7 @@ export const PRODUCTS: Record<ProductContent["id"], ProductContent> = {
       rows: [
         { label: "Construction", values: ["Laser-cut acrylic, flat-topped", "Acrylic with a gel top", "Acrylic with an angled, diamond-cut edge"] },
         { label: "Look", values: ["Sharp, defined", "Deep, glossy", "Faceted, catches the light"] },
-        { label: "From", values: ["£19.95", "£34.95", "£39.95"] },
+        { label: "From", values: [single("4d"), single("5d"), single("bevel")] },
       ],
       note: { text: "Bevel describes the angled edge of the characters. It is not a plate shape." },
     },
@@ -337,7 +341,7 @@ export const PRODUCTS: Record<ProductContent["id"], ProductContent> = {
     },
     faqs: [
       { id: "diamond", q: "Is bevel the same as diamond-cut?", a: "Yes — different names for the same angled-edge finish." },
-      { id: "per-plate", q: "Is £39.95 the price per plate or per pair?", a: "Per plate. A pair is £79.90." },
+      { id: "per-plate", q: `Is ${single("bevel")} the price per plate or per pair?`, a: `Per plate. A pair is ${pair("bevel")}.` },
       { id: "vs", q: "How is bevel different from 4D or 5D?", a: "4D has a flat-topped acrylic edge; 5D adds a gel top; bevel is cut with an angled, faceted edge instead." },
       { id: "badge", q: "Can I add a UK, EV or other badge to a Bevel plate?", a: "If your vehicle is eligible, choose the badge option in the builder alongside your Bevel plates." },
       { id: "match", q: "Can you match another supplier's bevel plate?", a: "We'll match it to our own profile; an identical match to a different manufacturer isn't guaranteed." },

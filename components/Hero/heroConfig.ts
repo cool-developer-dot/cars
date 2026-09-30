@@ -1,3 +1,5 @@
+import { PRICES } from "@/lib/site";
+
 export const HERO_EASE = [0.16, 1, 0.3, 1] as const;
 
 /** Delays in seconds from hero reveal start */
@@ -17,13 +19,14 @@ export const HERO_DELAY = {
   price: 1.0,
 } as const;
 
+/** Single-plate "from" prices come from lib/site.ts */
 export const PLATE_STYLES = [
-  { id: "standard", label: "Standard", from: 12.49 },
-  { id: "3d", label: "3D Gel", from: 19.95 },
-  { id: "4d", label: "4D", from: 19.95 },
-  { id: "5d", label: "5D", from: 34.95 },
-  { id: "ghost", label: "Ghost", from: 34.95 },
-  { id: "bevel", label: "Bevel", from: 39.95 },
+  { id: "standard", label: "Standard", from: PRICES.standard.single },
+  { id: "3d", label: "3D Gel", from: PRICES["3d"].single },
+  { id: "4d", label: "4D", from: PRICES["4d"].single },
+  { id: "5d", label: "5D", from: PRICES["5d"].single },
+  { id: "ghost", label: "Ghost", from: PRICES.ghost.single },
+  { id: "bevel", label: "Bevel", from: PRICES.bevel.single },
 ] as const;
 
 export const BENEFITS = [
