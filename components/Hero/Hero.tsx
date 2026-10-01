@@ -1,11 +1,19 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { m } from "framer-motion";
-import { ArrowRight, MapPin, ShieldCheck, Truck } from "lucide-react";
+import {
+  ArrowRight,
+  Car,
+  CarFront,
+  ChevronDown,
+  Columns2,
+  MapPin,
+  ShieldCheck,
+  Truck,
+} from "lucide-react";
 import { plateFont } from "@/lib/fonts";
-import { pairPrice } from "@/lib/site";
+import { FROM_PRICE, pairPrice } from "@/lib/site";
 import { useHydrationSafeReducedMotion } from "@/lib/useHydrationSafeReducedMotion";
 import {
   BENEFITS,
@@ -14,7 +22,11 @@ import {
   PLATE_STYLES,
   type PlateSide,
 } from "./heroConfig";
-import { builderHref } from "@/components/BuildYourPlate/buildConfig";
+import {
+  seedFromHero,
+  useHomeBuilderOptional,
+} from "@/components/home/HomeBuilder";
+import NeonEdge from "@/components/NeonEdge/NeonEdge";
 import styles from "./Hero.module.css";
 
 const BENEFIT_ICONS = {
@@ -22,6 +34,16 @@ const BENEFIT_ICONS = {
   mail: Truck,
   collect: MapPin,
 } as const;
+
+const SIDE_OPTIONS = [
+  { id: "front", label: "Front", Icon: Car },
+  { id: "rear", label: "Rear", Icon: CarFront },
+  { id: "pair", label: "Pair", Icon: Columns2 },
+] as const;
+
+/** Builder dropdown wording; the style names themselves are shared with PlateStyles */
+const optionLabel = (s: (typeof PLATE_STYLES)[number]) =>
+  s.id === "standard" ? "Standard (Legal)" : s.label;
 
 function UkMark() {
   return (
@@ -37,6 +59,7 @@ function UkMark() {
 
 export default function Hero() {
   const reduced = useHydrationSafeReducedMotion();
+  const homeBuilder = useHomeBuilderOptional();
   const [play, setPlay] = useState(false);
   const [side, setSide] = useState<PlateSide>("front");
   const [styleId, setStyleId] = useState<string>(PLATE_STYLES[0].id);
@@ -47,6 +70,15 @@ export default function Hero() {
     () => PLATE_STYLES.find((s) => s.id === styleId) ?? PLATE_STYLES[0],
     [styleId],
   );
+
+  const openHomeBuilder = (nextStyleId = styleId) => {
+    const seed = seedFromHero({ reg, styleId: nextStyleId, side });
+    if (homeBuilder) {
+      homeBuilder.openBuilder(seed);
+      return;
+    }
+    window.location.href = "/#build-your-plate";
+  };
 
   // A pair has its own price — it is not two singles
   const fromPrice = (
@@ -119,6 +151,7 @@ export default function Hero() {
       />
       <div className={styles.bgScrim} aria-hidden="true" />
       <div className={styles.bottomFade} aria-hidden="true" />
+      <NeonEdge play={show} fill="#05101c" spacer={false} />
 
       <div className={styles.inner}>
         <div className={styles.copy}>
@@ -136,16 +169,22 @@ export default function Hero() {
               ease: HERO_EASE,
             }}
           >
-            <span className={styles.badgeDot} aria-hidden="true" />
-            DVLA Registered · RNPS 75449
+            <span className={styles.badgeIcon} aria-hidden="true">
+              <ShieldCheck strokeWidth={2.4} />
+            </span>
+            DVLA-registered number plate supplier (RNPS 75449)
           </m.div>
 
           <h1 className={styles.headline}>
             {(
               [
                 { text: "Replacement", delay: HERO_DELAY.line1 },
-                { text: "number plates,", delay: HERO_DELAY.line2 },
-                { text: "made easy", delay: HERO_DELAY.line3, special: true },
+                { text: "Number Plates", delay: HERO_DELAY.line2 },
+                {
+                  text: `from £${FROM_PRICE.toFixed(2)} per plate`,
+                  delay: HERO_DELAY.line3,
+                  special: true,
+                },
               ] as { text: string; delay: number; special?: boolean }[]
             ).map((line) => (
               <span key={line.text} className={styles.lineMask}>
@@ -200,8 +239,9 @@ export default function Hero() {
             }
             animate={fadeUp(HERO_DELAY.subtitle, y(14, 10), 0.35, true)}
           >
-            Standard, 3D, 4D, 5D, Ghost and Bevel styles — made to order and
-            priced per plate. Royal Mail delivery or Ilford collection.
+            Standard, 3D, 4D, 5D, Ghost and Bevel styles, made to order and
+            priced per plate. Order online for Royal Mail delivery, or collect
+            from our Ilford collection point.
           </m.p>
 
           <ul className={styles.benefits}>
@@ -232,9 +272,11 @@ export default function Hero() {
                     }
                     aria-hidden="true"
                   >
-                    <Icon strokeWidth={2.2} />
+                    <Icon strokeWidth={2} />
                   </span>
-                  {item.label}
+                  <span className={styles.benefitText}>
+                    <strong>{item.title}</strong> {item.detail}
+                  </span>
                 </m.li>
               );
             })}
@@ -276,6 +318,7 @@ export default function Hero() {
             className={styles.card}
             onSubmit={(e) => {
               e.preventDefault();
+              openHomeBuilder();
             }}
           >
             <m.div
@@ -289,6 +332,7 @@ export default function Hero() {
                   <UkMark />
                 </span>
                 UK
+                <ChevronDown size={14} strokeWidth={2.2} aria-hidden="true" />
               </span>
             </m.div>
 
@@ -325,13 +369,7 @@ export default function Hero() {
               initial={instant ? false : { opacity: 0, y: 8 }}
               animate={fadeUp(HERO_DELAY.segment, 8, 0.32)}
             >
-              {(
-                [
-                  { id: "front", label: "Front" },
-                  { id: "rear", label: "Rear" },
-                  { id: "pair", label: "Pair" },
-                ] as const
-              ).map((opt) => (
+              {SIDE_OPTIONS.map((opt) => (
                 <button
                   key={opt.id}
                   type="button"
@@ -339,6 +377,7 @@ export default function Hero() {
                   aria-pressed={side === opt.id}
                   onClick={() => setSide(opt.id)}
                 >
+                  <opt.Icon size={18} strokeWidth={2} aria-hidden="true" />
                   {opt.label}
                 </button>
               ))}
@@ -356,11 +395,16 @@ export default function Hero() {
                 id="hero-style"
                 className={styles.styleSelect}
                 value={styleId}
-                onChange={(e) => setStyleId(e.target.value)}
+                onChange={(e) => {
+                  const next = e.target.value;
+                  setStyleId(next);
+                  // Choosing a style reveals the full homepage builder
+                  openHomeBuilder(next);
+                }}
               >
                 {PLATE_STYLES.map((s) => (
                   <option key={s.id} value={s.id}>
-                    {s.label} — from £{s.from.toFixed(2)}
+                    {optionLabel(s)}
                   </option>
                 ))}
               </select>
@@ -370,21 +414,23 @@ export default function Hero() {
               initial={instant ? false : { opacity: 0, y: 8 }}
               animate={fadeUp(HERO_DELAY.cta, 8, 0.34)}
             >
-              <Link href={builderHref(reg, selectedStyle.id)} className={styles.cta}>
+              <button type="submit" className={styles.cta}>
                 {show && !instant && (
                   <span
                     className={`${styles.ctaSweep} ${styles.ctaSweepPlay}`}
                     aria-hidden="true"
                   />
                 )}
-                <span className={styles.ctaLabel}>Build my plates</span>
+                <span className={styles.ctaLabel}>
+                  Build my plates — from £{fromPrice}
+                </span>
                 <ArrowRight
                   className={styles.ctaLabel}
                   size={16}
                   strokeWidth={2.4}
                   aria-hidden="true"
                 />
-              </Link>
+              </button>
             </m.div>
 
             <m.p

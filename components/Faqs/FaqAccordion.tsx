@@ -5,7 +5,6 @@ import Link from "next/link";
 import { m } from "framer-motion";
 import { ArrowRight, ChevronDown, MessageCircleQuestionMark } from "lucide-react";
 import { cardRevealV, inViewOnce } from "@/lib/motion";
-import { useHydrationSafeReducedMotion } from "@/lib/useHydrationSafeReducedMotion";
 import type { Faq } from "@/lib/faqs";
 import styles from "./Faqs.module.css";
 
@@ -22,7 +21,6 @@ export default function FaqAccordion({
   firstOpen?: boolean;
   className?: string;
 }) {
-  const reduced = useHydrationSafeReducedMotion();
   const [openId, setOpenId] = useState<string | null>(
     firstOpen ? items[0]?.id ?? null : null,
   );
@@ -39,8 +37,9 @@ export default function FaqAccordion({
             key={faq.id}
             className={`${styles.item} ${open ? styles.itemOpen : ""}`}
             custom={Math.min(i, 5)}
-            variants={reduced ? undefined : itemV}
-            {...(reduced ? {} : { ...inViewOnce, viewport: itemViewport })}
+            variants={itemV}
+            {...inViewOnce}
+            viewport={itemViewport}
           >
             <h3 className={styles.qHeading}>
               <button

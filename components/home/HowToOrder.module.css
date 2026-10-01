@@ -1,0 +1,364 @@
+/* Measurements follow the design (≈1312px wide) as vw, capped for big screens */
+
+.section {
+  padding-top: clamp(24px, 2.8vw, 48px);
+  background:
+    radial-gradient(40% 40% at 0% 100%, rgba(10, 100, 255, 0.12), transparent 70%),
+    linear-gradient(180deg, #06111f 0%, #050d18 100%);
+}
+
+/* Blurred night photo top-right + a pale 4D plate lying in the shadows */
+.backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.photo {
+  position: absolute;
+  top: -10%;
+  right: -8%;
+  width: 70%;
+  height: 90%;
+  object-fit: cover;
+  object-position: 70% 40%;
+  opacity: 0.22;
+  filter: blur(10px) saturate(0.8);
+  -webkit-mask-image: radial-gradient(70% 70% at 70% 30%, #000 30%, transparent 75%);
+  mask-image: radial-gradient(70% 70% at 70% 30%, #000 30%, transparent 75%);
+}
+
+.ghostPlate {
+  position: absolute;
+  left: -5%;
+  bottom: 6%;
+  width: min(34vw, 460px);
+  opacity: 0.09;
+  transform: rotate(16deg);
+}
+
+.inner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1552px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+@media (min-width: 560px) {
+  .inner {
+    padding: 0 24px;
+  }
+}
+
+@media (min-width: 900px) {
+  .inner {
+    padding: 0 clamp(28px, 6.3vw, 100px);
+  }
+}
+
+/* ——— Header ——— */
+
+.head {
+  margin-bottom: clamp(20px, 2.3vw, 36px);
+}
+
+.eyebrow {
+  margin-bottom: clamp(12px, 1.4vw, 20px);
+  font-size: clamp(11px, 0.84vw, 13px);
+  letter-spacing: 0.2em;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.8vw, 3.75rem);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.04em;
+  color: #fff;
+}
+
+.sub {
+  max-width: 36em;
+  margin: clamp(10px, 1.1vw, 16px) 0 0;
+  font-size: clamp(15px, 1.22vw, 19px);
+  line-height: 1.5;
+  color: rgba(226, 235, 248, 0.88);
+}
+
+/* ——— Steps ——— */
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 1024px) {
+  .steps {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(14px, 1.83vw, 28px);
+  }
+}
+
+/* Frosted glass card */
+.step {
+  --pad: clamp(14px, 1.25vw, 20px);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: var(--pad) var(--pad) 0;
+  border-radius: clamp(12px, 1.1vw, 16px);
+  background: linear-gradient(165deg, rgba(44, 76, 128, 0.3) 0%, rgba(10, 22, 44, 0.55) 100%);
+  border: 1px solid rgba(110, 165, 255, 0.4);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 0 30px rgba(80, 140, 255, 0.06),
+    0 22px 44px -26px rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px) saturate(130%);
+  -webkit-backdrop-filter: blur(10px) saturate(130%);
+}
+
+@media (min-width: 1024px) {
+  .step {
+    aspect-ratio: 272 / 300;
+  }
+}
+
+.stepTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: clamp(12px, 1.2vw, 18px);
+}
+
+.num {
+  display: grid;
+  place-items: center;
+  width: clamp(38px, 3.5vw, 52px);
+  height: clamp(38px, 3.5vw, 52px);
+  border-radius: 50%;
+  font-size: clamp(17px, 1.55vw, 23px);
+  font-weight: 700;
+  color: #fff;
+  background: radial-gradient(circle at 35% 30%, #3a95ff, #0a52d6 75%);
+  box-shadow:
+    0 0 18px rgba(10, 120, 255, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.stepIcon {
+  display: grid;
+  place-items: center;
+  width: clamp(38px, 3.5vw, 52px);
+  height: clamp(38px, 3.5vw, 52px);
+  border-radius: 50%;
+  color: #9ccaff;
+  background: rgba(12, 28, 56, 0.6);
+  border: 1px solid rgba(110, 165, 255, 0.4);
+}
+
+.stepIcon svg {
+  width: 50%;
+  height: 50%;
+}
+
+.stepTitle {
+  margin: 0 0 clamp(4px, 0.5vw, 8px);
+  font-size: clamp(16px, 1.52vw, 22.5px);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  color: #fff;
+}
+
+.stepText {
+  margin: 0;
+  font-size: clamp(13.5px, 1.14vw, 16.5px);
+  line-height: 1.42;
+  color: rgba(220, 230, 245, 0.84);
+}
+
+/* Illustration fills the card's floor and bleeds off its edges */
+.art {
+  position: relative;
+  flex: 1;
+  min-height: clamp(118px, 11vw, 160px);
+  margin: clamp(10px, 1vw, 16px) calc(-1 * var(--pad)) 0;
+}
+
+.regPanel {
+  position: absolute;
+  left: var(--pad);
+  right: 0;
+  bottom: 18%;
+  display: block;
+  padding: clamp(10px, 1.1vw, 16px) 0 clamp(10px, 1.1vw, 16px) clamp(10px, 1.1vw, 16px);
+  border-radius: 10px 0 0 10px;
+  background: linear-gradient(165deg, rgba(160, 200, 255, 0.12), rgba(60, 100, 170, 0.1));
+  border: 1px solid rgba(140, 190, 255, 0.28);
+  border-right: 0;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.artReg {
+  width: 88%;
+}
+
+.artFan {
+  position: absolute;
+  right: -18%;
+  bottom: -26%;
+  width: 104%;
+}
+
+.artDocs {
+  position: absolute;
+  left: 6%;
+  bottom: -8%;
+  width: 92%;
+}
+
+.artBox {
+  position: absolute;
+  right: -6%;
+  bottom: -4%;
+  width: 96%;
+}
+
+/* ——— CTA ——— */
+
+.btnRow {
+  display: flex;
+  justify-content: center;
+  margin-top: clamp(18px, 1.9vw, 30px);
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: clamp(240px, 21.7vw, 330px);
+  min-height: clamp(52px, 4.7vw, 70px);
+  border-radius: 10px;
+  color: #fff;
+  font-size: clamp(16px, 1.45vw, 21px);
+  font-weight: 500;
+  text-decoration: none;
+  background: linear-gradient(105deg, #0657f0 0%, #0a66ff 55%, #1f80ff 100%);
+  box-shadow:
+    0 0 0 1px rgba(120, 190, 255, 0.25),
+    0 0 26px rgba(10, 110, 255, 0.45),
+    0 14px 28px -12px rgba(0, 80, 255, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1), filter 200ms;
+}
+
+.cta svg {
+  transition: transform 200ms;
+}
+
+.cta:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.07);
+}
+
+.cta:hover svg {
+  transform: translateX(3px);
+}
+
+.cta:focus-visible {
+  outline: 2px solid #8ddcff;
+  outline-offset: 3px;
+}
+
+/* ——— Phones: one card per row, copy left, art right ——— */
+
+@media (max-width: 559px) {
+  .steps {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .step {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 42%;
+    grid-template-rows: auto auto 1fr;
+    column-gap: 10px;
+    padding-bottom: var(--pad);
+  }
+
+  .stepTop,
+  .stepTitle,
+  .stepText {
+    grid-column: 1;
+  }
+
+  .art {
+    grid-column: 2;
+    grid-row: 1 / -1;
+    min-height: 130px;
+    margin: calc(-1 * var(--pad)) calc(-1 * var(--pad)) calc(-1 * var(--pad)) 0;
+    overflow: hidden;
+  }
+
+  .regPanel {
+    left: 0;
+    bottom: auto;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .cta {
+    width: 100%;
+  }
+
+  .ghostPlate {
+    width: 80vw;
+    opacity: 0.07;
+  }
+}
+
+/* ——— Tablet: wider cards, so the art is scaled down to stay on the floor ——— */
+
+@media (min-width: 560px) and (max-width: 1023px) {
+  .art {
+    min-height: 170px;
+    overflow: hidden;
+  }
+
+  .regPanel {
+    bottom: 22%;
+  }
+
+  .artReg {
+    width: 76%;
+  }
+
+  .artFan {
+    right: -8%;
+    bottom: -30%;
+    width: 78%;
+  }
+
+  .artDocs {
+    left: 22%;
+    bottom: -10%;
+    width: 62%;
+  }
+
+  .artBox {
+    right: 10%;
+    bottom: -12%;
+    width: 64%;
+  }
+}

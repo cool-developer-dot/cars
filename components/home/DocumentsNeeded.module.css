@@ -1,0 +1,305 @@
+/* Measurements follow the design (≈1312px wide) as vw, capped for big screens */
+
+.section {
+  scroll-margin-top: 72px;
+  padding-top: clamp(22px, 2.2vw, 36px);
+}
+
+.inner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1552px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+@media (min-width: 560px) {
+  .inner {
+    padding: 0 24px;
+  }
+}
+
+@media (min-width: 900px) {
+  .inner {
+    padding: 0 clamp(28px, 6.4vw, 100px);
+  }
+}
+
+/* ——— Header ——— */
+
+.head {
+  margin-bottom: clamp(16px, 1.6vw, 26px);
+}
+
+.eyebrow {
+  margin-bottom: clamp(10px, 1vw, 16px);
+  font-size: clamp(11px, 0.88vw, 13.5px);
+  letter-spacing: 0.18em;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.7vw, 3.6rem);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+  color: #0a1424;
+}
+
+.sub {
+  margin: clamp(6px, 0.7vw, 12px) 0 0;
+  font-size: clamp(15px, 1.45vw, 21px);
+  line-height: 1.4;
+  color: #1d2b40;
+}
+
+/* ——— Cards ——— */
+
+.grid {
+  display: grid;
+  gap: 14px;
+}
+
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(16px, 2vw, 30px);
+  }
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: clamp(18px, 1.85vw, 28px) clamp(18px, 1.85vw, 28px) 0;
+  border-radius: clamp(14px, 1.1vw, 18px);
+  background: linear-gradient(170deg, rgba(255, 255, 255, 0.97) 0%, rgba(247, 250, 255, 0.94) 100%);
+  border: 1px solid rgba(16, 42, 84, 0.06);
+  box-shadow:
+    inset 0 1px 0 #fff,
+    0 22px 44px -26px rgba(18, 52, 110, 0.36),
+    0 2px 6px rgba(18, 52, 110, 0.04);
+}
+
+.cardHead {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(14px, 1.7vw, 26px);
+}
+
+.num {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: clamp(38px, 3.2vw, 50px);
+  height: clamp(38px, 3.2vw, 50px);
+  border-radius: 10px;
+  font-size: clamp(16px, 1.45vw, 22px);
+  font-weight: 700;
+  color: #0a5cff;
+  background: linear-gradient(160deg, #eaf2ff 0%, #dbe8ff 100%);
+  box-shadow: inset 0 0 0 1px rgba(10, 92, 255, 0.08);
+}
+
+.cardTitle {
+  margin: clamp(4px, 0.55vw, 9px) 0 clamp(8px, 0.9vw, 14px);
+  font-size: clamp(16.5px, 1.4vw, 21px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #0a1424;
+}
+
+.cardText {
+  margin: 0;
+  font-size: clamp(13.5px, 1.1vw, 16.5px);
+  line-height: 1.45;
+  color: #1d2b40;
+}
+
+/* Checklist left, documents right — sharing the card's floor */
+.cardFoot {
+  position: relative;
+  margin-top: auto;
+  padding-top: clamp(12px, 1.4vw, 22px);
+}
+
+.checks {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: clamp(8px, 0.85vw, 12px);
+  margin: 0;
+  padding: 0 0 clamp(18px, 2vw, 30px);
+  list-style: none;
+}
+
+.checks li {
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 1.3vw, 18px);
+  font-size: clamp(13.5px, 1.1vw, 16.5px);
+  line-height: 1.35;
+  color: #1d2b40;
+}
+
+.checks svg {
+  flex-shrink: 0;
+  width: clamp(18px, 1.5vw, 22px);
+  height: clamp(18px, 1.5vw, 22px);
+  color: #fff;
+  fill: #1e6bff;
+}
+
+/* Documents fan out from the card's bottom-right corner */
+.art {
+  position: absolute;
+  right: calc(-1 * clamp(4px, 1vw, 16px));
+  bottom: -9%;
+  width: 52%;
+}
+
+/* ——— Footer row ——— */
+
+.foot {
+  display: grid;
+  gap: 12px;
+  margin-top: clamp(14px, 1.6vw, 22px);
+}
+
+@media (min-width: 900px) {
+  .foot {
+    grid-template-columns: minmax(0, 640fr) minmax(0, 486fr);
+    align-items: stretch;
+    gap: clamp(16px, 1.6vw, 24px);
+  }
+}
+
+.govCard {
+  display: flex;
+  align-items: center;
+  gap: clamp(14px, 2.3vw, 34px);
+  padding: clamp(12px, 1.2vw, 18px) clamp(16px, 1.6vw, 24px);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(16, 42, 84, 0.06);
+  box-shadow: 0 14px 30px -20px rgba(18, 52, 110, 0.3);
+}
+
+.govIcon {
+  flex-shrink: 0;
+  width: clamp(22px, 1.9vw, 28px);
+  height: clamp(22px, 1.9vw, 28px);
+  color: #0a5cff;
+}
+
+.govText {
+  margin: 0;
+  font-size: clamp(13.5px, 1.1vw, 16.5px);
+  line-height: 1.45;
+  color: #1d2b40;
+}
+
+.ext {
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  margin-left: 4px;
+  vertical-align: -1px;
+}
+
+.btnWrap {
+  display: flex;
+}
+
+.fullBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  min-height: clamp(52px, 4.4vw, 66px);
+  border-radius: 10px;
+  color: #fff;
+  font-size: clamp(16px, 1.36vw, 20px);
+  font-weight: 500;
+  text-decoration: none;
+  background: linear-gradient(105deg, #0657f0 0%, #0a66ff 55%, #1f80ff 100%);
+  box-shadow:
+    0 14px 28px -12px rgba(0, 80, 255, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1), filter 200ms;
+}
+
+.fullBtn svg {
+  transition: transform 200ms;
+}
+
+.fullBtn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.07);
+}
+
+.fullBtn:hover svg {
+  transform: translateX(3px);
+}
+
+.fullBtn:focus-visible {
+  outline: 2px solid #0a5cff;
+  outline-offset: 3px;
+}
+
+/* ——— Tablets + phones: art sits beside the checklist instead ——— */
+
+@media (max-width: 899px) {
+  .cardFoot {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 40%);
+    align-items: end;
+  }
+
+  .art {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    width: 100%;
+    max-width: 300px;
+    justify-self: end;
+    margin: 0 -14px -6% 0;
+  }
+}
+
+/* ——— Phones ——— */
+
+@media (max-width: 559px) {
+  /* Number + title on one row, description full width below */
+  .cardHead {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 6px 12px;
+  }
+
+  .cardHead > div {
+    display: contents;
+  }
+
+  .cardTitle {
+    margin: 0;
+  }
+
+  .cardText {
+    grid-column: 1 / -1;
+    margin-top: 6px;
+  }
+
+  .cardFoot {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 44%);
+  }
+
+  .checks {
+    padding-bottom: 18px;
+  }
+}

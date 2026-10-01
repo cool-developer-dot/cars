@@ -1,0 +1,192 @@
+/* Height comes from --neon-edge-h on the section, so a host can resize it */
+.edge,
+.spacer {
+  --h: var(--neon-edge-h, clamp(44px, 6vw, 92px));
+}
+
+.spacer {
+  height: var(--h);
+}
+
+.edge {
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  z-index: 3;
+  height: var(--h);
+  pointer-events: none;
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.halo,
+.glow,
+.core,
+.sparkLine {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.halo {
+  stroke: rgba(20, 120, 255, 0.22);
+  stroke-width: 12px;
+}
+
+.glow {
+  stroke: rgba(40, 150, 255, 0.55);
+  stroke-width: 4px;
+}
+
+.core {
+  stroke-width: 1.75px;
+}
+
+/* The lit lines; revealed with a clip so the glow draws in left → right.
+   Hidden until played. */
+.lines {
+  filter:
+    drop-shadow(0 0 3px rgba(120, 200, 255, 0.9))
+    drop-shadow(0 0 12px rgba(10, 132, 255, 0.65))
+    drop-shadow(0 0 28px rgba(10, 110, 255, 0.35));
+  clip-path: inset(-80px 100% -80px 0);
+}
+
+/* A bright spark that keeps travelling along the line: a white copy of the
+   line seen through a narrow sliding mask */
+.spark {
+  opacity: 0;
+  filter:
+    drop-shadow(0 0 4px rgba(200, 240, 255, 0.95))
+    drop-shadow(0 0 12px rgba(40, 150, 255, 0.8));
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 50%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, #000 50%, transparent 100%);
+  -webkit-mask-size: 14% 100%;
+  mask-size: 14% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: -20% 0;
+  mask-position: -20% 0;
+}
+
+.sparkLine {
+  stroke: #f2fbff;
+  stroke-width: 2.5px;
+}
+
+/* Bloom where the two lines meet */
+.bloom {
+  position: absolute;
+  left: 71.5%;
+  bottom: 0;
+  width: min(46vw, 640px);
+  height: calc(var(--h) * 1.6);
+  transform: translate(-50%, 35%);
+  border-radius: 50%;
+  opacity: 0;
+  background: radial-gradient(
+    closest-side,
+    rgba(60, 160, 255, 0.34),
+    rgba(10, 100, 255, 0.12) 55%,
+    transparent 100%
+  );
+  filter: blur(6px);
+}
+
+/* On a pale section the wide halo turns muddy: keep the line tighter and
+   more saturated instead */
+.light .halo {
+  stroke: rgba(20, 110, 255, 0.12);
+}
+
+.light .glow {
+  stroke: rgba(20, 120, 255, 0.5);
+}
+
+.light .core {
+  stroke-width: 2.25px;
+}
+
+.light .sparkLine {
+  stroke: #7cc4ff;
+}
+
+.light .lines {
+  filter:
+    drop-shadow(0 0 2px rgba(60, 160, 255, 0.9))
+    drop-shadow(0 0 10px rgba(10, 120, 255, 0.45));
+}
+
+.light .bloom {
+  background: radial-gradient(
+    closest-side,
+    rgba(60, 150, 255, 0.22),
+    rgba(10, 100, 255, 0.06) 55%,
+    transparent 100%
+  );
+}
+
+.play .lines {
+  animation: draw 1.3s var(--ease) 0.2s forwards;
+}
+
+.play .bloom {
+  animation: fadeIn 1.2s var(--ease) 0.75s forwards;
+}
+
+.live .spark {
+  animation: spark 5.5s cubic-bezier(0.45, 0, 0.25, 1) 1.5s infinite;
+}
+
+.still .lines {
+  clip-path: none;
+}
+
+.still .bloom {
+  opacity: 1;
+}
+
+@keyframes draw {
+  to {
+    clip-path: inset(-80px -40px -80px 0);
+  }
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes spark {
+  0% {
+    opacity: 0;
+    -webkit-mask-position: -20% 0;
+    mask-position: -20% 0;
+  }
+  8%,
+  62% {
+    opacity: 1;
+  }
+  72%,
+  100% {
+    opacity: 0;
+    -webkit-mask-position: 120% 0;
+    mask-position: 120% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spark {
+    display: none;
+  }
+}

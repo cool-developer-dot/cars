@@ -1,0 +1,426 @@
+/* Measurements follow the design (≈1140px wide) as vw, capped for big screens */
+
+.section {
+  /* Continues the light band from styles — keep the seam tight */
+  padding-top: clamp(16px, 2vw, 32px);
+}
+
+.inner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1552px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+@media (min-width: 560px) {
+  .inner {
+    padding: 0 24px;
+  }
+}
+
+@media (min-width: 900px) {
+  .inner {
+    padding: 0 clamp(28px, 4.4vw, 68px);
+  }
+}
+
+/* ——— Header ——— */
+
+.head {
+  margin-bottom: clamp(14px, 1.8vw, 26px);
+}
+
+.eyebrow {
+  margin-bottom: clamp(10px, 1.2vw, 18px);
+  font-size: clamp(11px, 1vw, 14.5px);
+  letter-spacing: 0.2em;
+}
+
+.eyebrow::before {
+  width: clamp(32px, 3.6vw, 56px);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4.2vw, 4rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: #0a1424;
+}
+
+.accent {
+  color: #0a5cff;
+}
+
+.sub {
+  max-width: 40em;
+  margin: clamp(10px, 1.1vw, 16px) 0 0;
+  font-size: clamp(15px, 1.45vw, 21px);
+  line-height: 1.55;
+  color: #1d2b40;
+}
+
+/* ——— Cards ——— */
+
+.grid {
+  display: grid;
+  gap: 14px;
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    /* delivery | collection | room for the shopfront to bleed into */
+    grid-template-columns: minmax(0, 545fr) minmax(0, 390fr) minmax(0, 90fr);
+    gap: clamp(16px, 1.9vw, 28px);
+  }
+}
+
+.card {
+  position: relative;
+  border-radius: clamp(14px, 1.2vw, 18px);
+  background: linear-gradient(170deg, rgba(255, 255, 255, 0.97) 0%, rgba(247, 250, 255, 0.94) 100%);
+  border: 1px solid rgba(16, 42, 84, 0.06);
+  box-shadow:
+    inset 0 1px 0 #fff,
+    0 22px 44px -26px rgba(18, 52, 110, 0.38),
+    0 2px 6px rgba(18, 52, 110, 0.04);
+}
+
+.cardBody {
+  position: relative;
+  z-index: 1;
+  padding: clamp(18px, 1.95vw, 30px);
+}
+
+.cardHead {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(14px, 1.75vw, 26px);
+  margin-bottom: clamp(16px, 1.7vw, 26px);
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: clamp(48px, 5.1vw, 76px);
+  height: clamp(48px, 5.1vw, 76px);
+  border-radius: 50%;
+  color: #0a5cff;
+  background: linear-gradient(160deg, #e9f1ff 0%, #d8e6ff 100%);
+  box-shadow: inset 0 0 0 1px rgba(10, 92, 255, 0.08);
+}
+
+.icon svg {
+  width: 52%;
+  height: 52%;
+}
+
+.pin {
+  color: #e5384b;
+  background: linear-gradient(160deg, #eef3fb 0%, #dfe8f6 100%);
+}
+
+.cardTitle {
+  margin: clamp(2px, 0.5vw, 8px) 0 clamp(4px, 0.5vw, 8px);
+  font-size: clamp(17px, 1.75vw, 25px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #0a1424;
+}
+
+.cardSub {
+  margin: 0;
+  font-size: clamp(13px, 1.19vw, 17px);
+  line-height: 1.45;
+  color: #2b3a50;
+}
+
+.checks {
+  display: grid;
+  gap: clamp(8px, 0.9vw, 13px);
+  margin: 0;
+  padding: 0 0 0 clamp(2px, 0.5vw, 8px);
+  list-style: none;
+}
+
+.checks li {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(12px, 1.9vw, 28px);
+  font-size: clamp(13.5px, 1.19vw, 17px);
+  line-height: 1.4;
+  color: #1d2b40;
+}
+
+.checks svg {
+  flex-shrink: 0;
+  width: clamp(18px, 1.6vw, 22px);
+  height: clamp(18px, 1.6vw, 22px);
+  color: #fff;
+  fill: #1e6bff;
+  stroke-width: 2.2;
+}
+
+.checks small {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.9em;
+  color: #46566c;
+}
+
+.note {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(12px, 1.6vw, 22px);
+  margin: clamp(14px, 1.6vw, 22px) 0 0;
+  padding: clamp(12px, 1.2vw, 16px) clamp(14px, 1.7vw, 24px);
+  border-radius: 12px;
+  font-size: clamp(13px, 1.19vw, 16.5px);
+  line-height: 1.45;
+  color: #1d2b40;
+  background: linear-gradient(160deg, #e6effc 0%, #dce8f9 100%);
+}
+
+.note svg {
+  flex-shrink: 0;
+  width: clamp(22px, 2.3vw, 30px);
+  height: clamp(22px, 2.3vw, 30px);
+  color: #1d3b66;
+}
+
+/* ——— Royal Mail card ——— */
+
+.deliveryCard {
+  overflow: hidden;
+}
+
+.deliveryCard .cardBody {
+  max-width: 92%;
+}
+
+/* Copy stays left of the van, as in the design */
+.deliveryCard .cardHead {
+  max-width: 78%;
+}
+
+.deliveryCard .checks {
+  max-width: 90%;
+}
+
+.deliveryCard .note {
+  max-width: 92%;
+}
+
+/* Van fades into the card from the top-right corner */
+.van {
+  position: absolute;
+  right: -12%;
+  top: 1%;
+  width: 54%;
+  pointer-events: none;
+  opacity: 0.92;
+  -webkit-mask-image:
+    linear-gradient(90deg, transparent 0%, #000 45%),
+    linear-gradient(180deg, #000 55%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(90deg, transparent 0%, #000 45%),
+    linear-gradient(180deg, #000 55%, transparent 100%);
+  mask-composite: intersect;
+}
+
+/* ——— Ilford card ——— */
+
+.collectCard {
+  z-index: 1;
+}
+
+.collectBody {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.collectBody .cardHead,
+.collectChecks {
+  max-width: 78%;
+}
+
+.collectChecks {
+  padding-left: clamp(8px, 1.4vw, 20px);
+  margin-bottom: clamp(18px, 2.2vw, 32px);
+}
+
+.whatsapp {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: min(100%, 420px);
+  min-height: clamp(48px, 4.3vw, 62px);
+  margin-top: auto;
+  padding: 0 18px;
+  border-radius: 10px;
+  color: #fff;
+  font-size: clamp(14.5px, 1.4vw, 19.5px);
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  background: linear-gradient(105deg, #0657f0 0%, #0a66ff 60%, #1f7cff 100%);
+  box-shadow:
+    0 14px 28px -12px rgba(0, 80, 255, 0.65),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1), filter 200ms;
+}
+
+.whatsapp svg {
+  width: 1.2em;
+  height: 1.2em;
+  flex-shrink: 0;
+}
+
+.whatsapp:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.07);
+}
+
+.whatsapp:focus-visible {
+  outline: 2px solid #0a5cff;
+  outline-offset: 3px;
+}
+
+/* Desktop: the shopfront bleeds out past the card's top and right edge */
+.collectCard .store {
+  position: absolute;
+  left: 70%;
+  top: -22%;
+  width: 60%;
+  aspect-ratio: 0.82;
+  border-radius: 0;
+  box-shadow: none;
+  pointer-events: none;
+  -webkit-mask-image:
+    linear-gradient(90deg, transparent 0%, #000 34%),
+    linear-gradient(180deg, transparent 0%, #000 10%, #000 70%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(90deg, transparent 0%, #000 34%),
+    linear-gradient(180deg, transparent 0%, #000 10%, #000 70%, transparent 100%);
+  mask-composite: intersect;
+}
+
+/* ——— Info bar ——— */
+
+.infoBar {
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 2vw, 26px);
+  margin: clamp(12px, 1.6vw, 24px) 0 0;
+  padding: clamp(12px, 1.3vw, 18px) clamp(16px, 1.9vw, 26px);
+  border-radius: 12px;
+  font-size: clamp(13.5px, 1.19vw, 17px);
+  line-height: 1.45;
+  color: #1d2b40;
+  background: linear-gradient(90deg, rgba(220, 232, 249, 0.85) 0%, rgba(228, 238, 252, 0.7) 100%);
+  border: 1px solid rgba(16, 42, 84, 0.04);
+}
+
+.infoBar svg {
+  flex-shrink: 0;
+  width: clamp(22px, 2.3vw, 30px);
+  height: clamp(22px, 2.3vw, 30px);
+  color: #1d3b66;
+}
+
+/* ——— Tablet: cards stack, art stays inside its card ——— */
+
+@media (max-width: 1023px) {
+  .collectCard {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 38%);
+    overflow: hidden;
+  }
+
+  .collectCard .store {
+    position: relative;
+    left: auto;
+    top: auto;
+    grid-column: 2;
+    grid-row: 1;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: auto;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 30%);
+    mask-image: linear-gradient(90deg, transparent 0%, #000 30%);
+  }
+
+  .collectBody {
+    grid-column: 1;
+    grid-row: 1;
+    min-height: 0;
+  }
+
+  .collectBody .cardHead,
+  .collectChecks {
+    max-width: none;
+  }
+
+  .whatsapp {
+    margin-top: 20px;
+  }
+
+  .van {
+    width: 40%;
+    max-width: 340px;
+  }
+}
+
+/* ——— Phones: art becomes a banner on top of each card ——— */
+
+@media (max-width: 559px) {
+  .deliveryCard,
+  .collectCard {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .van {
+    position: relative;
+    right: auto;
+    top: auto;
+    width: 62%;
+    margin: 12px -8% -22px auto;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 30%);
+    mask-image: linear-gradient(90deg, transparent 0%, #000 30%);
+  }
+
+  .deliveryCard .cardBody,
+  .deliveryCard .cardHead {
+    max-width: none;
+  }
+
+  .collectCard .store {
+    order: -1;
+    flex: none;
+    width: 100%;
+    height: clamp(170px, 50vw, 230px);
+    aspect-ratio: auto;
+    -webkit-mask-image: linear-gradient(180deg, #000 65%, transparent 100%);
+    mask-image: linear-gradient(180deg, #000 65%, transparent 100%);
+  }
+
+  .whatsapp {
+    width: 100%;
+  }
+
+  .infoBar {
+    align-items: flex-start;
+  }
+}
