@@ -30,9 +30,9 @@ export const PLATE_STYLES = [
 ] as const;
 
 export const BENEFITS = [
-  { id: "dvla", label: "DVLA Registered" },
-  { id: "mail", label: "Royal Mail Delivery" },
-  { id: "collect", label: "Collection Available" },
+  { id: "dvla", title: "DVLA-registered", detail: "number plate supplier (RNPS 75449)" },
+  { id: "mail", title: "Royal Mail delivery,", detail: "UK-wide" },
+  { id: "collect", title: "Collection", detail: "available in Ilford" },
 ] as const;
 
 export type PlateSide = "front" | "rear" | "pair";

@@ -4,26 +4,26 @@ import Link from "next/link";
 import { m } from "framer-motion";
 import { ArrowRight, MapPin, ShieldCheck, Truck } from "lucide-react";
 import { cardRevealV, inViewOnce, revealV } from "@/lib/motion";
-import { useHydrationSafeReducedMotion } from "@/lib/useHydrationSafeReducedMotion";
 import HeroPhoto from "@/components/HeroPhoto";
 import { HOME_FAQS } from "@/lib/faqs";
 import { COMPANY } from "@/lib/site";
 import FaqAccordion from "./FaqAccordion";
 import styles from "./Faqs.module.css";
+import NeonEdge from "@/components/NeonEdge/NeonEdge";
 
 const TRUST = [
-  { Icon: ShieldCheck, title: "DVLA-registered", text: `RNPS ${COMPANY.rnps}` },
-  { Icon: Truck, title: "Royal Mail", text: "Free First Class from £15" },
+  { Icon: ShieldCheck, title: "DVLA-registered supplier", text: `(RNPS ${COMPANY.rnps})` },
+  { Icon: Truck, title: "Royal Mail delivery", text: "UK-wide" },
   { Icon: MapPin, title: "Ilford collection", text: "Ready within 3 hours" },
 ];
 
 const itemV = cardRevealV(0.08);
 
 export default function Faqs() {
-  const reduced = useHydrationSafeReducedMotion();
-
-  const inView = reduced ? {} : inViewOnce;
-  const rv = reduced ? undefined : revealV;
+  // Always animate: MotionConfig handles reduced motion. Dropping the
+  // variants after hydration left the content stuck at its hidden state.
+  const inView = inViewOnce;
+  const rv = revealV;
 
   return (
     <section
@@ -62,7 +62,7 @@ export default function Faqs() {
             >
               Got questions?
               <br />
-              <span className={styles.titleAccent}>We’ve got</span> answers.
+              <span className={styles.titleAccent}>We’ve got answers.</span>
             </m.h2>
             <m.p className={styles.intro} variants={rv} custom={0.14}>
               Quick answers on delivery, collection, documents and prices.
@@ -73,9 +73,10 @@ export default function Faqs() {
 
           <m.div
             className={styles.showcase}
-            variants={reduced ? undefined : itemV}
+            variants={itemV}
             custom={2}
-            {...(reduced ? {} : { ...inViewOnce, viewport: { once: true, amount: 0.2 } })}
+            {...inViewOnce}
+            viewport={{ once: true, amount: 0.2 }}
           >
             <div className={styles.photoWrap}>
               <HeroPhoto
@@ -108,6 +109,8 @@ export default function Faqs() {
           </Link>
         </div>
       </div>
+      {/* Into Get started (light) */}
+      <NeonEdge fill="#f3f7fb" />
     </section>
   );
 }
