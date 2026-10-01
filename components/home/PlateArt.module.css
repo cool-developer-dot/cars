@@ -1,0 +1,217 @@
+/* Everything is measured in cqw of .wrap, so the plate scales as one piece */
+.wrap {
+  display: block;
+  container-type: inline-size;
+  width: 100%;
+}
+
+.plate {
+  --edge: #b8c0ca;
+  --edge-dark: #8b949f;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100cqw;
+  aspect-ratio: 520 / 111;
+  border-radius: 2.2cqw;
+  overflow: hidden;
+  box-shadow:
+    0 0.35cqw 0 var(--edge),
+    0 0.7cqw 0 var(--edge-dark),
+    0 4cqw 6cqw -1cqw rgba(0, 0, 0, 0.45);
+}
+
+.white {
+  background: linear-gradient(168deg, #ffffff 0%, #f3f6f9 35%, #dfe5ec 75%, #cfd6df 100%);
+}
+
+.yellow {
+  --edge: #c99a00;
+  --edge-dark: #8f6c00;
+  background: linear-gradient(168deg, #ffe45f 0%, #fcd20d 32%, #f2bb00 72%, #dca300 100%);
+}
+
+
+/* UK identifier */
+.band {
+  position: absolute;
+  inset: 0 auto 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1cqw;
+  width: 9.5cqw;
+  background: #003399;
+  color: #fff;
+  font-size: 3.4cqw;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.band svg {
+  width: 5.6cqw;
+  height: auto;
+}
+
+.start {
+  justify-content: flex-start;
+  padding-left: 5cqw;
+}
+
+.band ~ .chars {
+  margin-left: 9.5cqw;
+}
+
+.chars {
+  display: grid;
+  font-size: 17cqw;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  transform: translateY(2%);
+}
+
+.base,
+.gloss {
+  grid-area: 1 / 1;
+}
+
+.base {
+  color: #0c0d0f;
+}
+
+.gloss {
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.sheen {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    112deg,
+    rgba(255, 255, 255, 0) 18%,
+    rgba(255, 255, 255, 0.4) 27%,
+    rgba(255, 255, 255, 0.06) 36%,
+    rgba(255, 255, 255, 0) 46%
+  );
+  box-shadow:
+    inset 0 0.3cqw 0 rgba(255, 255, 255, 0.7),
+    inset 0 -0.25cqw 0 rgba(0, 0, 0, 0.12);
+}
+
+
+/* ——— Finishes ——— */
+
+.standard .base {
+  color: #111214;
+}
+
+.standard .gloss {
+  display: none;
+}
+
+.gel .base {
+  color: #050506;
+  text-shadow:
+    0 0.2cqw 0 #000,
+    0 0.45cqw 0 #000,
+    0.2cqw 0.9cqw 0.8cqw rgba(0, 0, 0, 0.45);
+}
+
+.gel .gloss {
+  background-image: linear-gradient(
+    172deg,
+    rgba(255, 255, 255, 0.62) 0%,
+    rgba(255, 255, 255, 0.14) 28%,
+    rgba(255, 255, 255, 0) 46%,
+    rgba(255, 255, 255, 0) 78%,
+    rgba(255, 255, 255, 0.2) 100%
+  );
+}
+
+.acrylic .base {
+  color: #0b0c0e;
+  text-shadow:
+    0 0.25cqw 0 #2a2e34,
+    0 0.5cqw 0 #1d2025,
+    0 0.75cqw 0 #121418,
+    0.3cqw 1.5cqw 1.2cqw rgba(0, 0, 0, 0.45);
+}
+
+.acrylic .gloss {
+  background-image: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.22) 0%,
+    rgba(255, 255, 255, 0) 30%,
+    rgba(255, 255, 255, 0) 100%
+  );
+}
+
+.acrylicGel .base {
+  color: #060607;
+  text-shadow:
+    0 0.25cqw 0 #111,
+    0 0.5cqw 0 #0b0b0b,
+    0 0.75cqw 0 #000,
+    0.3cqw 1.5cqw 1.2cqw rgba(60, 40, 0, 0.55);
+}
+
+.acrylicGel .gloss {
+  background-image: linear-gradient(
+    172deg,
+    rgba(255, 255, 255, 0.55) 0%,
+    rgba(255, 255, 255, 0.12) 26%,
+    rgba(255, 255, 255, 0) 44%,
+    rgba(255, 255, 255, 0) 80%,
+    rgba(255, 240, 200, 0.22) 100%
+  );
+}
+
+.ghost .base {
+  color: #1f2328;
+  text-shadow:
+    0 0.25cqw 0 #0d0f12,
+    0 0.5cqw 0 #060708,
+    0.2cqw 1cqw 1cqw rgba(0, 0, 0, 0.5);
+}
+
+.ghost .gloss {
+  background-image: linear-gradient(
+    172deg,
+    rgba(255, 255, 255, 0.34) 0%,
+    rgba(255, 255, 255, 0.06) 30%,
+    rgba(255, 255, 255, 0) 50%,
+    rgba(120, 170, 255, 0.14) 100%
+  );
+}
+
+.bevel .base {
+  color: #0b0c0e;
+  -webkit-text-stroke: 0.3cqw #3a3f47;
+  text-shadow:
+    0 0.25cqw 0 #24272c,
+    0 0.5cqw 0 #15171a,
+    0.3cqw 1.4cqw 1cqw rgba(0, 0, 0, 0.5);
+}
+
+.bevel .gloss {
+  background-image:
+    linear-gradient(
+      118deg,
+      rgba(255, 255, 255, 0) 44%,
+      rgba(255, 255, 255, 0.55) 48%,
+      rgba(255, 255, 255, 0) 53%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(210, 218, 228, 0.5) 0%,
+      rgba(150, 158, 170, 0.22) 46%,
+      rgba(0, 0, 0, 0) 52%,
+      rgba(255, 255, 255, 0.1) 100%
+    );
+}

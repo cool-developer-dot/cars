@@ -1,0 +1,200 @@
+/* Measurements follow the design (≈1312px wide) as vw, capped for big screens */
+
+.section {
+  padding-top: clamp(22px, 2.6vw, 40px);
+  background:
+    radial-gradient(40% 50% at 0% 30%, rgba(10, 90, 220, 0.12), transparent 70%),
+    linear-gradient(180deg, #06111f 0%, #050d18 100%);
+}
+
+/* Close-up of the hero car's rear plate, fading into the navy */
+.photoBox {
+  position: relative;
+  height: clamp(170px, 46vw, 300px);
+  margin: calc(-1 * clamp(22px, 2.6vw, 40px)) 0 4px;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(180deg, #000 55%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 55%, transparent 100%);
+}
+
+.photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 76% 42%;
+  transform: scale(2.1) rotate(-6deg);
+  transform-origin: 76% 42%;
+}
+
+.grid {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: 20px;
+  width: 100%;
+  max-width: 1552px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+@media (min-width: 560px) {
+  .grid {
+    padding: 0 24px;
+  }
+}
+
+.copy .lead {
+  max-width: 44em;
+  font-size: clamp(14.5px, 1.15vw, 17px);
+  line-height: 1.5;
+  color: rgba(232, 239, 250, 0.9);
+}
+
+.copy .lead + .lead {
+  margin-top: clamp(10px, 1.1vw, 16px);
+}
+
+.copy .lead:first-of-type {
+  margin-top: clamp(12px, 1.3vw, 20px);
+}
+
+.eyebrow {
+  margin-bottom: clamp(10px, 1.2vw, 18px);
+  font-size: clamp(11px, 0.84vw, 13px);
+  letter-spacing: 0.2em;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.7vw, 3.6rem);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+  color: #fff;
+}
+
+/* ——— Tiles ——— */
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tile {
+  padding: 16px 14px;
+  background: linear-gradient(165deg, rgba(18, 34, 60, 0.82) 0%, rgba(5, 12, 24, 0.9) 100%);
+  border: 1px solid rgba(110, 165, 255, 0.3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.tileIcon {
+  width: clamp(44px, 4.3vw, 62px);
+  height: clamp(44px, 4.3vw, 62px);
+}
+
+.tileIcon svg {
+  width: 48%;
+  height: 48%;
+}
+
+.tileTitle {
+  margin: clamp(10px, 1.1vw, 16px) 0 clamp(6px, 0.7vw, 10px);
+  font-size: clamp(14px, 1.13vw, 17px);
+  font-weight: 650;
+  line-height: 1.25;
+  color: #fff;
+}
+
+.tileText {
+  margin: 0;
+  font-size: clamp(12.5px, 0.98vw, 14.5px);
+  line-height: 1.4;
+  color: rgba(214, 226, 244, 0.72);
+}
+
+@media (min-width: 640px) {
+  .tiles {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* Desktop: plate close-up fills the top-right; tiles sit under it */
+@media (min-width: 1024px) {
+  .photoBox {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 52%;
+    height: 66%;
+    margin: 0;
+    -webkit-mask-image:
+      linear-gradient(90deg, transparent 0%, #000 30%),
+      linear-gradient(180deg, #000 55%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-image:
+      linear-gradient(90deg, transparent 0%, #000 30%),
+      linear-gradient(180deg, #000 55%, transparent 100%);
+    mask-composite: intersect;
+  }
+
+  .photo {
+    transform: scale(2.5) rotate(-8deg);
+    transform-origin: 78% 42%;
+  }
+
+  .grid {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    align-items: end;
+    gap: clamp(24px, 3vw, 44px);
+    padding: 0 clamp(28px, 6.3vw, 100px);
+  }
+
+  .tiles {
+    gap: clamp(10px, 1.4vw, 20px);
+  }
+
+  .tile {
+    padding: clamp(14px, 1.4vw, 20px) clamp(12px, 1.3vw, 18px);
+    min-height: clamp(150px, 13.7vw, 200px);
+  }
+}
+
+/* ——— Phones ——— */
+
+@media (max-width: 559px) {
+  .copy .lead {
+    font-size: 14.5px;
+    line-height: 1.55;
+  }
+
+  .tile {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    column-gap: 12px;
+    padding: 12px;
+  }
+
+  .tileIcon {
+    grid-row: 1 / 3;
+    width: 40px;
+    height: 40px;
+  }
+
+  .tileTitle {
+    margin: 0 0 2px;
+    font-size: 13.5px;
+  }
+
+  .tileText {
+    font-size: 12px;
+  }
+}

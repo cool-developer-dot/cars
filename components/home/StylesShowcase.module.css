@@ -1,0 +1,401 @@
+/* Measurements follow the design at ~1550px wide and scale down from there */
+
+.section {
+  padding-top: clamp(28px, 3.6vw, 56px);
+  padding-bottom: clamp(8px, 1.2vw, 18px);
+}
+
+/* Soft diagonal studio light across the pale background */
+.rays {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(118deg, transparent 18%, rgba(255, 255, 255, 0.75) 26%, transparent 36%),
+    linear-gradient(118deg, transparent 52%, rgba(255, 255, 255, 0.6) 60%, transparent 70%),
+    linear-gradient(118deg, transparent 74%, rgba(255, 255, 255, 0.5) 82%, transparent 92%),
+    radial-gradient(60% 50% at 100% 0%, rgba(255, 255, 255, 0.9), transparent 70%);
+}
+
+.inner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1552px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+@media (min-width: 560px) {
+  .inner {
+    padding: 0 24px;
+  }
+}
+
+@media (min-width: 900px) {
+  .inner {
+    padding: 0 clamp(28px, 3.7vw, 57px);
+  }
+}
+
+/* ——— Header ——— */
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px 40px;
+  margin-bottom: clamp(22px, 2.9vw, 44px);
+}
+
+@media (min-width: 900px) {
+  .head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 530px);
+    padding-left: clamp(0px, 1.4vw, 22px);
+  }
+
+  .madeWrap {
+    width: 100%;
+  }
+}
+
+.headCopy {
+  min-width: 0;
+}
+
+.eyebrow {
+  margin-bottom: clamp(14px, 1.8vw, 28px);
+  font-size: clamp(11.5px, 0.95vw, 14.5px);
+  letter-spacing: 0.26em;
+}
+
+.eyebrow::before {
+  width: clamp(36px, 3.7vw, 57px);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5vw, 4.9rem);
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+  color: #0a1424;
+}
+
+.accent {
+  color: #0a5cff;
+}
+
+.sub {
+  margin: clamp(14px, 1.9vw, 30px) 0 0;
+  font-size: clamp(15px, 1.42vw, 22px);
+  line-height: 1.45;
+  color: #46566c;
+}
+
+/* "Made to order" card */
+.madeWrap {
+  width: min(100%, 530px);
+}
+
+.madeCard {
+  display: flex;
+  align-items: center;
+  gap: clamp(14px, 1.6vw, 26px);
+  padding: clamp(16px, 1.7vw, 26px) clamp(16px, 1.6vw, 24px) clamp(16px, 1.7vw, 26px) clamp(18px, 1.7vw, 26px);
+  border-radius: 18px;
+  color: inherit;
+  text-decoration: none;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.96) 0%, rgba(244, 248, 255, 0.92) 100%);
+  border: 1px solid rgba(16, 42, 84, 0.07);
+  box-shadow:
+    inset 0 1px 0 #fff,
+    0 18px 40px -22px rgba(18, 52, 110, 0.35),
+    0 2px 6px rgba(18, 52, 110, 0.04);
+  transition: transform 240ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 240ms;
+}
+
+.madeCard:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    inset 0 1px 0 #fff,
+    0 24px 48px -22px rgba(18, 52, 110, 0.45);
+}
+
+.madeIcon {
+  flex-shrink: 0;
+  width: clamp(36px, 3.3vw, 52px);
+  height: auto;
+  color: #0a5cff;
+}
+
+.madeText {
+  flex: 1;
+  min-width: 0;
+  font-size: clamp(13.5px, 1.1vw, 17px);
+  line-height: 1.45;
+  color: #46566c;
+}
+
+.madeText strong {
+  display: block;
+  margin-bottom: 3px;
+  font-size: clamp(15px, 1.2vw, 18.5px);
+  font-weight: 650;
+  color: #0a1424;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.roundArrow {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: clamp(34px, 3.4vw, 52px);
+  height: clamp(34px, 3.4vw, 52px);
+  border-radius: 50%;
+  color: #0a5cff;
+  background: linear-gradient(160deg, #eef4ff 0%, #dbe8ff 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(10, 92, 255, 0.08),
+    0 6px 14px -8px rgba(10, 92, 255, 0.45);
+  transition: background 220ms, color 220ms, transform 220ms;
+}
+
+.roundArrow svg {
+  width: 46%;
+  height: 46%;
+}
+
+.madeArrow {
+  width: clamp(40px, 3.6vw, 56px);
+  height: clamp(40px, 3.6vw, 56px);
+}
+
+.madeCard:hover .roundArrow {
+  color: #fff;
+  background: linear-gradient(105deg, #0060f0, #2b9bff);
+}
+
+/* ——— Style cards ——— */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 720px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+}
+
+@media (min-width: 1140px) {
+  .grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: clamp(10px, 0.9vw, 15px);
+  }
+}
+
+.grid > li {
+  min-width: 0;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  border-radius: clamp(14px, 1.1vw, 18px);
+  color: inherit;
+  text-decoration: none;
+  background: #ffffff;
+  border: 1px solid rgba(16, 42, 84, 0.06);
+  box-shadow:
+    inset 0 1px 0 #fff,
+    0 18px 38px -22px rgba(18, 52, 110, 0.34),
+    0 2px 6px rgba(18, 52, 110, 0.04);
+  transition:
+    transform 280ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 280ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow:
+    inset 0 1px 0 #fff,
+    0 28px 50px -22px rgba(18, 52, 110, 0.45),
+    0 0 0 1px rgba(10, 92, 255, 0.14);
+}
+
+.card:hover .roundArrow {
+  color: #fff;
+  background: linear-gradient(105deg, #0060f0, #2b9bff);
+  transform: translateX(2px);
+}
+
+.card:focus-visible {
+  outline: 2px solid #0a5cff;
+  outline-offset: 3px;
+}
+
+/* Studio close-up: the plate fills the frame, cropped like a product shot */
+.media {
+  position: relative;
+  display: block;
+  aspect-ratio: 228 / 218;
+  overflow: hidden;
+  background:
+    radial-gradient(90% 70% at 20% 0%, #ffffff 0%, transparent 70%),
+    linear-gradient(170deg, #eff2f6 0%, #d5dce6 100%);
+}
+
+.plate {
+  position: absolute;
+  left: -4%;
+  top: 60%;
+  width: 255%;
+  transform: rotate(-22deg);
+  transform-origin: 0 0;
+  filter: drop-shadow(0 10px 14px rgba(20, 30, 50, 0.25));
+  transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card:hover .plate {
+  transform: rotate(-20deg) scale(1.03);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: clamp(14px, 1.4vw, 22px) clamp(12px, 1.4vw, 22px) clamp(14px, 1.4vw, 22px);
+}
+
+.name {
+  font-size: clamp(16px, 1.42vw, 22px);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: #0a1424;
+}
+
+.blurb {
+  margin-top: clamp(6px, 0.7vw, 11px);
+  font-size: clamp(13px, 1.16vw, 18px);
+  line-height: 1.5;
+  color: #536379;
+}
+
+.rule {
+  display: block;
+  width: clamp(32px, 3vw, 46px);
+  height: 2px;
+  margin: clamp(12px, 1.3vw, 20px) 0 clamp(10px, 1.1vw, 17px);
+  border-radius: 2px;
+  background: rgba(16, 42, 84, 0.12);
+}
+
+.foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.prices {
+  min-width: 0;
+}
+
+.from {
+  display: block;
+  font-size: clamp(15px, 1.36vw, 21px);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #0a1424;
+  white-space: nowrap;
+}
+
+.pair {
+  display: block;
+  margin-top: 3px;
+  font-size: clamp(13px, 1.16vw, 18px);
+  color: #6b7a90;
+  white-space: nowrap;
+}
+
+/* ——— Info bar ——— */
+
+.infoBar {
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 1.6vw, 24px);
+  margin: clamp(14px, 1.6vw, 24px) 0 0;
+  padding: clamp(14px, 1.4vw, 20px) clamp(16px, 1.9vw, 28px);
+  border-radius: 16px;
+  font-size: clamp(13.5px, 1.07vw, 16.5px);
+  line-height: 1.5;
+  color: #46566c;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(16, 42, 84, 0.06);
+  box-shadow: 0 14px 30px -20px rgba(18, 52, 110, 0.3);
+}
+
+.infoBar a {
+  font-weight: 600;
+  color: #0a5cff;
+  text-decoration: none;
+}
+
+.infoBar a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.infoIcon {
+  flex-shrink: 0;
+  width: clamp(26px, 2.3vw, 36px);
+  height: auto;
+  color: #0a5cff;
+}
+
+/* ——— Phones ——— */
+
+@media (max-width: 559px) {
+  .head {
+    align-items: stretch;
+  }
+
+  .madeWrap {
+    width: 100%;
+  }
+
+  .body {
+    padding: 12px 12px 13px;
+  }
+
+  .blurb {
+    line-height: 1.4;
+  }
+
+  .infoBar {
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 359px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

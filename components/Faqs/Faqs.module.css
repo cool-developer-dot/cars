@@ -7,6 +7,8 @@
   --fq-line: rgba(140, 180, 240, 0.14);
   /* top spacing; the section above supplies the light→navy fade */
   --dusk-h: 8px;
+  /* matches the homepage sections' closing edge */
+  --neon-edge-h: clamp(28px, 3.4vw, 52px);
   position: relative;
   isolation: isolate;
   overflow: hidden;
@@ -94,7 +96,7 @@
   width: 100%;
   max-width: 1520px;
   margin: 0 auto;
-  padding: calc(var(--dusk-h) + 24px) 16px var(--section-y);
+  padding: calc(var(--dusk-h) + 16px) 16px 8px;
 }
 
 /* On small screens the aside dissolves so the list sits between its parts */
@@ -522,7 +524,7 @@
 
   .inner {
     gap: 36px;
-    padding: calc(var(--dusk-h) + 32px) 32px var(--section-y);
+    padding: calc(var(--dusk-h) + 16px) 32px 12px;
   }
 
   .intro {
@@ -593,7 +595,7 @@
     grid-template-columns: minmax(0, 0.92fr) minmax(0, 1fr);
     grid-template-areas: "aside list";
     gap: 56px;
-    padding: calc(var(--dusk-h) + 40px) 48px var(--section-y);
+    padding: calc(var(--dusk-h) + 20px) 48px 16px;
   }
 
   .aside {
@@ -645,5 +647,147 @@
   .panel,
   .answer {
     transition: none;
+  }
+}
+
+/* ——— Design pass (measured from the ≈1000px mock, as vw) ———
+   Two columns from 900px: copy + car photo left, compact accordion right. */
+
+@media (min-width: 900px) {
+  .inner {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas: "aside list";
+    gap: clamp(28px, 4.6vw, 72px);
+    padding: calc(var(--dusk-h) + clamp(16px, 2vw, 32px)) clamp(28px, 6.5vw, 100px) 16px;
+  }
+
+  .aside {
+    grid-area: aside;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(20px, 2.4vw, 36px);
+  }
+
+  .title {
+    font-size: clamp(2.2rem, 3.7vw, 3.75rem);
+    line-height: 1.02;
+    letter-spacing: -0.045em;
+  }
+
+  .intro {
+    margin-top: clamp(12px, 1.6vw, 22px);
+    max-width: 44ch;
+    font-size: clamp(14px, 1.3vw, 18px);
+    line-height: 1.45;
+  }
+
+  .showcase {
+    flex: 1;
+    min-height: clamp(280px, 34vw, 460px);
+    border-radius: 24px;
+    overflow: visible;
+  }
+
+  .photoWrap {
+    inset: -24px -16px 0 -40px;
+  }
+
+  .trust {
+    margin: 0;
+    padding: clamp(10px, 1.2vw, 18px) clamp(10px, 1.4vw, 20px);
+    border-radius: 14px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .trustItem {
+    flex-direction: row;
+    text-align: left;
+    gap: clamp(8px, 1vw, 14px);
+  }
+
+  .trustIcon {
+    width: clamp(32px, 3.2vw, 48px);
+    height: clamp(32px, 3.2vw, 48px);
+  }
+
+  .trustIcon svg {
+    width: 48%;
+    height: 48%;
+  }
+
+  .trustTitle {
+    font-size: clamp(11.5px, 1.05vw, 15px);
+  }
+
+  .trustText {
+    font-size: clamp(10.5px, 0.9vw, 13px);
+  }
+
+  .listCol {
+    gap: clamp(12px, 1.4vw, 20px);
+  }
+
+  .list {
+    gap: clamp(6px, 0.6vw, 10px);
+  }
+
+  .item {
+    border-radius: clamp(8px, 0.8vw, 14px);
+  }
+
+  .question {
+    gap: clamp(10px, 1.4vw, 18px);
+    padding: clamp(8px, 0.8vw, 14px) clamp(10px, 1vw, 16px) clamp(8px, 0.8vw, 14px)
+      clamp(14px, 1.5vw, 22px);
+  }
+
+  .qText {
+    font-size: clamp(13.5px, 1.12vw, 17px);
+  }
+
+  .toggle {
+    width: clamp(26px, 2.6vw, 40px);
+    height: clamp(26px, 2.6vw, 40px);
+  }
+
+  .answer {
+    padding: 0 clamp(40px, 5vw, 76px) clamp(14px, 1.6vw, 24px) clamp(40px, 4.6vw, 68px);
+    font-size: clamp(12.5px, 1.05vw, 15.5px);
+    line-height: 1.5;
+  }
+
+  .more {
+    font-size: clamp(12.5px, 1vw, 15px);
+  }
+}
+
+/* Phones: tighter accordion rows */
+@media (max-width: 559px) {
+  .inner {
+    gap: 22px;
+  }
+
+  .question {
+    padding: 14px 12px 14px 16px;
+    gap: 12px;
+  }
+
+  .qText {
+    font-size: 15px;
+  }
+
+  .toggle {
+    width: 32px;
+    height: 32px;
+  }
+
+  .answer {
+    padding: 0 16px 16px 50px;
+    font-size: 14px;
+  }
+
+  .showcase {
+    min-height: 260px;
   }
 }

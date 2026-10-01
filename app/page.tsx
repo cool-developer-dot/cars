@@ -1,11 +1,21 @@
 import type { Metadata } from "next";
 import Hero from "@/components/Hero/Hero";
-import PlateStyles from "@/components/PlateStyles/PlateStyles";
-import BuildYourPlate from "@/components/BuildYourPlate/BuildYourPlate";
-import CommonReasons from "@/components/CommonReasons/CommonReasons";
-import HomeInfo from "@/components/HomeInfo/HomeInfo";
+import MadeToOrder from "@/components/home/MadeToOrder";
+import StylesShowcase from "@/components/home/StylesShowcase";
+import DeliveryCollection from "@/components/home/DeliveryCollection";
+import HowToOrder from "@/components/home/HowToOrder";
+import DocumentsNeeded from "@/components/home/DocumentsNeeded";
+import LegalCompliance from "@/components/home/LegalCompliance";
+import Guides from "@/components/home/Guides";
+import Supplier from "@/components/home/Supplier";
+import Reviews from "@/components/home/Reviews";
 import Faqs from "@/components/Faqs/Faqs";
-import HomeCta from "@/components/HomeInfo/HomeCta";
+import GetStarted from "@/components/home/GetStarted";
+import {
+  HomeBuilderProvider,
+  HomeBuilderSlot,
+} from "@/components/home/HomeBuilder";
+import { hasReviews } from "@/lib/reviews";
 import JsonLd from "@/components/content/JsonLd";
 import { COMPANY, FROM_PRICE, SITE_URL, gbp } from "@/lib/site";
 
@@ -48,13 +58,23 @@ export default function Home() {
           ],
         }}
       />
-      <Hero />
-      <PlateStyles />
-      <BuildYourPlate />
-      <CommonReasons />
-      <HomeInfo />
-      <Faqs />
-      <HomeCta />
+      <HomeBuilderProvider>
+        <Hero />
+        <MadeToOrder />
+        <StylesShowcase />
+        {/* One shared builder — revealed when the user chooses a style or starts building */}
+        <HomeBuilderSlot />
+        <DeliveryCollection />
+        <HowToOrder />
+        <DocumentsNeeded />
+        <LegalCompliance />
+        <Guides />
+        {/* Reviews only render once real ones are added (lib/reviews.ts) */}
+        <Supplier next={hasReviews ? "#f3f7fb" : "#06111f"} />
+        <Reviews />
+        <Faqs />
+        <GetStarted />
+      </HomeBuilderProvider>
     </>
   );
 }
