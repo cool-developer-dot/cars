@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { ArrowRight, ChevronDown, Loader2, ShoppingBag, SlidersHorizontal, X } from "lucide-react";
 import {
@@ -97,12 +98,19 @@ function OptionsSheet({ state, set, onClose }: {
   const q = quoteFor(state);
 
   useEffect(() => {
-    first.current?.focus();
+    first.current?.focus({ preventScroll: true });
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    // Freeze the page behind the sheet (iOS scrolls the page otherwise)
+    const html = document.documentElement;
+    const prev = html.style.overflow;
+    html.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      html.style.overflow = prev;
+    };
   }, [onClose]);
 
   const sizeOpts = (rear: boolean) =>
@@ -115,8 +123,17 @@ function OptionsSheet({ state, set, onClose }: {
 
   const canHex = hexAllowed({ ...state, frontSize: "8", rearSize: "8", badge: "none" });
 
-  return (
-    <div className={s.sheet} role="dialog" aria-modal="false" aria-labelledby={`${uid}-t`}>
+  // Rendered at <body> level: inside the panel it would be clipped by the
+  // section and the reveal animation's transform on small screens
+  return createPortal(
+    <div className={s.overlay} onClick={onClose}>
+    <div
+      className={s.sheet}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby={`${uid}-t`}
+      onClick={(e) => e.stopPropagation()}
+    >
       <div className={s.sheetHead}>
         <h3 id={`${uid}-t`} className={s.sheetTitle}>
           Plate options
@@ -219,6 +236,8 @@ function OptionsSheet({ state, set, onClose }: {
         </button>
       </div>
     </div>
+    </div>,
+    document.body,
   );
 }
 
