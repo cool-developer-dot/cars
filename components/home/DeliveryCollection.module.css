@@ -2,7 +2,7 @@
 
 .section {
   /* Continues the light band from styles — keep the seam tight */
-  padding-top: clamp(16px, 2vw, 32px);
+  padding-top: var(--sec-top);
 }
 
 .inner {
@@ -107,8 +107,8 @@
   display: grid;
   place-items: center;
   flex-shrink: 0;
-  width: clamp(48px, 5.1vw, 76px);
-  height: clamp(48px, 5.1vw, 76px);
+  width: clamp(44px, 4.4vw, 62px);
+  height: clamp(44px, 4.4vw, 62px);
   border-radius: 50%;
   color: #0a5cff;
   background: linear-gradient(160deg, #e9f1ff 0%, #d8e6ff 100%);
@@ -127,7 +127,7 @@
 
 .cardTitle {
   margin: clamp(2px, 0.5vw, 8px) 0 clamp(4px, 0.5vw, 8px);
-  font-size: clamp(17px, 1.75vw, 25px);
+  font-size: clamp(16px, 1.5vw, 21px);
   font-weight: 700;
   letter-spacing: -0.02em;
   color: #0a1424;
@@ -135,7 +135,7 @@
 
 .cardSub {
   margin: 0;
-  font-size: clamp(13px, 1.19vw, 17px);
+  font-size: clamp(12.5px, 1.04vw, 15px);
   line-height: 1.45;
   color: #2b3a50;
 }
@@ -152,7 +152,7 @@
   display: flex;
   align-items: flex-start;
   gap: clamp(12px, 1.9vw, 28px);
-  font-size: clamp(13.5px, 1.19vw, 17px);
+  font-size: clamp(12.5px, 1.04vw, 15px);
   line-height: 1.4;
   color: #1d2b40;
 }
@@ -180,7 +180,7 @@
   margin: clamp(14px, 1.6vw, 22px) 0 0;
   padding: clamp(12px, 1.2vw, 16px) clamp(14px, 1.7vw, 24px);
   border-radius: 12px;
-  font-size: clamp(13px, 1.19vw, 16.5px);
+  font-size: clamp(12.5px, 1.02vw, 14.5px);
   line-height: 1.45;
   color: #1d2b40;
   background: linear-gradient(160deg, #e6effc 0%, #dce8f9 100%);
@@ -203,35 +203,31 @@
   max-width: 92%;
 }
 
-/* Copy stays left of the van, as in the design */
+/* Copy runs over the van's faded edge, as in the design */
 .deliveryCard .cardHead {
-  max-width: 78%;
+  max-width: 72%;
 }
 
 .deliveryCard .checks {
-  max-width: 90%;
+  max-width: 78%;
 }
 
 .deliveryCard .note {
-  max-width: 92%;
+  max-width: 78%;
 }
 
-/* Van fades into the card from the top-right corner */
+/* Van fills the card's right side, vertically centred, its left half
+   dissolving into the card behind the copy */
 .van {
   position: absolute;
-  right: -12%;
-  top: 1%;
-  width: 54%;
+  z-index: 0;
+  right: -5%;
+  top: 46%;
+  width: 46%;
+  transform: translateY(-50%);
   pointer-events: none;
-  opacity: 0.92;
-  -webkit-mask-image:
-    linear-gradient(90deg, transparent 0%, #000 45%),
-    linear-gradient(180deg, #000 55%, transparent 100%);
-  -webkit-mask-composite: source-in;
-  mask-image:
-    linear-gradient(90deg, transparent 0%, #000 45%),
-    linear-gradient(180deg, #000 55%, transparent 100%);
-  mask-composite: intersect;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.18) 34%, #000 72%);
+  mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.18) 34%, #000 72%);
 }
 
 /* ——— Ilford card ——— */
@@ -248,7 +244,7 @@
 
 .collectBody .cardHead,
 .collectChecks {
-  max-width: 78%;
+  max-width: 74%;
 }
 
 .collectChecks {
@@ -264,12 +260,12 @@
   justify-content: center;
   gap: 12px;
   width: min(100%, 420px);
-  min-height: clamp(48px, 4.3vw, 62px);
+  min-height: clamp(44px, 3.4vw, 52px);
   margin-top: auto;
   padding: 0 18px;
   border-radius: 10px;
   color: #fff;
-  font-size: clamp(14.5px, 1.4vw, 19.5px);
+  font-size: clamp(14.5px, 1.1vw, 16.5px);
   font-weight: 500;
   text-decoration: none;
   white-space: nowrap;
@@ -296,24 +292,29 @@
   outline-offset: 3px;
 }
 
-/* Desktop: the shopfront bleeds out past the card's top and right edge */
+/* Desktop: the shopfront photo rises above the card's top edge and runs
+   past its right edge, fading into the card on the left and at the foot */
 .collectCard .store {
   position: absolute;
-  left: 70%;
-  top: -22%;
+  z-index: 0;
+  left: 68%;
+  top: -24%;
   width: 60%;
-  aspect-ratio: 0.82;
-  border-radius: 0;
-  box-shadow: none;
+  height: 118%;
   pointer-events: none;
   -webkit-mask-image:
-    linear-gradient(90deg, transparent 0%, #000 34%),
-    linear-gradient(180deg, transparent 0%, #000 10%, #000 70%, transparent 100%);
+    linear-gradient(90deg, transparent 0%, #000 30%),
+    linear-gradient(180deg, transparent 0%, #000 12%, #000 72%, transparent 100%);
   -webkit-mask-composite: source-in;
   mask-image:
-    linear-gradient(90deg, transparent 0%, #000 34%),
-    linear-gradient(180deg, transparent 0%, #000 10%, #000 70%, transparent 100%);
+    linear-gradient(90deg, transparent 0%, #000 30%),
+    linear-gradient(180deg, transparent 0%, #000 12%, #000 72%, transparent 100%);
   mask-composite: intersect;
+}
+
+.storeImg {
+  object-fit: cover;
+  object-position: 40% 50%;
 }
 
 /* ——— Info bar ——— */
@@ -377,8 +378,9 @@
   }
 
   .van {
-    width: 40%;
-    max-width: 340px;
+    width: 46%;
+    max-width: 380px;
+    right: -10%;
   }
 }
 

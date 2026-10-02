@@ -190,3 +190,61 @@
     display: none;
   }
 }
+
+/* Phones: thin strokes vanish at this size, so the line gets heavier and
+   its glow wider to read as clearly as on desktop */
+@media (max-width: 767px) {
+  .halo {
+    stroke-width: 16px;
+    stroke: rgba(20, 120, 255, 0.3);
+  }
+
+  .glow {
+    stroke-width: 6px;
+    stroke: rgba(50, 160, 255, 0.7);
+  }
+
+  .core {
+    stroke-width: 2.5px;
+  }
+
+  .sparkLine {
+    stroke-width: 3px;
+  }
+
+  .lines {
+    filter:
+      drop-shadow(0 0 3px rgba(140, 210, 255, 1))
+      drop-shadow(0 0 10px rgba(10, 132, 255, 0.8))
+      drop-shadow(0 0 22px rgba(10, 110, 255, 0.45));
+  }
+
+  .light .halo {
+    stroke: rgba(20, 110, 255, 0.18);
+  }
+
+  .light .glow {
+    stroke: rgba(20, 120, 255, 0.65);
+  }
+
+  .light .core {
+    stroke-width: 3px;
+  }
+}
+
+/* Phones: one glow pass instead of three, and no looping spark — twelve
+   full-width filtered SVGs were a large share of the page's GPU memory */
+@media (max-width: 899px) {
+  .lines,
+  .light .lines {
+    filter: drop-shadow(0 0 6px rgba(20, 130, 255, 0.85));
+  }
+
+  .spark {
+    display: none;
+  }
+
+  .bloom {
+    filter: none;
+  }
+}

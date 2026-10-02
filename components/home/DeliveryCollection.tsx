@@ -2,7 +2,9 @@ import { ArrowRight, CircleCheck, Info, MapPin, MessageCircle, Truck } from "luc
 import Reveal from "@/components/content/Reveal";
 import NeonEdge from "@/components/NeonEdge/NeonEdge";
 import { COMPANY, CONTACT, DELIVERY } from "@/lib/site";
-import { StoreFront, VanArt } from "./Art";
+import Image from "next/image";
+import { VanArt } from "./Art";
+import storePhoto from "@/public/delivery/ilford-collection.webp";
 import h from "./home.module.css";
 import s from "./DeliveryCollection.module.css";
 
@@ -82,7 +84,15 @@ export default function DeliveryCollection() {
 
           {/* Ilford */}
           <Reveal index={1} className={`${s.card} ${s.collectCard}`}>
-            <StoreFront className={s.store} />
+            <span className={s.store}>
+              <Image
+                src={storePhoto}
+                alt="The ReplacementPlates collection point in Ilford"
+                fill
+                sizes="(min-width: 1024px) 300px, (min-width: 560px) 38vw, 100vw"
+                className={s.storeImg}
+              />
+            </span>
             <div id="collection" className={`${s.cardBody} ${s.collectBody}`}>
               <div className={s.cardHead}>
                 <span className={`${s.icon} ${s.pin}`} aria-hidden="true">

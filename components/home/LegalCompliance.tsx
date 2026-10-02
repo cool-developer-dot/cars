@@ -48,14 +48,15 @@ export default function LegalCompliance() {
           <p className={`${h.lead} ${s.lead}`}>
             Our Standard, 3D, 4D, 5D and Bevel styles are made to these requirements.
             Ghost&rsquo;s specific construction and compliance information is being
-            finalised — see <Link href="/plate-styles#ghost">Ghost on our plate styles page</Link>{" "}
-            and contact us for its current status before ordering that style.
+            finalised — see the{" "}
+            <Link href="/plate-styles#ghost">Ghost product page</Link> for its current
+            status before ordering that style.
           </p>
         </Reveal>
 
         <ul className={s.tiles}>
           {TILES.map(({ Icon, title, text }, i) => (
-            <Reveal as="li" key={title} index={i} className={`${h.glass} ${s.tile}`}>
+            <Reveal as="li" key={title} index={i} className={`${h.liquid} ${s.tile}`}>
               <span className={`${h.iconBlue} ${s.tileIcon}`} aria-hidden="true">
                 <Icon strokeWidth={2} />
               </span>

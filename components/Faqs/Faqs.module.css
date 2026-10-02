@@ -8,7 +8,7 @@
   /* top spacing; the section above supplies the light→navy fade */
   --dusk-h: 8px;
   /* matches the homepage sections' closing edge */
-  --neon-edge-h: clamp(28px, 3.4vw, 52px);
+  --neon-edge-h: clamp(38px, 3.4vw, 52px);
   position: relative;
   isolation: isolate;
   overflow: hidden;
@@ -96,7 +96,7 @@
   width: 100%;
   max-width: 1520px;
   margin: 0 auto;
-  padding: calc(var(--dusk-h) + 16px) 16px 8px;
+  padding: var(--sec-top) 16px var(--sec-bottom);
 }
 
 /* On small screens the aside dissolves so the list sits between its parts */
@@ -524,7 +524,7 @@
 
   .inner {
     gap: 36px;
-    padding: calc(var(--dusk-h) + 16px) 32px 12px;
+    padding: var(--sec-top) 32px var(--sec-bottom);
   }
 
   .intro {
@@ -595,7 +595,7 @@
     grid-template-columns: minmax(0, 0.92fr) minmax(0, 1fr);
     grid-template-areas: "aside list";
     gap: 56px;
-    padding: calc(var(--dusk-h) + 20px) 48px 16px;
+    padding: var(--sec-top) 48px var(--sec-bottom);
   }
 
   .aside {
@@ -658,7 +658,7 @@
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     grid-template-areas: "aside list";
     gap: clamp(28px, 4.6vw, 72px);
-    padding: calc(var(--dusk-h) + clamp(16px, 2vw, 32px)) clamp(28px, 6.5vw, 100px) 16px;
+    padding: var(--sec-top) clamp(28px, 6.5vw, 100px) var(--sec-bottom);
   }
 
   .aside {
@@ -696,8 +696,8 @@
     margin: 0;
     padding: clamp(10px, 1.2vw, 18px) clamp(10px, 1.4vw, 20px);
     border-radius: 14px;
-    backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
   }
 
   .trustItem {

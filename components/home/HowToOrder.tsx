@@ -61,7 +61,7 @@ export default function HowToOrder() {
 
         <ol className={s.steps}>
           {STEPS.map(({ title, text, Icon, art }, i) => (
-            <Reveal as="li" key={title} index={i} className={s.step}>
+            <Reveal as="li" key={title} index={i} className={`${h.liquid} ${s.step}`}>
               <div className={s.stepTop}>
                 <span className={s.num} aria-hidden="true">
                   {i + 1}

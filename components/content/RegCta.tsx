@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 import { plateFont } from "@/lib/fonts";
 import c from "./content.module.css";
+import { builderUrl } from "@/lib/builderLink";
 
 /** Registration entry → builder (optionally with a style preselected) */
 export default function RegCta({ style }: { style?: string }) {
@@ -13,12 +14,7 @@ export default function RegCta({ style }: { style?: string }) {
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    const params = new URLSearchParams();
-    const clean = reg.trim().toUpperCase();
-    if (clean) params.set("reg", clean);
-    if (style) params.set("style", style);
-    const qs = params.toString();
-    router.push(qs ? `/build?${qs}` : "/build");
+    router.push(builderUrl({ reg, style }));
   };
 
   return (

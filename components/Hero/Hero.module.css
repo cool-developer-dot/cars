@@ -4,7 +4,7 @@
   --hero-cyan: #4ecbff;
   --hero-navy: rgba(6, 14, 28, 0.72);
   /* height of the neon closing edge (components/NeonEdge) */
-  --neon-edge-h: clamp(64px, 9.5vw, 140px);
+  --neon-edge-h: clamp(42px, 6.6vw, 100px);
   position: relative;
   isolation: isolate;
   display: flex;
@@ -103,8 +103,8 @@
   border: 1px solid rgba(200, 215, 235, 0.22);
   background: rgba(40, 48, 60, 0.5);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
   font-size: 13.5px;
   font-weight: 500;
   letter-spacing: 0;
@@ -280,8 +280,8 @@
     0 24px 56px -20px rgba(0, 0, 0, 0.7),
     inset 0 1px 0 rgba(255, 255, 255, 0.1),
     inset 0 0 22px rgba(10, 132, 255, 0.08);
-  backdrop-filter: blur(14px) saturate(135%);
   -webkit-backdrop-filter: blur(14px) saturate(135%);
+  backdrop-filter: blur(14px) saturate(135%);
   overflow: hidden;
 }
 
@@ -630,7 +630,7 @@
     grid-template-columns: minmax(0, 1.15fr) minmax(340px, 0.85fr);
     gap: 36px;
     align-items: stretch;
-    padding: calc(96px + 36px) 24px calc(var(--neon-edge-h) + 8px);
+    padding: calc(96px + 36px) 24px var(--neon-edge-h);
     /* --side: free space beside the centred 1180px column. The copy and card
        only lean outward into that space, so 900–1300px screens keep a gutter
        instead of pushing the headline off-screen. */
@@ -648,7 +648,7 @@
   .cardSlot {
     justify-self: end;
     align-self: end;
-    margin-bottom: 24px;
+    margin-bottom: 0;
     margin-right: calc(-1 * clamp(0px, var(--side) - 4px, 28px));
   }
 
@@ -692,7 +692,7 @@
     flex: 0 1 auto;
     width: 100%;
     max-width: none;
-    padding: calc(72px + 18px) 16px calc(var(--neon-edge-h) + 8px);
+    padding: calc(72px + 18px) 16px calc(var(--neon-edge-h) + 14px);
   }
 
   .copy {
@@ -716,8 +716,8 @@
       0 0 0 1px rgba(40, 180, 100, 0.06),
       0 0 10px rgba(40, 200, 120, 0.1),
       inset 0 1px 0 rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
   }
 
   .badgeIcon {
@@ -758,8 +758,8 @@
     border-radius: 16px;
     border: 1px solid rgba(140, 190, 255, 0.14);
     background: rgba(6, 14, 28, 0.5);
-    backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
   }
 
@@ -772,8 +772,8 @@
     border: 0;
     border-radius: 0;
     background: transparent;
-    backdrop-filter: none;
     -webkit-backdrop-filter: none;
+    backdrop-filter: none;
     font-size: 11.5px;
     font-weight: 500;
     line-height: 1.25;
@@ -815,8 +815,8 @@
     box-shadow:
       0 16px 32px -14px rgba(0, 0, 0, 0.6),
       inset 0 1px 0 rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(10px) saturate(130%);
     -webkit-backdrop-filter: blur(10px) saturate(130%);
+    backdrop-filter: blur(10px) saturate(130%);
   }
 
   .cardTitle {
@@ -998,5 +998,23 @@
 
   .cta:hover {
     transform: none;
+  }
+}
+
+/* Phones: drop backdrop blur (see globals.css "GPU-memory budget") */
+@media (max-width: 899px) {
+  .badge,
+  .benefits,
+  .card {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .card {
+    background: linear-gradient(165deg, rgba(14, 28, 52, 0.94) 0%, rgba(6, 13, 26, 0.96) 100%);
+  }
+
+  .benefits {
+    background: rgba(6, 14, 28, 0.82);
   }
 }

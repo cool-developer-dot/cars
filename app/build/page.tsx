@@ -1,28 +1,20 @@
-import type { Metadata } from "next";
-import { PlateBuilder } from "@/components/BuildYourPlate/BuildYourPlate";
-import { parseStyle } from "@/components/BuildYourPlate/buildConfig";
-import { FROM_PRICE, gbp } from "@/lib/site";
+import { redirect } from "next/navigation";
+import { builderUrl } from "@/lib/builderLink";
 
-export const metadata: Metadata = {
-  title: "Build Your Number Plates",
-  description: `Design road-legal or show number plates online and see every change live — Standard, 3D gel, 4D, 5D, Bevel and Ghost, from ${gbp(FROM_PRICE)} per plate.`,
-  alternates: { canonical: "/build" },
-};
-
+/**
+ * The site has one plate builder, on the homepage. Old /build links (and the
+ * basket's "Edit plates") land there with their settings carried over.
+ */
 export default async function Page({ searchParams }: PageProps<"/build">) {
   const q = await searchParams;
   const one = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v);
-  const reg = one(q.reg);
-  const style = parseStyle(one(q.style));
-
-  return (
-    <PlateBuilder
-      variant="page"
-      editFromBasket={one(q.edit) === "1"}
-      initial={{
-        reg: reg ?? "",
-        ...(style ? { styleId: style } : {}),
-      }}
-    />
+  const amount = one(q.amount);
+  redirect(
+    builderUrl({
+      reg: one(q.reg),
+      style: one(q.style),
+      amount: amount === "front" || amount === "rear" || amount === "both" ? amount : undefined,
+      edit: one(q.edit) === "1",
+    }),
   );
 }

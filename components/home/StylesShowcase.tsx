@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { ArrowRight, Info, Layers } from "lucide-react";
 import Reveal from "@/components/content/Reveal";
+import NeonEdge from "@/components/NeonEdge/NeonEdge";
 import { COMPANY, PRICES, gbp, pairPrice } from "@/lib/site";
+import BuilderLink from "./BuilderLink";
 import PlateArt from "./PlateArt";
 import { STYLE_ART, STYLE_ORDER } from "./homeConfig";
 import h from "./home.module.css";
@@ -28,10 +30,10 @@ export default function StylesShowcase() {
           </Reveal>
 
           <Reveal index={1} className={s.madeWrap}>
-            <Link href="/plate-styles" className={s.madeCard}>
+            <Link href="/plate-styles" className={`${h.glassLight} ${s.madeCard}`}>
               <Layers className={s.madeIcon} strokeWidth={1.7} aria-hidden="true" />
               <span className={s.madeText}>
-                <strong>All plates are made to order</strong>
+                <strong className="title-case">All plates are made to order</strong>
                 by a DVLA-registered supplier{" "}
                 <span className={s.nowrap}>(RNPS {COMPANY.rnps})</span>
               </span>
@@ -48,8 +50,8 @@ export default function StylesShowcase() {
             const price = PRICES[id];
             return (
               <Reveal as="li" key={id} index={i}>
-                <Link
-                  href={price.href}
+                <BuilderLink
+                  seed={{ styleId: id }}
                   className={s.card}
                   aria-label={`${art.label}: ${art.blurb} From ${gbp(price.single)}, pair ${gbp(pairPrice(id))}`}
                 >
@@ -70,24 +72,27 @@ export default function StylesShowcase() {
                       </span>
                     </span>
                   </span>
-                </Link>
+                </BuilderLink>
               </Reveal>
             );
           })}
         </ul>
 
         <Reveal>
-          <p className={s.infoBar}>
+          <p className={`${h.glassLight} ${s.infoBar}`}>
             <Info className={s.infoIcon} strokeWidth={1.8} aria-hidden="true" />
             <span>
               Prices are for one standard-size plate; a matching pair is priced as a
               pair. Also made to order:{" "}
-              <Link href="/build">short, hex</Link> and{" "}
-              <Link href="/build">oversized</Link> plates.
+              <BuilderLink options>short, hex</BuilderLink> and{" "}
+              <BuilderLink options>oversized</BuilderLink> plates.
             </span>
           </p>
         </Reveal>
       </div>
+
+      {/* Light → light: the neon line alone marks the seam */}
+      <NeonEdge light />
     </section>
   );
 }

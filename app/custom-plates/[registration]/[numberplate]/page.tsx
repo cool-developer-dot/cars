@@ -1,14 +1,5 @@
-import type { Metadata } from "next";
-import { PlateBuilder } from "@/components/BuildYourPlate/BuildYourPlate";
-import { parseStyle } from "@/components/BuildYourPlate/buildConfig";
-
-// One page per registration would be endless thin content: keep these out
-// of search and point them at the main builder.
-export const metadata: Metadata = {
-  title: "Build Your Number Plates",
-  alternates: { canonical: "/build" },
-  robots: { index: false, follow: true },
-};
+import { redirect } from "next/navigation";
+import { builderUrl } from "@/lib/builderLink";
 
 const readReg = (raw: string) => {
   let reg = raw;
@@ -21,17 +12,10 @@ const readReg = (raw: string) => {
   return reg && reg !== "undefined" && reg.toUpperCase() !== "YOUR REG" ? reg : "";
 };
 
-/** The client's builder URL: /custom-plates/{registration}/{style} */
+/** The client's old builder URL: /custom-plates/{registration}/{style} → the homepage builder */
 export default async function Page({
   params,
 }: PageProps<"/custom-plates/[registration]/[numberplate]">) {
   const { registration, numberplate } = await params;
-  const style = parseStyle(numberplate);
-
-  return (
-    <PlateBuilder
-      variant="page"
-      initial={{ reg: readReg(registration), ...(style ? { styleId: style } : {}) }}
-    />
-  );
+  redirect(builderUrl({ reg: readReg(registration), style: numberplate }));
 }

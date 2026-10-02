@@ -872,3 +872,9 @@
     transform: none;
   }
 }
+
+/* Homepage: no night-scene band, so the columns start right after the
+   closing CTA's neon edge */
+.footerPlain .inner {
+  padding-top: clamp(28px, 3vw, 44px);
+}

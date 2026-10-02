@@ -25,8 +25,10 @@ import {
 import {
   seedFromHero,
   useHomeBuilderOptional,
+  amountFromSide,
 } from "@/components/home/HomeBuilder";
 import NeonEdge from "@/components/NeonEdge/NeonEdge";
+import { builderUrl } from "@/lib/builderLink";
 import styles from "./Hero.module.css";
 
 const BENEFIT_ICONS = {
@@ -74,10 +76,12 @@ export default function Hero() {
   const openHomeBuilder = (nextStyleId = styleId) => {
     const seed = seedFromHero({ reg, styleId: nextStyleId, side });
     if (homeBuilder) {
-      homeBuilder.openBuilder(seed);
+      homeBuilder.goToBuilder(seed);
       return;
     }
-    window.location.href = "/#build-your-plate";
+    window.location.assign(
+      builderUrl({ reg, style: nextStyleId, amount: amountFromSide(side) }),
+    );
   };
 
   // A pair has its own price — it is not two singles

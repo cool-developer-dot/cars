@@ -10,7 +10,6 @@ const ROUTES = [
   "/5d-number-plates",
   "/bevel-number-plates",
   "/faqs",
-  "/build",
   "/delivery-collection",
   "/about",
   "/contact",

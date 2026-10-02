@@ -94,13 +94,12 @@ const asBuild = (v: unknown): BuildState | null =>
 /* ——— Pieces ——— */
 
 function Card({ children, className = "", index = 0 }: { children: ReactNode; className?: string; index?: number }) {
-  const reduced = useHydrationSafeReducedMotion();
   return (
     <m.div
       className={`${styles.card} ${className}`}
-      variants={reduced ? undefined : cardRevealV(0.1)}
+      variants={cardRevealV(0.1)}
       custom={index}
-      initial={reduced ? false : "hidden"}
+      initial="hidden"
       animate="show"
     >
       {children}
@@ -215,7 +214,8 @@ export default function Basket() {
     window.scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" });
   };
 
-  const rv = reduced ? undefined : revealV;
+  // Always animate: MotionConfig (reducedMotion="user") makes it instant
+  const rv = revealV;
 
   /* ——— States ——— */
 
@@ -270,7 +270,7 @@ export default function Basket() {
           you go.
         </p>
         <div className={styles.stateActions}>
-          <Link href="/build" className={`${b.btnPrimary} ${styles.stateBtn}`}>
+          <Link href="/#builder" className={`${b.btnPrimary} ${styles.stateBtn}`}>
             Build my plates
             <ArrowRight size={17} strokeWidth={2.4} aria-hidden="true" />
           </Link>
@@ -350,7 +350,7 @@ export default function Basket() {
                 </button>
               </div>
               <div className={styles.itemActions}>
-                <Link href="/build?edit=1" className={styles.linkBtn}>
+                <Link href="/?edit=1#builder" className={styles.linkBtn}>
                   <Pencil size={14} aria-hidden="true" />
                   Edit plates
                 </Link>
@@ -573,7 +573,7 @@ export default function Basket() {
       <div className={b.ambient} aria-hidden="true" />
       <div className={styles.inner}>
         <header className={styles.header}>
-          <m.p className={b.eyebrow} variants={rv} custom={0} initial={reduced ? false : "hidden"} animate="show">
+          <m.p className={b.eyebrow} variants={rv} custom={0} initial="hidden" animate="show">
             <span className={b.eyebrowLine} aria-hidden="true" />
             Your basket
             <span className={b.eyebrowLine} aria-hidden="true" />
@@ -583,7 +583,7 @@ export default function Basket() {
             className={`${b.title} ${styles.title}`}
             variants={rv}
             custom={0.06}
-            initial={reduced ? false : "hidden"}
+            initial="hidden"
             animate="show"
           >
             {done ? (

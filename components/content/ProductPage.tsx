@@ -14,12 +14,13 @@ import {
   TrustChips,
 } from "./blocks";
 import c from "./content.module.css";
+import { builderUrl } from "@/lib/builderLink";
 
 export default function ProductPage({ product: p }: { product: ProductContent }) {
   const price = PRICES[p.id];
   const single = gbp(price.single);
   const pair = gbp(pairPrice(p.id));
-  const build = `/build?style=${p.id}`;
+  const build = builderUrl({ style: p.id });
 
   return (
     <div className={`${c.theme} ${c.page}`}>

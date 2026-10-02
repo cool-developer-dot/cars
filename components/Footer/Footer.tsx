@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { m } from "framer-motion";
 import {
   ArrowRight,
@@ -18,7 +19,6 @@ import {
   Truck,
 } from "lucide-react";
 import { cardRevealV, inViewOnce } from "@/lib/motion";
-import { useHydrationSafeReducedMotion } from "@/lib/useHydrationSafeReducedMotion";
 import HeroPhoto from "@/components/HeroPhoto";
 import { COMPANY, CONTACT } from "@/lib/site";
 import { FOOTER_COLUMNS, LEGAL_LINKS, SOCIALS } from "./footerConfig";
@@ -122,20 +122,23 @@ function Subscribe() {
 }
 
 export default function Footer() {
-  const reduced = useHydrationSafeReducedMotion();
-  const reveal = (i: number) =>
-    reduced
-      ? {}
-      : {
-          variants: colV,
-          custom: i,
-          ...inViewOnce,
-          viewport: { once: true, amount: 0.2 },
-        };
+  // Always animate: MotionConfig (reducedMotion="user") makes it instant
+  // for people who ask for less motion. Dropping the variants after
+  // hydration left the footer stuck at its hidden state.
+  const reveal = (i: number) => ({
+    variants: colV,
+    custom: i,
+    ...inViewOnce,
+    viewport: { once: true, amount: 0.2 },
+  });
+
+  const showScene = usePathname() !== "/";
 
   return (
-    <footer className={styles.footer}>
-      {/* ——— Night-scene band with the feature bar ——— */}
+    <footer className={`${styles.footer} ${showScene ? "" : styles.footerPlain}`}>
+      {/* ——— Night-scene band with the feature bar ———
+          Not on the homepage: its closing CTA already shows these points */}
+      {showScene && (
       <div className={styles.scene}>
         <div className={styles.sceneImage} aria-hidden="true">
           <HeroPhoto className={styles.scenePhoto} />
@@ -165,6 +168,7 @@ export default function Footer() {
           ))}
         </m.ul>
       </div>
+      )}
 
       <div className={styles.inner}>
         {/* ——— Main grid ——— */}

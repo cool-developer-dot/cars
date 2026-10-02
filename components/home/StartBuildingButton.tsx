@@ -1,33 +1,37 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { ArrowRight } from "lucide-react";
+import { builderUrl } from "@/lib/builderLink";
 import { useHomeBuilderOptional } from "./HomeBuilder";
 
 type Props = {
   className?: string;
-  children?: React.ReactNode;
+  children?: ReactNode;
+  /** Put the cursor in the registration field on arrival */
+  focusReg?: boolean;
 };
 
-/** Opens the single homepage builder instead of navigating to /build. */
-export default function StartBuildingButton({ className, children }: Props) {
+/** Brings the customer to the one plate builder (homepage, section 2) */
+export default function StartBuildingButton({ className, children, focusReg = false }: Props) {
   const homeBuilder = useHomeBuilderOptional();
 
-  const onClick = () => {
-    if (homeBuilder) {
-      homeBuilder.openBuilder();
-      return;
-    }
-    window.location.href = "/#build-your-plate";
-  };
-
   return (
-    <button type="button" className={className} onClick={onClick}>
+    <a
+      href={builderUrl()}
+      className={className}
+      onClick={(e) => {
+        if (!homeBuilder) return; // another page: follow the link home
+        e.preventDefault();
+        homeBuilder.goToBuilder(undefined, { focusReg });
+      }}
+    >
       {children ?? (
         <>
           Start building
           <ArrowRight strokeWidth={2.4} aria-hidden="true" />
         </>
       )}
-    </button>
+    </a>
   );
 }

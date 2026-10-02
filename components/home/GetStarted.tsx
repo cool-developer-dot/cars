@@ -5,6 +5,7 @@ import { ArrowRight, Clock, MapPin, Truck } from "lucide-react";
 import Reveal from "@/components/content/Reveal";
 import NeonEdge from "@/components/NeonEdge/NeonEdge";
 import { plateFont } from "@/lib/fonts";
+import { builderUrl } from "@/lib/builderLink";
 import { useHomeBuilderOptional } from "./HomeBuilder";
 import h from "./home.module.css";
 import s from "./GetStarted.module.css";
@@ -23,12 +24,10 @@ export default function GetStarted() {
     e.preventDefault();
     const clean = reg.trim().toUpperCase();
     if (homeBuilder) {
-      homeBuilder.openBuilder(clean ? { reg: clean } : undefined);
+      homeBuilder.goToBuilder(clean ? { reg: clean } : undefined, { focusReg: !clean });
       return;
     }
-    window.location.href = clean
-      ? `/#build-your-plate`
-      : "/#build-your-plate";
+    window.location.assign(builderUrl({ reg: clean }));
   };
 
   return (

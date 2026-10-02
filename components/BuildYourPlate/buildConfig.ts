@@ -270,7 +270,3 @@ export function summaryRows(s: BuildState) {
     { label: "Fixing Kit", value: KITS.find((k) => k.id === s.kit)!.summary },
   ];
 }
-
-/** Canonical builder URL for a registration + style */
-export const builderHref = (reg: string, styleId: StyleId) =>
-  `/custom-plates/${encodeURIComponent(reg.trim().replace(/\s+/g, " ") || "YOUR REG")}/${styleId}`;

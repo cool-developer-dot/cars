@@ -138,7 +138,7 @@ export default function Navbar() {
               </Link>
             </div>
 
-            <Link href="/build" className={styles.cta}>
+            <Link href="/#builder" className={styles.cta}>
               Build my plates →
             </Link>
 
@@ -289,7 +289,7 @@ export default function Navbar() {
             </Link>
 
             <Link
-              href="/build"
+              href="/#builder"
               className={styles.drawerCta}
               tabIndex={open ? 0 : -1}
               onClick={closeMenu}

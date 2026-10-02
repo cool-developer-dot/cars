@@ -21,7 +21,7 @@ export const HOME_FAQS: Faq[] = [
   {
     id: "other-towns",
     q: "Do you have shops in other towns?",
-    a: "No — one collection point, in Ilford. Elsewhere, we deliver by Royal Mail.",
+    a: "No — one collection point, in Ilford. Everywhere else, we deliver by Royal Mail.",
     links: [{ label: "Delivery areas", href: "/delivery-collection" }],
   },
   {

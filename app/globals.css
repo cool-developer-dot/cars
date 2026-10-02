@@ -51,6 +51,19 @@ html {
      rather than adding to it. */
   --section-y: 32px;
   --band-h: 56px;
+
+  /* Homepage section rhythm: every section uses these two, so the gap
+     between any two sections (bottom pad + neon edge + top pad) is equal */
+  --sec-top: clamp(22px, 2.4vw, 34px);
+  --sec-bottom: clamp(10px, 1.2vw, 16px);
+}
+
+/* Phones: a touch tighter, since the dividers are taller there */
+@media (max-width: 559px) {
+  :root {
+    --sec-top: 18px;
+    --sec-bottom: 8px;
+  }
 }
 
 @media (min-width: 700px) {
@@ -111,4 +124,24 @@ body {
   .hero {
     background-position: right center;
   }
+}
+
+/* ——— Phones: GPU-memory budget ———
+   iOS Safari reloads a tab that uses too much graphics memory (seen as the
+   page jumping back to the top after the hero). Every backdrop-filter, CSS
+   blur and stacked drop-shadow allocates its own full-resolution offscreen
+   surface at 3× pixel density, so on small screens the purely decorative
+   ones are switched off; each component swaps in a solid tint instead
+   (search for "GPU-memory budget" in the component stylesheets). */
+
+/* Headings: first letter of every word capitalised, site-wide. Done in CSS
+   so content written in sentence case (CMS copy, FAQ data) still follows it. */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.title-case {
+  text-transform: capitalize;
 }

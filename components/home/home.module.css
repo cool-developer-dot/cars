@@ -4,13 +4,13 @@
    dark → #06111f, light → #f3f7fb. */
 
 .section {
-  --neon-edge-h: clamp(28px, 3.4vw, 52px);
+  --neon-edge-h: clamp(38px, 3.4vw, 52px);
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   isolation: isolate;
   overflow: clip;
-  padding-top: clamp(24px, 3vw, 44px);
-  padding-bottom: clamp(4px, 0.8vw, 10px);
+  padding-top: var(--sec-top);
+  padding-bottom: var(--sec-bottom);
   font-family: var(--font-ui);
 }
 
@@ -169,13 +169,13 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
-  min-height: 52px;
-  padding: 0 30px;
+  min-height: 46px;
+  padding: 0 24px;
   border: 0;
   border-radius: 12px;
   color: #fff;
   font: inherit;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
   letter-spacing: 0.01em;
   text-decoration: none;
@@ -404,5 +404,143 @@
 
   .benefit {
     max-width: none;
+  }
+}
+
+/* ——— Liquid glass (cards on the dark-blue sections) ———
+   Translucent, heavily blurred and saturated fill; a bright gradient rim
+   (lit top-left, cool blue bottom-right); a soft specular sheen across the
+   top; and a faint blue halo. Content stacks above the sheen via isolation. */
+.liquid {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid transparent;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.13) 0%,
+      rgba(255, 255, 255, 0.04) 40%,
+      rgba(120, 175, 255, 0.03) 65%,
+      rgba(120, 175, 255, 0.09) 100%
+    ),
+    rgba(22, 52, 104, 0.26);
+  -webkit-backdrop-filter: blur(18px) saturate(175%) brightness(1.06);
+  backdrop-filter: blur(18px) saturate(175%) brightness(1.06);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    inset 0 -1px 0 rgba(140, 195, 255, 0.1),
+    inset 0 0 28px rgba(110, 170, 255, 0.08),
+    0 0 20px rgba(30, 120, 255, 0.2),
+    0 18px 36px -20px rgba(0, 8, 30, 0.8);
+}
+
+/* Gradient rim */
+.liquid::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: 1;
+  padding: 1px;
+  border-radius: inherit;
+  background: linear-gradient(
+    140deg,
+    rgba(230, 242, 255, 0.75) 0%,
+    rgba(110, 180, 255, 0.55) 28%,
+    rgba(40, 120, 255, 0.4) 62%,
+    rgba(120, 190, 255, 0.7) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Specular sheen */
+.liquid::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background:
+    radial-gradient(110% 70% at 18% -10%, rgba(255, 255, 255, 0.16), transparent 60%),
+    radial-gradient(80% 60% at 100% 110%, rgba(60, 140, 255, 0.14), transparent 70%);
+  pointer-events: none;
+}
+
+/* ——— Light glass (small cards + notes on the pale sections) ———
+   Frosted and slightly blue-tinted rather than flat white: a see-through
+   fill that picks up the background, a bright white rim lit top-left,
+   a cool rim bottom-right, an inner top highlight and a soft blue drop. */
+.glassLight {
+  position: relative;
+  isolation: isolate;
+  border: 1px solid transparent;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.82) 0%,
+      rgba(255, 255, 255, 0.55) 45%,
+      rgba(232, 241, 255, 0.5) 100%
+    );
+  -webkit-backdrop-filter: blur(18px) saturate(170%);
+  backdrop-filter: blur(18px) saturate(170%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 rgba(10, 92, 255, 0.05),
+    0 1px 2px rgba(18, 52, 110, 0.05),
+    0 16px 36px -22px rgba(18, 60, 140, 0.4);
+}
+
+.glassLight::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  padding: 1px;
+  border-radius: inherit;
+  background: linear-gradient(
+    140deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(214, 228, 248, 0.9) 45%,
+    rgba(150, 185, 235, 0.55) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Phones: no backdrop blur (see globals.css "GPU-memory budget") —
+   a denser tint keeps the glass look over the dark and light sections */
+@media (max-width: 899px) {
+  .liquid {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background:
+      linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.12) 0%,
+        rgba(255, 255, 255, 0.04) 45%,
+        rgba(120, 175, 255, 0.1) 100%
+      ),
+      rgba(16, 38, 78, 0.72);
+  }
+
+  .glassLight {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: linear-gradient(135deg, #ffffff 0%, #f6f9ff 55%, #edf3fd 100%);
   }
 }

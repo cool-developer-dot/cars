@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Hero from "@/components/Hero/Hero";
 import MadeToOrder from "@/components/home/MadeToOrder";
+import WhyReplacing from "@/components/home/WhyReplacing";
 import StylesShowcase from "@/components/home/StylesShowcase";
 import DeliveryCollection from "@/components/home/DeliveryCollection";
 import HowToOrder from "@/components/home/HowToOrder";
@@ -13,7 +14,6 @@ import Faqs from "@/components/Faqs/Faqs";
 import GetStarted from "@/components/home/GetStarted";
 import {
   HomeBuilderProvider,
-  HomeBuilderSlot,
 } from "@/components/home/HomeBuilder";
 import { hasReviews } from "@/lib/reviews";
 import JsonLd from "@/components/content/JsonLd";
@@ -61,9 +61,8 @@ export default function Home() {
       <HomeBuilderProvider>
         <Hero />
         <MadeToOrder />
+        <WhyReplacing />
         <StylesShowcase />
-        {/* One shared builder — revealed when the user chooses a style or starts building */}
-        <HomeBuilderSlot />
         <DeliveryCollection />
         <HowToOrder />
         <DocumentsNeeded />

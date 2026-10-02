@@ -1,92 +1,18 @@
 "use client";
 
 import { m } from "framer-motion";
-import {
-  EASE_FILL,
-  EASE_PREMIUM,
-  RING_CENTERS,
-  RING_CY,
-  RING_ENLARGE_SCALE,
-  RING_R,
-  RING_STROKE,
-  RING_VIEWBOX,
-  TIMING,
-} from "./timing";
+import { EASE_FILL, EASE_PREMIUM, LOGO_ENLARGE_SCALE, TIMING } from "./timing";
 import styles from "./OpeningIntro.module.css";
 
 type Props = {
   reduced: boolean;
 };
 
-function RingsSvg({
-  variant,
-  className,
-}: {
-  variant: "chrome" | "metal";
-  className?: string;
-}) {
-  const isMetal = variant === "metal";
-
-  return (
-    <svg
-      className={className}
-      viewBox={RING_VIEWBOX}
-      fill="none"
-      aria-hidden="true"
-      preserveAspectRatio="xMidYMid meet"
-    >
-      <defs>
-        {isMetal ? (
-          <>
-            <linearGradient id="metalGrad" x1="0" y1="100" x2="0" y2="0">
-              <stop offset="0%" stopColor="#D9DEE5" />
-              <stop offset="28%" stopColor="#FFFFFF" />
-              <stop offset="52%" stopColor="#F5F7FA" />
-              <stop offset="78%" stopColor="#D9DEE5" />
-              <stop offset="100%" stopColor="#FFFFFF" />
-            </linearGradient>
-            <linearGradient id="metalRim" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="rgba(255,255,255,0.5)" />
-              <stop offset="100%" stopColor="rgba(255,255,255,0.06)" />
-            </linearGradient>
-          </>
-        ) : (
-          <linearGradient id="chromeGrad" x1="18" y1="8" x2="82" y2="92">
-            <stop offset="0%" stopColor="rgba(255,255,255,0.14)" />
-            <stop offset="38%" stopColor="rgba(20,26,34,0.98)" />
-            <stop offset="68%" stopColor="rgba(8,12,18,1)" />
-            <stop offset="100%" stopColor="rgba(255,255,255,0.07)" />
-          </linearGradient>
-        )}
-      </defs>
-
-      {RING_CENTERS.map((cx) => (
-        <g key={cx}>
-          <circle
-            cx={cx}
-            cy={RING_CY}
-            r={RING_R}
-            stroke={isMetal ? "url(#metalGrad)" : "url(#chromeGrad)"}
-            strokeWidth={RING_STROKE}
-            fill="none"
-          />
-          <circle
-            cx={cx}
-            cy={RING_CY}
-            r={RING_R}
-            stroke={
-              isMetal ? "url(#metalRim)" : "rgba(255,255,255,0.065)"
-            }
-            strokeWidth={1.1}
-            fill="none"
-            opacity={isMetal ? 0.5 : 1}
-          />
-        </g>
-      ))}
-    </svg>
-  );
-}
-
+/**
+ * The opening mark: the ReplacementPlates logo, dead centre of the screen.
+ * It fades up dim, fills to full brightness from the bottom, catches a light
+ * sweep, grows slightly, then fades as the site appears.
+ */
 export default function IntroRings({ reduced }: Props) {
   if (reduced) return null;
 
@@ -95,14 +21,13 @@ export default function IntroRings({ reduced }: Props) {
 
   return (
     <m.div
-      className={styles.ringsGroup}
+      className={styles.logoGroup}
       aria-hidden="true"
-      style={{ transformOrigin: "center center" }}
-      initial={{ opacity: 0, scale: 0.97 }}
+      initial={{ opacity: 0, scale: 0.96 }}
       animate={{
-        // Appear → white hold → enlarge → large hold → fade
+        // Appear → fill → hold → enlarge → hold → fade
         opacity: [0, 1, 1, 1, 1, 0],
-        scale: [0.97, 1, 1, RING_ENLARGE_SCALE, RING_ENLARGE_SCALE, RING_ENLARGE_SCALE],
+        scale: [0.96, 1, 1, LOGO_ENLARGE_SCALE, LOGO_ENLARGE_SCALE, LOGO_ENLARGE_SCALE],
       }}
       transition={{
         duration: t,
@@ -117,29 +42,27 @@ export default function IntroRings({ reduced }: Props) {
         ],
       }}
     >
-      <div className={styles.layer}>
-        <RingsSvg variant="chrome" className={styles.ringSvg} />
-      </div>
+      {/* Dim base: the logo's silhouette before it lights up */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/logo-rp.webp" alt="" width={922} height={194} className={`${styles.logo} ${styles.logoDim}`} />
 
+      {/* Full-colour logo revealed bottom → top */}
       <m.div
-        className={`${styles.layer} ${styles.whiteLayer}`}
+        className={styles.logoFill}
         initial={{ clipPath: "inset(100% 0 0 0)" }}
         animate={{ clipPath: "inset(0% 0 0 0)" }}
-        transition={{
-          duration: fillDuration,
-          delay: TIMING.fillStart,
-          ease: EASE_FILL,
-        }}
+        transition={{ duration: fillDuration, delay: TIMING.fillStart, ease: EASE_FILL }}
       >
-        <RingsSvg variant="metal" className={styles.ringSvg} />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/logo-rp.webp" alt="" width={922} height={194} className={styles.logo} />
       </m.div>
 
       <m.div
         className={styles.sweep}
         initial={{ x: "-45%", opacity: 0 }}
-        animate={{ x: ["-45%", "145%"], opacity: [0, 0.35, 0.35, 0] }}
+        animate={{ x: ["-45%", "145%"], opacity: [0, 0.4, 0.4, 0] }}
         transition={{
-          duration: 0.26,
+          duration: 0.32,
           delay: TIMING.whiteHold,
           ease: EASE_PREMIUM,
           times: [0, 0.18, 0.72, 1],

@@ -2,7 +2,7 @@
 
 .section {
   scroll-margin-top: 72px;
-  padding-top: clamp(22px, 2.2vw, 36px);
+  padding-top: var(--sec-top);
 }
 
 .inner {
@@ -171,8 +171,10 @@
 
 @media (min-width: 900px) {
   .foot {
-    grid-template-columns: minmax(0, 640fr) minmax(0, 486fr);
-    align-items: stretch;
+    /* the note gets the room it needs to sit on two lines; the button
+       takes the rest and centres on the note's height */
+    grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+    align-items: center;
     gap: clamp(16px, 1.6vw, 24px);
   }
 }
@@ -180,8 +182,8 @@
 .govCard {
   display: flex;
   align-items: center;
-  gap: clamp(14px, 2.3vw, 34px);
-  padding: clamp(12px, 1.2vw, 18px) clamp(16px, 1.6vw, 24px);
+  gap: clamp(12px, 1.4vw, 20px);
+  padding: clamp(12px, 1.1vw, 16px) clamp(16px, 1.6vw, 22px);
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.85);
   border: 1px solid rgba(16, 42, 84, 0.06);
@@ -197,8 +199,9 @@
 
 .govText {
   margin: 0;
-  font-size: clamp(13.5px, 1.1vw, 16.5px);
-  line-height: 1.45;
+  font-size: clamp(13px, 0.98vw, 15px);
+  line-height: 1.5;
+  text-wrap: pretty;
   color: #1d2b40;
 }
 
@@ -220,10 +223,10 @@
   justify-content: center;
   gap: 12px;
   width: 100%;
-  min-height: clamp(52px, 4.4vw, 66px);
+  min-height: clamp(44px, 3.4vw, 52px);
   border-radius: 10px;
   color: #fff;
-  font-size: clamp(16px, 1.36vw, 20px);
+  font-size: clamp(15px, 1.1vw, 16.5px);
   font-weight: 500;
   text-decoration: none;
   background: linear-gradient(105deg, #0657f0 0%, #0a66ff 55%, #1f80ff 100%);

@@ -31,13 +31,50 @@ export type PlatformSummary = {
   featured?: Review;
 };
 
+/* ——— Real reviews: add them here ———
+   Copy ratings, counts and quotes exactly as each platform shows them, and
+   link to the source. Faking or inventing reviews is illegal in the UK
+   (DMCC Act 2024), so nothing below is ever filled in with made-up data. */
+
 /** Ratings for Private Number Plate Maker Ltd on independent platforms */
-export const PLATFORM_REVIEWS: PlatformSummary[] = [];
+const REAL_PLATFORM_REVIEWS: PlatformSummary[] = [];
 
 /** Reviews left directly on this website */
-export const SITE_REVIEWS: Review[] = [];
+const REAL_SITE_REVIEWS: Review[] = [];
 
-/** Where the "See all reviews" buttons go; leave empty to hide them */
-export const ALL_REVIEWS_URL = "";
+/** Where the "See all reviews" buttons go */
+const REAL_ALL_REVIEWS_URL = "";
+
+/* ——— Design preview (development only) ———
+   Placeholder content so the section's layout can be reviewed locally.
+   It is clearly labelled on the page and never reaches a production build. */
+
+const hasReal = REAL_PLATFORM_REVIEWS.length > 0 || REAL_SITE_REVIEWS.length > 0;
+
+/** True when the section is showing placeholder content */
+export const IS_SAMPLE = !hasReal && process.env.NODE_ENV !== "production";
+
+const SAMPLE_TEXT = "Sample review text. Replace with a real customer review.";
+
+const SAMPLE_PLATFORM_REVIEWS: PlatformSummary[] = (
+  ["trustpilot", "google", "facebook"] as const
+).map((platform) => ({
+  platform,
+  rating: 5,
+  count: 0,
+  url: "#reviews",
+  featured: { name: "Sample customer", when: "Sample date", rating: 5, text: SAMPLE_TEXT },
+}));
+
+const SAMPLE_SITE_REVIEWS: Review[] = Array.from({ length: 3 }, () => ({
+  name: "Sample customer",
+  when: "Sample date",
+  rating: 5,
+  text: SAMPLE_TEXT,
+}));
+
+export const PLATFORM_REVIEWS = IS_SAMPLE ? SAMPLE_PLATFORM_REVIEWS : REAL_PLATFORM_REVIEWS;
+export const SITE_REVIEWS = IS_SAMPLE ? SAMPLE_SITE_REVIEWS : REAL_SITE_REVIEWS;
+export const ALL_REVIEWS_URL = IS_SAMPLE ? "#reviews" : REAL_ALL_REVIEWS_URL;
 
 export const hasReviews = PLATFORM_REVIEWS.length > 0 || SITE_REVIEWS.length > 0;

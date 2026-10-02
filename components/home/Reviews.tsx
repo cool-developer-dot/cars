@@ -9,6 +9,7 @@ import {
   PLATFORM_REVIEWS,
   SITE_REVIEWS,
   hasReviews,
+  IS_SAMPLE,
   type Review,
   type ReviewPlatform,
 } from "@/lib/reviews";
@@ -101,7 +102,7 @@ export default function Reviews() {
   if (!hasReviews) return null;
 
   return (
-    <section className={`${h.section} ${h.light}`} aria-labelledby="reviews-title">
+    <section id="reviews" className={`${h.section} ${h.light}`} aria-labelledby="reviews-title">
       <div className={h.container}>
         {PLATFORM_REVIEWS.length > 0 && (
           <>
@@ -127,9 +128,11 @@ export default function Reviews() {
                       {PLATFORM[p.platform].name}
                     </span>
                     <span className={s.score}>
-                      <strong>{p.rating.toFixed(1)}/5</strong>
+                      <strong>{IS_SAMPLE ? "–" : p.rating.toFixed(1)}/5</strong>
                       <Stars rating={p.rating} green={p.platform === "trustpilot"} />
-                      <span className={s.count}>{p.count.toLocaleString("en-GB")} reviews</span>
+                      <span className={s.count}>
+                        {IS_SAMPLE ? "Sample" : `${p.count.toLocaleString("en-GB")} reviews`}
+                      </span>
                     </span>
                   </a>
                   {p.featured && <ReviewCard review={p.featured} />}

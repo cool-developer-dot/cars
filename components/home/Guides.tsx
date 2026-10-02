@@ -96,7 +96,7 @@ export default function Guides() {
                   <span className={s.badge} aria-hidden="true">
                     <Icon strokeWidth={1.9} />
                   </span>
-                  <span className={s.title}>{title}</span>
+                  <span className={`${s.title} title-case`}>{title}</span>
                   <ArrowRight className={s.arrow} strokeWidth={2.2} aria-hidden="true" />
                 </span>
               </Link>
