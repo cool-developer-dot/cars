@@ -89,11 +89,22 @@ export default function OpeningIntro({ children }: Props) {
     document.body.style.overflow = "hidden";
 
     // The site (and the hero's entrance) waits until the intro has fully
-    // finished — nothing appears while the rings are still on screen.
+    // finished — nothing appears while the logo is still on screen.
     const doneTimer = window.setTimeout(finish, TIMING.complete * 1000);
+
+    // Never hold an eager visitor: any swipe, scroll or key press skips the
+    // intro and hands the page over immediately
+    const skip = () => finish();
+    const opts = { passive: true, once: true } as const;
+    window.addEventListener("touchstart", skip, opts);
+    window.addEventListener("wheel", skip, opts);
+    window.addEventListener("keydown", skip, opts);
 
     return () => {
       window.clearTimeout(doneTimer);
+      window.removeEventListener("touchstart", skip);
+      window.removeEventListener("wheel", skip);
+      window.removeEventListener("keydown", skip);
       document.body.style.overflow = prevOverflow;
     };
   }, [phase, finish]);

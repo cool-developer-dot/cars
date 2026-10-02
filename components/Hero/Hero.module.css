@@ -11,7 +11,10 @@
   flex-direction: column;
   flex: 1 1 auto;
   min-height: unset;
-  overflow-x: hidden;
+  /* clip, not hidden: overflow-x: hidden turns the hero into its own
+     vertical scroll box, and on iPhone swipes that start on the hero then
+     scroll that box (a few px) instead of the page — the "stuck" hero */
+  overflow-x: clip;
   color: #fff;
   font-family: var(--font-geist-sans), "Segoe UI", sans-serif;
 }
@@ -623,7 +626,7 @@
 @media (min-width: 900px) {
   .hero {
     min-height: 100dvh;
-    overflow: hidden;
+    overflow: clip;
   }
 
   .inner {

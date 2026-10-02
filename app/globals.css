@@ -90,7 +90,7 @@ body {
 .hero {
   position: relative;
   isolation: isolate;
-  overflow-x: hidden;
+  overflow-x: clip; /* hidden would make a scroll box (traps touch scrolling) */
   background-color: #0b0d12;
   background-image: url("/hero-bg.webp");
   background-repeat: no-repeat;

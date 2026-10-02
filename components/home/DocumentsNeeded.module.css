@@ -73,7 +73,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow: clip;
   padding: clamp(18px, 1.85vw, 28px) clamp(18px, 1.85vw, 28px) 0;
   border-radius: clamp(14px, 1.1vw, 18px);
   background: linear-gradient(170deg, rgba(255, 255, 255, 0.97) 0%, rgba(247, 250, 255, 0.94) 100%);
