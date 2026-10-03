@@ -1,0 +1,229 @@
+/* Replacement plates — light section. Shell, heading, lead and glass come
+   from the shared homepage styles (home.module.css); this file only lays
+   out the four cards. */
+
+/* soft studio streaks over the shared light background */
+.section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(118deg, transparent 16%, rgba(255, 255, 255, 0.7) 30%, transparent 44%),
+    linear-gradient(118deg, transparent 58%, rgba(255, 255, 255, 0.55) 70%, transparent 82%);
+}
+
+.line {
+  display: block;
+}
+
+.lead {
+  max-width: 64ch;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card {
+  --r: 20px;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--r);
+}
+
+.copy {
+  position: relative;
+  z-index: 1;
+  padding: 18px 18px 20px;
+}
+
+.cardTitle {
+  margin: 0 0 8px;
+  font-size: var(--fs-h3);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+.cardText {
+  margin: 0;
+  font-size: var(--fs-body);
+  line-height: 1.55;
+  color: var(--text);
+  text-wrap: pretty;
+}
+
+/* ——— Photos: feathered into the card on every edge ——— */
+
+/* Phones: a banner across the top of the card */
+.media {
+  position: relative;
+  order: -1;
+  height: 196px;
+  overflow: hidden;
+  border-radius: var(--r) var(--r) 0 0;
+  -webkit-mask-image:
+    linear-gradient(180deg, transparent 0%, #000 12%, #000 70%, transparent 100%),
+    linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(180deg, transparent 0%, #000 12%, #000 70%, transparent 100%),
+    linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
+  mask-composite: intersect;
+}
+
+.media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cracked img {
+  object-position: 40% 4%; /* keep the whole zoom circle in view */
+}
+
+.lost img {
+  object-position: 50% 60%;
+}
+
+.match img {
+  object-position: 50% 45%;
+}
+
+/* The printed → 3D gel drawing needs no feathering */
+.mediaArt {
+  height: 230px;
+  overflow: visible;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+.upgrade {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  perspective: 900px;
+}
+
+.upPlate {
+  position: relative;
+  width: min(250px, 74%);
+  transform: rotateX(16deg) rotateY(-14deg) rotate(-9deg);
+  filter: drop-shadow(0 12px 14px rgba(18, 52, 110, 0.18));
+}
+
+.upPlate:last-child {
+  margin-left: 6%;
+}
+
+.tag {
+  position: absolute;
+  top: -15px;
+  left: 2%;
+  z-index: 1;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: var(--fs-small);
+  font-weight: 600;
+  line-height: 1.2;
+  color: #fff;
+  box-shadow: 0 4px 10px -4px rgba(18, 52, 110, 0.4);
+}
+
+.tagGrey {
+  background: #8a97a8;
+}
+
+.tagBlue {
+  background: linear-gradient(180deg, #2f9bff 0%, #0a6ef0 100%);
+}
+
+.upArrow {
+  width: 22px;
+  height: 22px;
+  margin: 6px 0 10px;
+  color: #0a6eff;
+}
+
+/* ——— Tablet and up: copy left, photo right ——— */
+
+@media (min-width: 560px) {
+  .card {
+    position: relative;
+    flex-direction: row;
+    align-items: center;
+    min-height: 250px;
+  }
+
+  /* text stops where the photo's fade begins */
+  .copy {
+    width: 55%;
+    padding: 26px 0 26px 26px;
+  }
+
+  .media {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    order: 0;
+    width: 46%;
+    height: auto;
+    border-radius: 0 var(--r) var(--r) 0;
+    -webkit-mask-image:
+      linear-gradient(90deg, transparent 0%, #000 34%, #000 94%, transparent 100%),
+      linear-gradient(180deg, transparent 0%, #000 7%, #000 93%, transparent 100%);
+    mask-image:
+      linear-gradient(90deg, transparent 0%, #000 34%, #000 94%, transparent 100%),
+      linear-gradient(180deg, transparent 0%, #000 7%, #000 93%, transparent 100%);
+  }
+
+  .mediaArt {
+    width: 44%;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .upPlate {
+    width: 88%;
+  }
+}
+
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .card {
+    --r: 22px;
+    min-height: 280px;
+  }
+
+  .copy {
+    width: 54%;
+    padding: 30px 0 30px 30px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .copy {
+    width: 57%;
+    padding: 34px 0 34px 34px;
+  }
+}

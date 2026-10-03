@@ -1,0 +1,1037 @@
+/* Plate-style page hero. Colours, glass and button recipes are copied from
+   the homepage hero (components/Hero) so the pages match, but nothing here is
+   shared with it — the homepage can change without touching this page.
+   Sizes come from the global type tokens (--fs-*) in app/globals.css. */
+
+.hero {
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --blue: #0a84ff;
+  --eyebrow: #3d8dff;
+  --text: rgba(225, 233, 245, 0.86);
+  --muted: rgba(190, 208, 232, 0.66);
+  --line: rgba(140, 190, 255, 0.16);
+  /* height of the neon closing edge (components/NeonEdge) — as the homepage hero */
+  --neon-edge-h: clamp(42px, 6.6vw, 100px);
+  position: relative;
+  isolation: isolate;
+  overflow: clip; /* clip, not hidden: hidden traps touch scrolling on iOS */
+  color: #fff;
+  background: #05101c;
+  font-family: var(--font-ui);
+}
+
+/* ——— Background: rendered wet road at night ——— */
+
+.bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: #05101c url("/3d/hero-bg.webp") center 40% / cover no-repeat;
+  pointer-events: none;
+}
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    /* nav legibility */
+    linear-gradient(180deg, rgba(4, 9, 18, 0.55) 0%, transparent 16%),
+    /* copy side stays dark */
+    linear-gradient(90deg, rgba(4, 10, 20, 0.78) 0%, rgba(4, 10, 20, 0.42) 46%, rgba(4, 10, 20, 0.2) 70%, rgba(4, 10, 20, 0.35) 100%),
+    /* settle into the next section's navy */
+    linear-gradient(180deg, transparent 62%, rgba(5, 16, 28, 0.7) 100%);
+}
+
+/* ——— Layout (phones first: one column) ——— */
+
+.inner {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    "copy"
+    "art"
+    "card"
+    "options"
+    "trust";
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: calc(72px + 22px) 16px calc(var(--neon-edge-h) + var(--sec-bottom));
+}
+
+.copy {
+  grid-area: copy;
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 12px;
+  font-size: var(--fs-eyebrow);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: var(--eyebrow-tracking);
+  text-transform: uppercase;
+  color: var(--eyebrow);
+}
+
+.eyebrow::before {
+  content: "";
+  width: 28px;
+  height: 2px;
+  flex-shrink: 0;
+  border-radius: 2px;
+  background: currentColor;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--fs-h1);
+  font-weight: var(--display-weight);
+  line-height: var(--display-leading);
+  letter-spacing: var(--display-tracking);
+  color: #fff;
+}
+
+.titleLine {
+  display: block;
+  text-wrap: balance;
+}
+
+.price {
+  background: linear-gradient(95deg, #1a7dff 0%, #2f9bff 45%, #4fc0ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.lead {
+  margin: 14px 0 0;
+  max-width: 46ch;
+  font-size: var(--fs-lead);
+  line-height: 1.55;
+  color: var(--text);
+}
+
+/* ——— Plates art: feathered into the scene on every edge ——— */
+
+.art {
+  grid-area: art;
+  position: relative;
+  z-index: 0;
+  /* a little wider than the screen: bigger plates, edges feathered away */
+  margin: 4px -9% -6px;
+  pointer-events: none;
+  -webkit-mask-image:
+    linear-gradient(90deg, transparent 0%, #000 9%, #000 91%, transparent 100%),
+    linear-gradient(180deg, transparent 0%, #000 14%, #000 76%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(90deg, transparent 0%, #000 9%, #000 91%, transparent 100%),
+    linear-gradient(180deg, transparent 0%, #000 14%, #000 76%, transparent 100%);
+  mask-composite: intersect;
+}
+
+.art img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ——— Option cards ——— */
+
+.options {
+  grid-area: options;
+  margin-top: 26px;
+}
+
+.buyTitle {
+  margin: 0 0 14px;
+  font-size: var(--fs-h3);
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+.optionGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+/* Liquid glass, as the homepage's dark-section cards */
+.option {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px 12px;
+  border: 1px solid transparent;
+  border-radius: 16px;
+  text-align: center;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 45%, rgba(120, 175, 255, 0.1) 100%),
+    rgba(16, 38, 78, 0.72);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: transform 200ms var(--ease);
+}
+
+.option::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  padding: 1px;
+  border-radius: inherit;
+  background: linear-gradient(140deg, rgba(230, 242, 255, 0.6) 0%, rgba(110, 180, 255, 0.4) 30%, rgba(40, 120, 255, 0.3) 62%, rgba(120, 190, 255, 0.55) 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.option[aria-pressed="true"]::before {
+  background: linear-gradient(140deg, rgba(160, 215, 255, 0.95) 0%, rgba(40, 140, 255, 0.85) 100%);
+}
+
+.option:focus-visible {
+  outline: 2px solid #4ecbff;
+  outline-offset: 2px;
+}
+
+.optionIcon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 36px;
+  flex-shrink: 0;
+  color: #2f8bff;
+  filter: drop-shadow(0 0 6px rgba(10, 132, 255, 0.55));
+}
+
+.optionIcon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.optionText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.optionText strong {
+  font-size: var(--fs-body);
+  font-weight: 650;
+  line-height: 1.35;
+  color: #fff;
+  text-wrap: balance;
+}
+
+.optionText span {
+  font-size: var(--fs-small);
+  line-height: 1.45;
+  color: rgba(214, 226, 244, 0.8);
+  text-wrap: pretty;
+}
+
+/* ——— Builder card ——— */
+
+.card {
+  grid-area: card;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 6px;
+  padding: 18px 16px 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(90, 170, 255, 0.5);
+  background: linear-gradient(165deg, rgba(14, 28, 52, 0.95) 0%, rgba(6, 13, 26, 0.97) 100%);
+  box-shadow:
+    0 0 0 1px rgba(10, 132, 255, 0.12),
+    0 0 22px rgba(10, 132, 255, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  scroll-margin-top: 96px;
+}
+
+.cardHead {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.cardIcon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  color: #2f8bff;
+  filter: drop-shadow(0 0 8px rgba(10, 132, 255, 0.6));
+}
+
+.cardIcon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.cardHeadText {
+  min-width: 0;
+}
+
+.cardTitleRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+}
+
+.cardTitle {
+  margin: 0;
+  font-size: var(--fs-h3);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: #fff;
+}
+
+.selected {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(61, 222, 138, 0.6);
+  background: rgba(24, 120, 70, 0.22);
+  font-size: var(--fs-eyebrow);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #5ff0a6;
+}
+
+.cardSub {
+  margin: 6px 0 0;
+  text-wrap: balance;
+  font-size: var(--fs-label);
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-size: var(--fs-label);
+  font-weight: 500;
+  color: rgba(225, 233, 245, 0.9);
+}
+
+/* Registration: blue UK band + white plate face */
+.plateField {
+  display: flex;
+  align-items: stretch;
+  gap: 4px;
+  height: 64px;
+  padding: 3px;
+  border-radius: 12px;
+  border: 1px solid rgba(120, 180, 255, 0.35);
+  background: rgba(6, 12, 24, 0.85);
+  box-shadow: 0 0 14px rgba(10, 132, 255, 0.25);
+}
+
+.plateBand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 52px;
+  flex-shrink: 0;
+  border-radius: 9px;
+  background: linear-gradient(180deg, #0b2456 0%, #071737 100%);
+  border: 1px solid rgba(120, 180, 255, 0.2);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #fff;
+}
+
+.plateBand svg {
+  width: 26px;
+  height: 17px;
+  border-radius: 2px;
+}
+
+.plateFace {
+  position: relative;
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  border-radius: 9px;
+  background: linear-gradient(180deg, #ffffff 0%, #eef1f5 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.plateInput {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  padding: 0 10px;
+  text-align: center;
+  font-size: 34px; /* plate lettering, not a text role; ≥16px stops iOS zoom */
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #0b0d12;
+}
+
+.plateField:focus-within {
+  border-color: rgba(141, 220, 255, 0.8);
+  box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.25), 0 0 16px rgba(10, 132, 255, 0.35);
+}
+
+/* Front / Rear / Pair */
+.segment {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  padding: 3px;
+  gap: 3px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: rgba(6, 12, 24, 0.7);
+}
+
+.segBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: rgba(220, 230, 245, 0.78);
+  font: inherit;
+  font-size: var(--fs-label);
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 180ms var(--ease), background 180ms var(--ease), box-shadow 220ms var(--ease);
+}
+
+.segBtn + .segBtn:not(.segOn) {
+  box-shadow: -1px 0 0 var(--line);
+}
+
+.segOn + .segBtn {
+  box-shadow: none;
+}
+
+.segBtn:hover {
+  color: #fff;
+}
+
+.segIcon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.segOn {
+  color: #fff;
+  background: linear-gradient(180deg, #1d8bff 0%, #0a6ef0 100%);
+  box-shadow: 0 0 12px rgba(10, 132, 255, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.segBtn:focus-visible,
+.tile:focus-visible {
+  outline: 2px solid #4ecbff;
+  outline-offset: 2px;
+}
+
+/* Style tiles */
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 78px;
+  padding: 10px 4px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: rgba(6, 12, 24, 0.7);
+  color: rgba(225, 233, 245, 0.88);
+  font: inherit;
+  font-size: var(--fs-small);
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 180ms var(--ease), box-shadow 200ms var(--ease), color 180ms var(--ease);
+}
+
+.tile:hover {
+  border-color: rgba(120, 180, 255, 0.4);
+  color: #fff;
+}
+
+.tileOn {
+  color: #fff;
+  border-color: rgba(60, 150, 255, 0.95);
+  background: linear-gradient(180deg, rgba(16, 44, 92, 0.9) 0%, rgba(8, 22, 48, 0.9) 100%);
+  box-shadow: 0 0 14px rgba(10, 132, 255, 0.45), inset 0 0 12px rgba(10, 132, 255, 0.18);
+}
+
+.tileGlyph {
+  display: block;
+  width: 40px;
+  height: 25px;
+  color: rgba(225, 233, 245, 0.85);
+}
+
+.tileOn .tileGlyph {
+  color: #fff;
+}
+
+.tileGlyph svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.tick {
+  position: absolute;
+  top: -7px;
+  right: -7px;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #1d8bff;
+  box-shadow: 0 0 0 2px #071326, 0 0 10px rgba(10, 132, 255, 0.6);
+  color: #fff;
+}
+
+.tick svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* Main button — the homepage hero's CTA */
+.cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  height: 52px;
+  border: 0;
+  border-radius: 12px;
+  color: #fff;
+  font: inherit;
+  font-size: var(--fs-btn);
+  font-weight: 650;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  background: linear-gradient(105deg, #0070f0 0%, #0a84ff 42%, #2eb0ff 100%);
+  box-shadow:
+    0 0 0 1px rgba(120, 200, 255, 0.2),
+    0 8px 20px -8px rgba(0, 100, 255, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.24);
+  transition: transform 200ms var(--ease), filter 200ms var(--ease);
+}
+
+.cta:hover {
+  filter: brightness(1.06);
+}
+
+.cta:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px rgba(8, 14, 28, 0.9),
+    0 0 0 4px rgba(78, 203, 255, 0.75);
+}
+
+.prices {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.priceItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 0 4px;
+}
+
+.priceItem + .priceItem {
+  padding-left: 14px;
+  border-left: 1px solid var(--line);
+}
+
+.priceIcon {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: rgba(200, 220, 245, 0.85);
+}
+
+.prices dt {
+  font-size: var(--fs-body);
+  font-weight: 500;
+  line-height: 1.3;
+  color: #fff;
+}
+
+.prices dt strong {
+  font-weight: 700;
+}
+
+.prices dd {
+  margin: 3px 0 0;
+  text-wrap: balance;
+  font-size: var(--fs-small);
+  line-height: 1.35;
+  color: var(--muted);
+}
+
+/* ——— Trust row ——— */
+
+.trust {
+  grid-area: trust;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 26px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.trustItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px 10px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  text-align: center;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 45%, rgba(120, 175, 255, 0.06) 100%),
+    rgba(8, 20, 42, 0.86);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.trustIcon {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  border-radius: 14px;
+  border: 1px solid rgba(80, 160, 255, 0.45);
+  background: radial-gradient(circle at 35% 25%, rgba(30, 110, 230, 0.45), rgba(8, 30, 70, 0.9) 75%);
+  box-shadow: 0 0 12px rgba(10, 120, 255, 0.35);
+  color: #4ea6ff;
+}
+
+.trustIcon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.trustText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.trustText strong {
+  font-size: var(--fs-label);
+  font-weight: 650;
+  line-height: 1.3;
+  color: #fff;
+}
+
+.trustText span {
+  font-size: var(--fs-small);
+  line-height: 1.35;
+  color: var(--muted);
+}
+
+/* ——— Entrance (after the opening intro, as the homepage) ——— */
+
+.anim {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.play .anim {
+  animation: rise 0.55s var(--ease) var(--d, 0ms) both;
+}
+
+.still .anim {
+  opacity: 1;
+  transform: none;
+  animation: none;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ——— Tablet ——— */
+
+@media (min-width: 560px) {
+  .inner {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .art {
+    margin-left: -6%;
+    margin-right: -6%;
+  }
+
+  .option {
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+    padding: 16px;
+    gap: 14px;
+  }
+
+  .card {
+    padding: 22px 22px 18px;
+  }
+
+  .tile {
+    min-height: 86px;
+  }
+
+  .trust {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .trustItem {
+    flex-direction: row;
+    text-align: left;
+    padding: 14px 16px;
+    gap: 14px;
+  }
+}
+
+/* ——— Desktop: copy + art left, builder card right ——— */
+
+@media (min-width: 900px) {
+  .hero {
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
+  }
+
+  .inner {
+    /* free space beside the 1180px column, as the homepage hero */
+    --side: max(0px, calc((100vw - 1180px) / 2));
+    grid-template-columns: minmax(0, 1fr) minmax(360px, 0.78fr);
+    grid-template-areas:
+      "copy card"
+      "options card"
+      "art card"
+      "trust trust";
+    align-content: center;
+    flex: 1;
+    column-gap: clamp(28px, 3.4vw, 52px);
+    max-width: 1244px;
+    padding: calc(96px + 40px) 32px var(--neon-edge-h);
+  }
+
+  .copy {
+    padding-top: 4px;
+  }
+
+  .eyebrow {
+    margin-bottom: 16px;
+  }
+
+  .lead {
+    margin-top: 18px;
+  }
+
+  .options {
+    margin-top: 30px;
+  }
+
+  .card {
+    align-self: start;
+    margin-top: 0;
+    padding: 30px 30px 24px;
+    gap: 22px;
+    border-radius: 22px;
+    background: linear-gradient(165deg, rgba(14, 30, 56, 0.78) 0%, rgba(6, 13, 26, 0.86) 100%);
+    box-shadow:
+      0 0 0 1px rgba(10, 132, 255, 0.12),
+      0 0 26px rgba(10, 132, 255, 0.28),
+      0 24px 56px -20px rgba(0, 0, 0, 0.7),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      inset 0 0 22px rgba(10, 132, 255, 0.08);
+    -webkit-backdrop-filter: blur(14px) saturate(135%);
+    backdrop-filter: blur(14px) saturate(135%);
+  }
+
+  .cardIcon {
+    width: 52px;
+    height: 52px;
+  }
+
+  .field {
+    gap: 10px;
+  }
+
+  .plateField {
+    height: 84px;
+  }
+
+  .plateBand {
+    width: 64px;
+  }
+
+  .plateInput {
+    font-size: 52px;
+  }
+
+  .segBtn {
+    height: 50px;
+  }
+
+  .tiles {
+    gap: 10px;
+  }
+
+  .tile {
+    min-height: 102px;
+    gap: 10px;
+  }
+
+  .tileGlyph {
+    width: 46px;
+    height: 29px;
+  }
+
+  .prices {
+    padding-top: 18px;
+  }
+
+  .option {
+    background:
+      linear-gradient(135deg, rgba(255, 255, 255, 0.13) 0%, rgba(255, 255, 255, 0.04) 40%, rgba(120, 175, 255, 0.03) 65%, rgba(120, 175, 255, 0.09) 100%),
+      rgba(22, 52, 104, 0.26);
+    -webkit-backdrop-filter: blur(18px) saturate(175%) brightness(1.06);
+    backdrop-filter: blur(18px) saturate(175%) brightness(1.06);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.28),
+      inset 0 0 28px rgba(110, 170, 255, 0.08),
+      0 0 20px rgba(30, 120, 255, 0.2),
+      0 18px 36px -20px rgba(0, 8, 30, 0.8);
+  }
+
+  .option:hover {
+    transform: translateY(-2px);
+  }
+
+  .optionIcon {
+    width: 52px;
+    height: 42px;
+  }
+
+  .optionText span {
+    font-size: var(--fs-label);
+  }
+
+  .trustIcon {
+    width: 52px;
+    height: 52px;
+    border-radius: 15px;
+  }
+
+  .trustIcon svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* The render bleeds left into the free margin and tucks under the cards */
+  .art {
+    width: calc(100% + min(var(--side), 120px) + 40px);
+    margin: -56px 0 -86px calc(-1 * min(var(--side), 120px));
+  }
+
+  .options {
+    position: relative;
+    z-index: 1;
+  }
+
+  .trust {
+    position: relative;
+    z-index: 1;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 22px;
+  }
+
+  .trustItem {
+    padding: 16px 18px;
+    background:
+      linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.03) 45%, rgba(120, 175, 255, 0.07) 100%),
+      rgba(8, 20, 42, 0.62);
+    -webkit-backdrop-filter: blur(14px) saturate(150%);
+    backdrop-filter: blur(14px) saturate(150%);
+  }
+
+  .bg {
+    background-position: center 45%;
+  }
+}
+
+/* Small laptops / landscape tablets: slimmer card column so the H1 keeps
+   its two lines, card content stacked, trust points two by two */
+@media (min-width: 900px) and (max-width: 1199px) {
+  .inner {
+    grid-template-columns: minmax(0, 1fr) 360px;
+  }
+
+  .option {
+    flex-direction: column;
+    text-align: center;
+    padding: 16px 14px;
+    gap: 10px;
+  }
+
+  .trust {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .card {
+    padding: 24px 22px 20px;
+    gap: 18px;
+  }
+
+  .tile {
+    min-height: 92px;
+  }
+}
+
+@media (min-width: 1100px) and (max-width: 1199px) {
+  .inner {
+    grid-template-columns: minmax(0, 1fr) 400px;
+  }
+}
+
+@media (min-width: 900px) and (max-width: 1279px) {
+  .plateInput {
+    font-size: 44px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .inner {
+    grid-template-columns: minmax(0, 1fr) minmax(400px, 0.78fr);
+  }
+
+  /* one row of four: icon and text read from the left, as in the design */
+  .trustItem {
+    justify-content: flex-start;
+  }
+}
+
+@media (min-width: 1280px) {
+  .inner {
+    grid-template-columns: minmax(0, 1fr) 500px;
+  }
+}
+
+/* Phones: art comes from the lighter file, tighter scrims for small type */
+@media (max-width: 899px) {
+  /* portrait crop that already fades into the navy below it */
+  .bg {
+    background-image: url("/3d/hero-bg-mobile.webp");
+    background-position: center top;
+    background-size: 100% auto;
+  }
+
+  .scrim {
+    background:
+      linear-gradient(180deg, rgba(4, 9, 18, 0.62) 0%, rgba(4, 9, 18, 0.35) 30%, rgba(4, 9, 18, 0.55) 60%, rgba(5, 16, 28, 0.92) 100%);
+  }
+}
+
+@media (max-width: 374px) {
+  .inner {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .card {
+    padding: 16px 12px 14px;
+  }
+
+  .tiles {
+    gap: 6px;
+  }
+
+  .plateInput {
+    font-size: 30px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anim {
+    opacity: 1;
+    transform: none;
+    animation: none !important;
+  }
+
+  .option:hover {
+    transform: none;
+  }
+}

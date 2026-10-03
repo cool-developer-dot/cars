@@ -1,0 +1,389 @@
+/* Sizes and options — light section, three cards with drawn diagrams.
+   Shell, headings, glass and icon discs come from home.module.css. */
+
+.section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(160deg, transparent 52%, rgba(255, 255, 255, 0.75) 64%, transparent 76%),
+    linear-gradient(160deg, transparent 8%, rgba(255, 255, 255, 0.55) 18%, transparent 30%);
+}
+
+.line {
+  display: block;
+}
+
+.lead {
+  max-width: 60ch;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 20px 18px;
+  border-radius: 20px;
+}
+
+.cardHead {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.icon {
+  width: 48px;
+  height: 48px;
+}
+
+.icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.cardTitle {
+  margin: 2px 0 6px;
+  font-size: var(--fs-h3);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+.cardText {
+  margin: 0;
+  font-size: var(--fs-body);
+  line-height: 1.55;
+  color: var(--text);
+  text-wrap: pretty;
+}
+
+/* the drawing fills the space under the copy, centred */
+.figure {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  min-height: 130px;
+  color: #0a5cff;
+}
+
+.dimLine,
+.dimLineV {
+  position: relative;
+  display: block;
+  background: currentColor;
+}
+
+.dimLine {
+  flex: 1;
+  height: 1.5px;
+}
+
+.dimLineV {
+  flex: none;
+  align-self: stretch;
+  width: 1.5px;
+}
+
+/* end ticks */
+.dimLine::before,
+.dimLineV::before {
+  content: "";
+  position: absolute;
+  background: currentColor;
+}
+
+.dimLine::before {
+  top: -6px;
+  width: 1.5px;
+  height: 13px;
+}
+
+.dimLineV::before {
+  left: -6px;
+  width: 13px;
+  height: 1.5px;
+}
+
+.dimLabel {
+  flex-shrink: 0;
+  font-size: var(--fs-label);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* ——— 520 × 111 ——— */
+
+.figStd {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "top ."
+    "plate side";
+  gap: 10px 12px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.dimTop {
+  grid-area: top;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dimTop .dimLine:first-child::before {
+  left: 0;
+}
+
+.dimTop .dimLine:last-child::before {
+  right: 0;
+}
+
+.stdPlate {
+  grid-area: plate;
+  display: block;
+  filter: drop-shadow(0 10px 14px rgba(18, 52, 110, 0.16));
+}
+
+.dimSide {
+  grid-area: side;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dimSide .dimLineV {
+  align-self: stretch;
+}
+
+.dimSide .dimLineV::before {
+  top: 0;
+}
+
+.dimSide .dimLineV::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: -6px;
+  width: 13px;
+  height: 1.5px;
+  background: currentColor;
+}
+
+/* ——— Motorcycle plates ——— */
+
+.figMoto {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-evenly;
+  gap: 16px;
+  width: 100%;
+}
+
+.motoItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.moto {
+  display: grid;
+  place-items: center;
+  container-type: inline-size;
+  border-radius: 8px;
+  background: linear-gradient(168deg, #ffffff 0%, #f3f6f9 35%, #dfe5ec 75%, #cfd6df 100%);
+  box-shadow:
+    0 2px 0 #b8c0ca,
+    0 4px 0 #8b949f,
+    0 14px 18px -8px rgba(18, 52, 110, 0.35),
+    inset 0 2px 0 rgba(255, 255, 255, 0.8);
+}
+
+.std {
+  width: 128px;
+  aspect-ratio: 1.45;
+}
+
+.small {
+  width: 98px;
+  aspect-ratio: 1.3;
+}
+
+.motoChars {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 30cqw; /* plate lettering scales with the plate, not a text role */
+  font-weight: 700;
+  line-height: 0.98;
+  color: #050506;
+  text-shadow:
+    0 0.6cqw 0 #000,
+    0.4cqw 2cqw 2cqw rgba(0, 0, 0, 0.35);
+}
+
+.caption {
+  font-size: var(--fs-small);
+  color: var(--muted);
+}
+
+/* ——— Measuring ——— */
+
+.figMeasure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  max-width: 380px;
+}
+
+.figMeasure .mLabel {
+  font-size: var(--fs-small);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.mWidth,
+.mFix {
+  display: flex;
+  width: calc(100% - 92px);
+  margin-right: 92px;
+}
+
+.mWidth .dimLine::before {
+  left: 0;
+}
+
+.mWidth .dimLine::after {
+  content: "";
+  position: absolute;
+  top: -6px;
+  right: 0;
+  width: 1.5px;
+  height: 13px;
+  background: currentColor;
+}
+
+.mRow {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+  width: 100%;
+}
+
+.recess {
+  position: relative;
+  flex: 1;
+  height: 74px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #f6f8fb 0%, #e3e8ef 100%);
+  box-shadow:
+    0 8px 18px -10px rgba(18, 52, 110, 0.35),
+    inset 0 1px 0 #fff;
+}
+
+.recessInner {
+  display: block;
+  height: 100%;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #d9e0e9 0%, #eef2f7 100%);
+  box-shadow: inset 0 3px 8px rgba(18, 52, 110, 0.22);
+}
+
+.fix {
+  position: absolute;
+  bottom: 14px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(10, 92, 255, 0.12);
+}
+
+.fixL {
+  left: 26%;
+}
+
+.fixR {
+  right: 26%;
+}
+
+.mHeight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.mHeight .dimLineV {
+  align-self: stretch;
+}
+
+.mHeight .dimLineV::before {
+  top: 0;
+}
+
+.mHeight .dimLineV::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: -6px;
+  width: 13px;
+  height: 1.5px;
+  background: currentColor;
+}
+
+.mHeight .mLabel {
+  max-width: 6.5em;
+  line-height: 1.25;
+}
+
+/* dashed line between the two fixing points */
+.mFix {
+  justify-content: center;
+}
+
+.dashed {
+  display: block;
+  width: 48%;
+  height: 0;
+  border-top: 1.5px dashed currentColor;
+}
+
+/* ——— Desktop: three across ——— */
+
+@media (min-width: 900px) {
+  .cards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    padding: 22px 20px 20px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .card {
+    padding: 24px 24px 22px;
+  }
+}
