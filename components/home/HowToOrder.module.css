@@ -68,14 +68,14 @@
 
 .eyebrow {
   margin-bottom: clamp(12px, 1.4vw, 20px);
-  font-size: clamp(11px, 0.84vw, 13px);
+  font-size: var(--fs-eyebrow);
   letter-spacing: 0.2em;
 }
 
 .title {
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(2rem, 3.8vw, 3.75rem);
+  font-size: var(--fs-h2);
   font-weight: 700;
   line-height: 1.04;
   letter-spacing: -0.04em;
@@ -85,7 +85,7 @@
 .sub {
   max-width: 36em;
   margin: clamp(10px, 1.1vw, 16px) 0 0;
-  font-size: clamp(15px, 1.22vw, 19px);
+  font-size: var(--fs-lead);
   line-height: 1.5;
   color: rgba(226, 235, 248, 0.88);
 }
@@ -165,7 +165,7 @@
 
 .stepTitle {
   margin: 0 0 clamp(4px, 0.5vw, 8px);
-  font-size: clamp(15px, 1.36vw, 20px);
+  font-size: var(--fs-h3);
   font-weight: 600;
   line-height: 1.25;
   letter-spacing: -0.015em;
@@ -174,7 +174,7 @@
 
 .stepText {
   margin: 0;
-  font-size: clamp(12.5px, 0.98vw, 15px);
+  font-size: var(--fs-body);
   line-height: 1.45;
   color: rgba(206, 220, 242, 0.8);
 }
@@ -246,7 +246,7 @@
   padding: 0 clamp(28px, 2.6vw, 40px);
   border-radius: 10px;
   color: #fff;
-  font-size: clamp(15px, 1.1vw, 16.5px);
+  font-size: var(--fs-btn);
   font-weight: 500;
   text-decoration: none;
   background: linear-gradient(105deg, #0657f0 0%, #0a66ff 55%, #1f80ff 100%);

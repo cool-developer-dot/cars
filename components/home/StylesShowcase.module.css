@@ -68,7 +68,7 @@
 
 .eyebrow {
   margin-bottom: clamp(14px, 1.8vw, 28px);
-  font-size: clamp(11.5px, 0.95vw, 14.5px);
+  font-size: var(--fs-eyebrow);
   letter-spacing: 0.26em;
 }
 
@@ -80,7 +80,7 @@
   margin: 0;
   font-family: var(--font-display);
   /* same H2 scale as the other sections */
-  font-size: clamp(2rem, 3.7vw, 3.6rem);
+  font-size: var(--fs-h2);
   font-weight: 700;
   line-height: 1.04;
   letter-spacing: -0.045em;
@@ -93,7 +93,7 @@
 
 .sub {
   margin: clamp(14px, 1.9vw, 30px) 0 0;
-  font-size: clamp(15px, 1.3vw, 19px);
+  font-size: var(--fs-lead);
   line-height: 1.45;
   color: #46566c;
 }
@@ -132,7 +132,7 @@
 .madeText {
   flex: 1;
   min-width: 0;
-  font-size: clamp(13.5px, 1.1vw, 17px);
+  font-size: var(--fs-body);
   line-height: 1.45;
   color: #46566c;
 }
@@ -140,7 +140,7 @@
 .madeText strong {
   display: block;
   margin-bottom: 3px;
-  font-size: clamp(15px, 1.2vw, 18.5px);
+  font-size: var(--fs-h3);
   font-weight: 650;
   color: #0a1424;
 }
@@ -280,7 +280,7 @@
 }
 
 .name {
-  font-size: clamp(15px, 1.2vw, 19px);
+  font-size: var(--fs-h3);
   font-weight: 700;
   letter-spacing: -0.015em;
   color: #0a1424;
@@ -288,7 +288,7 @@
 
 .blurb {
   margin-top: clamp(6px, 0.7vw, 11px);
-  font-size: clamp(12.5px, 0.98vw, 15px);
+  font-size: var(--fs-body);
   line-height: 1.5;
   color: #536379;
 }
@@ -316,7 +316,7 @@
 
 .from {
   display: block;
-  font-size: clamp(14px, 1.15vw, 18px);
+  font-size: var(--fs-h3);
   font-weight: 700;
   letter-spacing: -0.01em;
   color: #0a1424;
@@ -326,7 +326,7 @@
 .pair {
   display: block;
   margin-top: 3px;
-  font-size: clamp(12.5px, 0.98vw, 15px);
+  font-size: var(--fs-body);
   color: #6b7a90;
   white-space: nowrap;
 }
@@ -340,7 +340,7 @@
   margin: clamp(14px, 1.6vw, 24px) 0 0;
   padding: clamp(14px, 1.4vw, 20px) clamp(16px, 1.9vw, 28px);
   border-radius: 16px;
-  font-size: clamp(13.5px, 1.07vw, 16.5px);
+  font-size: var(--fs-body);
   line-height: 1.5;
   color: #46566c;
 }

@@ -52,10 +52,52 @@ html {
   --section-y: 32px;
   --band-h: 56px;
 
+  /* ——— Type scale ———
+     One fixed size per text role, per breakpoint (phone / tablet /
+     desktop). Every heading, paragraph and label on the site reads its
+     size from here — never set a one-off font-size for these roles. */
+  --fs-h1: 36px;
+  --fs-h2: 26px;
+  --fs-h3: 15px;
+  --fs-lead: 15px;
+  --fs-body: 14px;
+  --fs-label: 13px;
+  --fs-small: 12px;
+  --fs-eyebrow: 11.5px;
+  --fs-btn: 15px;
+
   /* Homepage section rhythm: every section uses these two, so the gap
      between any two sections (bottom pad + neon edge + top pad) is equal */
   --sec-top: clamp(22px, 2.4vw, 34px);
   --sec-bottom: clamp(10px, 1.2vw, 16px);
+}
+
+@media (min-width: 560px) {
+  :root {
+    --fs-h1: 52px;
+    --fs-h2: 38px;
+    --fs-h3: 17px;
+    --fs-lead: 17px;
+    --fs-body: 15px;
+    --fs-label: 14px;
+    --fs-small: 13px;
+    --fs-eyebrow: 12px;
+    --fs-btn: 16px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --fs-h1: 64px;
+    --fs-h2: 46px;
+    --fs-h3: 18px;
+    --fs-lead: 18px;
+    --fs-body: 15px;
+    --fs-label: 14px;
+    --fs-small: 13px;
+    --fs-eyebrow: 13px;
+    --fs-btn: 16px;
+  }
 }
 
 /* Phones: a touch tighter, since the dividers are taller there */

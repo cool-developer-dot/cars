@@ -72,7 +72,9 @@
   }
 }
 
-@media (min-width: 1024px) {
+/* Side by side only from 1280px: below that the shared H2 size can't keep
+   "Replacement Number Plates," on one line beside the panel */
+@media (min-width: 1280px) {
   .inner {
     grid-template-columns: minmax(0, 734fr) minmax(0, 670fr);
     align-items: center;
@@ -89,7 +91,7 @@
 
 .eyebrow {
   margin-bottom: clamp(14px, 1.6vw, 24px);
-  font-size: clamp(11.5px, 0.95vw, 14.5px);
+  font-size: var(--fs-eyebrow);
   letter-spacing: 0.22em;
   color: #2f8cff;
 }
@@ -101,7 +103,7 @@
 .title {
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(2.05rem, 3.64vw, 3.6rem);
+  font-size: var(--fs-h2);
   font-weight: 700;
   line-height: 1.06;
   letter-spacing: -0.045em;
@@ -109,7 +111,7 @@
 }
 
 /* The design keeps the first line whole on desktop */
-@media (min-width: 1024px) {
+@media (min-width: 1280px) {
   .titleLine {
     white-space: nowrap;
   }
@@ -126,7 +128,7 @@
 .text {
   margin: clamp(16px, 1.8vw, 26px) 0 0;
   max-width: 64ch;
-  font-size: clamp(15px, 1.15vw, 17.5px);
+  font-size: var(--fs-lead);
   line-height: 1.6;
   color: rgba(232, 239, 250, 0.92);
 }
@@ -155,7 +157,7 @@
 
 .stepTitle {
   margin: 0 0 clamp(6px, 0.8vw, 12px);
-  font-size: clamp(15px, 1.36vw, 20px);
+  font-size: var(--fs-h3);
   font-weight: 600;
   line-height: 1.22;
   letter-spacing: -0.015em;
@@ -165,7 +167,7 @@
 /* Always a step below the section intro (.text) */
 .stepText {
   margin: 0;
-  font-size: clamp(12.5px, 0.98vw, 15px);
+  font-size: var(--fs-body);
   font-weight: 400;
   line-height: 1.45;
   color: rgba(206, 220, 242, 0.8);
@@ -186,7 +188,7 @@
   padding: 0 clamp(24px, 2.2vw, 34px);
   border-radius: 10px;
   color: #fff;
-  font-size: clamp(15px, 1.1vw, 16.5px);
+  font-size: var(--fs-btn);
   font-weight: 600;
   letter-spacing: 0.005em;
   text-decoration: none;
@@ -231,7 +233,7 @@
   justify-self: center;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1280px) {
   .panelWrap {
     justify-self: end;
   }
@@ -481,7 +483,7 @@
 
 /* ——— Small screens ——— */
 
-@media (max-width: 1023px) {
+@media (max-width: 1279px) {
   .copy {
     max-width: 760px;
   }
@@ -496,12 +498,8 @@
     padding: 12px 12px 13px;
   }
 
-  .stepTitle {
-    font-size: 14.5px;
-  }
 
   .stepText {
-    font-size: 12.5px;
     line-height: 1.4;
   }
 
@@ -526,7 +524,9 @@
   .section {
     padding-top: var(--sec-top);
   }
+}
 
+@media (max-width: 1279px) {
   .titleLine {
     display: block;
     text-wrap: balance;
@@ -959,7 +959,7 @@
 
 .sheetTitle {
   margin: 0;
-  font-size: 17px;
+  font-size: var(--fs-h3);
   font-weight: 650;
   color: #ffffff;
 }
@@ -1367,12 +1367,8 @@
 }
 
 /* Phones: "Replacement Number Plates," on one line, "Made To Order" on the
-   next — the size is computed from the column width so it always fits */
-@media (max-width: 559px) {
-  .title {
-    font-size: min(2.05rem, calc((100vw - 34px) / 13.5));
-  }
-
+   next. At the shared 26px H2 size the first line fits from 375px up. */
+@media (min-width: 375px) and (max-width: 559px) {
   .titleLine {
     white-space: nowrap;
     text-wrap: nowrap;

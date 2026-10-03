@@ -34,14 +34,14 @@
 
 .eyebrow {
   margin-bottom: clamp(10px, 1vw, 16px);
-  font-size: clamp(11px, 0.88vw, 13.5px);
+  font-size: var(--fs-eyebrow);
   letter-spacing: 0.18em;
 }
 
 .title {
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(2rem, 3.7vw, 3.6rem);
+  font-size: var(--fs-h2);
   font-weight: 700;
   line-height: 1.02;
   letter-spacing: -0.04em;
@@ -50,7 +50,7 @@
 
 .sub {
   margin: clamp(6px, 0.7vw, 12px) 0 0;
-  font-size: clamp(15px, 1.45vw, 21px);
+  font-size: var(--fs-lead);
   line-height: 1.4;
   color: #1d2b40;
 }
@@ -106,7 +106,7 @@
 
 .cardTitle {
   margin: clamp(4px, 0.55vw, 9px) 0 clamp(8px, 0.9vw, 14px);
-  font-size: clamp(16.5px, 1.4vw, 21px);
+  font-size: var(--fs-h3);
   font-weight: 700;
   letter-spacing: -0.02em;
   color: #0a1424;
@@ -114,7 +114,7 @@
 
 .cardText {
   margin: 0;
-  font-size: clamp(13.5px, 1.1vw, 16.5px);
+  font-size: var(--fs-body);
   line-height: 1.45;
   color: #1d2b40;
 }
@@ -140,7 +140,7 @@
   display: flex;
   align-items: center;
   gap: clamp(10px, 1.3vw, 18px);
-  font-size: clamp(13.5px, 1.1vw, 16.5px);
+  font-size: var(--fs-body);
   line-height: 1.35;
   color: #1d2b40;
 }
@@ -199,7 +199,7 @@
 
 .govText {
   margin: 0;
-  font-size: clamp(13px, 0.98vw, 15px);
+  font-size: var(--fs-body);
   line-height: 1.5;
   text-wrap: pretty;
   color: #1d2b40;
@@ -226,7 +226,7 @@
   min-height: clamp(44px, 3.4vw, 52px);
   border-radius: 10px;
   color: #fff;
-  font-size: clamp(15px, 1.1vw, 16.5px);
+  font-size: var(--fs-btn);
   font-weight: 500;
   text-decoration: none;
   background: linear-gradient(105deg, #0657f0 0%, #0a66ff 55%, #1f80ff 100%);

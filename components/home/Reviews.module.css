@@ -1,5 +1,5 @@
 .title {
-  font-size: clamp(1.7rem, 3.4vw, 2.6rem);
+  font-size: var(--fs-h2);
 }
 
 .seeAll {
@@ -9,7 +9,7 @@
   padding: 10px 18px;
   border-radius: 999px;
   border: 1.5px solid rgba(10, 92, 255, 0.5);
-  font-size: 14px;
+  font-size: var(--fs-label);
   font-weight: 600;
   color: #0a5cff;
   text-decoration: none;
@@ -59,7 +59,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 18px;
+  font-size: var(--fs-h3);
   font-weight: 600;
   color: #0a1424;
 }
@@ -97,7 +97,7 @@
 
 .count {
   margin-left: auto;
-  font-size: 13px;
+  font-size: var(--fs-small);
   color: #6b7a90;
 }
 
@@ -170,12 +170,12 @@
 .who {
   display: grid;
   min-width: 0;
-  font-size: 12.5px;
+  font-size: var(--fs-small);
   color: #6b7a90;
 }
 
 .who strong {
-  font-size: 14px;
+  font-size: var(--fs-label);
   font-weight: 650;
   color: #0a1424;
 }
@@ -192,7 +192,7 @@
 }
 
 .quote {
-  font-size: 14px;
+  font-size: var(--fs-body);
   line-height: 1.55;
   color: #46566c;
 }

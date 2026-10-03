@@ -47,7 +47,7 @@
 
 .copy .lead {
   max-width: 44em;
-  font-size: clamp(14.5px, 1.15vw, 17px);
+  font-size: var(--fs-lead);
   line-height: 1.5;
   color: rgba(232, 239, 250, 0.9);
 }
@@ -62,14 +62,14 @@
 
 .eyebrow {
   margin-bottom: clamp(10px, 1.2vw, 18px);
-  font-size: clamp(11px, 0.84vw, 13px);
+  font-size: var(--fs-eyebrow);
   letter-spacing: 0.2em;
 }
 
 .title {
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(2rem, 3.7vw, 3.6rem);
+  font-size: var(--fs-h2);
   font-weight: 700;
   line-height: 1.02;
   letter-spacing: -0.04em;
@@ -104,7 +104,7 @@
 
 .tileTitle {
   margin: clamp(10px, 1.1vw, 16px) 0 clamp(6px, 0.7vw, 10px);
-  font-size: clamp(14px, 1.13vw, 17px);
+  font-size: var(--fs-h3);
   font-weight: 650;
   line-height: 1.25;
   color: #fff;
@@ -112,7 +112,7 @@
 
 .tileText {
   margin: 0;
-  font-size: clamp(12.5px, 0.98vw, 14.5px);
+  font-size: var(--fs-small);
   line-height: 1.4;
   color: rgba(214, 226, 244, 0.72);
 }
@@ -168,7 +168,6 @@
 
 @media (max-width: 559px) {
   .copy .lead {
-    font-size: 14.5px;
     line-height: 1.55;
   }
 
@@ -188,10 +187,25 @@
 
   .tileTitle {
     margin: 0 0 2px;
-    font-size: 13.5px;
   }
 
-  .tileText {
-    font-size: 12px;
+}
+
+/* Four across only when each tile is wide enough for the shared H3 size;
+   on standard laptops the tiles sit 2 × 2 beside the copy */
+@media (min-width: 1024px) and (max-width: 1699px) {
+  .tiles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .tile {
+    min-height: 0;
+  }
+}
+
+/* Narrowest phones: one tile per row so the titles never overflow */
+@media (max-width: 374px) {
+  .tiles {
+    grid-template-columns: 1fr;
   }
 }
