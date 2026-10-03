@@ -1365,3 +1365,16 @@
   }
 
 }
+
+/* Phones: "Replacement Number Plates," on one line, "Made To Order" on the
+   next — the size is computed from the column width so it always fits */
+@media (max-width: 559px) {
+  .title {
+    font-size: min(2.05rem, calc((100vw - 34px) / 13.5));
+  }
+
+  .titleLine {
+    white-space: nowrap;
+    text-wrap: nowrap;
+  }
+}

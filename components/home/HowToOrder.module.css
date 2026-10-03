@@ -363,3 +363,38 @@
     display: none;
   }
 }
+
+/* Phones: every illustration sits centred in its art column */
+@media (max-width: 559px) {
+  .art {
+    display: grid;
+    place-items: center;
+  }
+
+  .artFan,
+  .artBox,
+  .artDocs {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    right: auto;
+    bottom: auto;
+    margin: 0;
+  }
+
+  /* the fan's plates sit up-right inside its own box: nudge it back */
+  .artFan {
+    width: 86%;
+    transform: translate(-51%, -40%);
+  }
+
+  .artBox {
+    width: 84%;
+    transform: translate(-50%, -46%);
+  }
+
+  .artDocs {
+    width: 92%;
+    transform: translate(-50%, -44%);
+  }
+}
