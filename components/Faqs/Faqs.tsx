@@ -102,7 +102,7 @@ export default function Faqs() {
         </div>
 
         <div className={styles.listCol}>
-          <FaqAccordion items={HOME_FAQS} firstOpen />
+          <FaqAccordion items={HOME_FAQS} />
           <Link href="/faqs" className={styles.more}>
             More answers on delivery, documents and legal requirements
             <ArrowRight size={16} strokeWidth={2.3} aria-hidden="true" />

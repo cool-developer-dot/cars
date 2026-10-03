@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Hero from "@/components/Hero/Hero";
 import MadeToOrder from "@/components/home/MadeToOrder";
-import WhyReplacing from "@/components/home/WhyReplacing";
+// import WhyReplacing from "@/components/home/WhyReplacing";
 import StylesShowcase from "@/components/home/StylesShowcase";
 import DeliveryCollection from "@/components/home/DeliveryCollection";
 import HowToOrder from "@/components/home/HowToOrder";
@@ -61,7 +61,8 @@ export default function Home() {
       <HomeBuilderProvider>
         <Hero />
         <MadeToOrder />
-        <WhyReplacing />
+        {/* Hidden for now (client request) — re-enable when ready */}
+        {/* <WhyReplacing /> */}
         <StylesShowcase />
         <DeliveryCollection />
         <HowToOrder />
