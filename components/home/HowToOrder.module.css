@@ -364,37 +364,22 @@
   }
 }
 
-/* Phones: every illustration sits centred in its art column */
+/* Phones: cards 2 and 4 use the same footprint as card 3's documents
+   (inset from the left, centred across the art column, resting on the
+   card's floor). Cards 1 and 3 are untouched. */
 @media (max-width: 559px) {
-  .art {
-    display: grid;
-    place-items: center;
-  }
-
-  .artFan,
-  .artBox,
-  .artDocs {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    right: auto;
-    bottom: auto;
-    margin: 0;
-  }
-
-  /* the fan's plates sit up-right inside its own box: nudge it back */
+  /* the fanned plates spread a little wider than their own box */
   .artFan {
-    width: 86%;
-    transform: translate(-51%, -40%);
+    right: auto;
+    left: 11%;
+    bottom: 4%;
+    width: 80%;
   }
 
   .artBox {
-    width: 84%;
-    transform: translate(-50%, -46%);
-  }
-
-  .artDocs {
-    width: 92%;
-    transform: translate(-50%, -44%);
+    right: auto;
+    left: 7%;
+    bottom: -6%;
+    width: 88%;
   }
 }
