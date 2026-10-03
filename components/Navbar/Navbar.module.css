@@ -12,6 +12,7 @@
 
 .bar {
   pointer-events: auto;
+  position: relative; /* anchors the Plate Styles menu */
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -213,6 +214,40 @@
     0 4px 12px rgba(10, 132, 255, 0.22);
 }
 
+/* Plate Styles: link + its menu; while the menu is open the link keeps its hover look */
+.navGroup {
+  display: flex;
+}
+
+.navItemOpen {
+  color: #fff;
+}
+
+.navItemOpen svg {
+  opacity: 1;
+  transform: rotate(180deg);
+}
+
+.navItemOpen::before {
+  opacity: 1 !important;
+  background: rgba(6, 18, 35, 0.42) !important;
+  border-color: rgba(73, 183, 255, 0.22) !important;
+  box-shadow:
+    0 6px 14px -6px rgba(10, 132, 255, 0.28),
+    inset 0 -1px 0 rgba(22, 139, 255, 0.45),
+    inset 1px 0 0 rgba(73, 183, 255, 0.12),
+    inset -1px 0 0 rgba(73, 183, 255, 0.12),
+    inset 0 0 12px rgba(10, 132, 255, 0.06) !important;
+}
+
+.navItemOpen::after {
+  opacity: 1 !important;
+  transform: scaleX(1) !important;
+  box-shadow:
+    0 0 6px rgba(22, 139, 255, 0.55),
+    0 4px 12px rgba(10, 132, 255, 0.22) !important;
+}
+
 /* Active page — no permanent underline; hover effect only */
 .navItemActive {
   color: rgba(255, 255, 255, 0.96);
@@ -385,7 +420,7 @@
   height: 18px;
 }
 
-/* —— Mobile / tablet right drawer (< 900px) —— */
+/* —— Mobile / tablet right drawer (< 1024px) —— */
 .drawerRoot {
   position: fixed;
   inset: 0;
@@ -563,7 +598,9 @@
     box-shadow 180ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.drawerItem + .drawerItem {
+.drawerItem + .drawerItem,
+.drawerItem + .drawerGroup > .drawerItem,
+.drawerGroup + .drawerItem {
   box-shadow: inset 0 1px 0 rgba(140, 190, 255, 0.1);
 }
 
@@ -586,6 +623,11 @@
   width: 16px;
   height: 16px;
   opacity: 0.7;
+  transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.drawerChevronOpen {
+  transform: rotate(180deg);
 }
 
 .drawerItem::after {
@@ -772,7 +814,7 @@
   }
 }
 
-/* Tablet sizing (hamburger still used below 900px) */
+/* Tablet sizing (hamburger still used below 1024px) */
 @media (min-width: 768px) {
   .header {
     top: 16px;
@@ -797,19 +839,16 @@
   }
 }
 
-/* Desktop — full navbar, no hamburger (≥ 900px) */
-@media (min-width: 900px) {
+/* Desktop — full navbar, no hamburger (≥ 1024px). Narrower than this the
+   logo, five links, icons and CTA can't share one row without overlapping,
+   so tablets and small laptops keep the drawer. */
+@media (min-width: 1024px) {
   .divider {
     display: block;
   }
 
   .nav {
     display: flex;
-  }
-
-  .navItem {
-    font-size: 13.5px;
-    padding: 8px 12px;
   }
 
   .cta {
@@ -829,10 +868,7 @@
   .drawerRoot {
     display: none !important;
   }
-}
 
-/* Large desktop polish */
-@media (min-width: 1024px) {
   .bar {
     width: 96%;
     height: 66px;
@@ -849,7 +885,7 @@
   }
 
   .navItem {
-    font-size: 14px;
+    font-size: var(--fs-label);
     padding: 8px 14px;
   }
 
@@ -860,7 +896,7 @@
   .cta {
     height: 40px;
     padding: 0 18px;
-    font-size: 14px;
+    font-size: var(--fs-label);
   }
 
   .iconBtn {
@@ -869,20 +905,45 @@
   }
 }
 
-@media (min-width: 900px) and (max-width: 1023px) {
+/* Small laptops (1024–1279px): at the sizes above the row needs ~1185px,
+   so the logo, link padding and gaps tighten here. ≥ 1280px is untouched. */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .bar {
+    padding: 0 10px 0 14px;
+    gap: 10px;
+  }
+
+  .logoLink {
+    padding: 6px 2px;
+  }
+
+  .logoImg {
+    height: 38px !important;
+  }
+
+  .divider {
+    margin: 0 2px;
+  }
+
+  .nav {
+    gap: 2px;
+  }
+
   .navItem {
-    padding: 7px 9px;
-    font-size: 13px;
+    padding: 8px 9px;
+    font-size: var(--fs-small);
+  }
+
+  .actions {
+    gap: 8px;
+  }
+
+  .desktopIcons {
+    gap: 6px;
   }
 
   .cta {
     padding: 0 14px;
-    font-size: 13px;
-    height: 40px;
-  }
-
-  .logoImg {
-    height: 40px !important;
-    max-width: 250px !important;
+    font-size: var(--fs-small);
   }
 }

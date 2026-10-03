@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useId, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState, type FocusEvent } from "react";
 import {
   ArrowRight,
   CarFront,
@@ -21,17 +21,20 @@ import {
 } from "lucide-react";
 import { useCart } from "@/contexts/cart/CartProvider";
 import styles from "./Navbar.module.css";
+import { StylesDrawerList, StylesPanel } from "./StylesMenu";
 
 type NavItem = {
   label: string;
   href: string;
   hasMenu?: boolean;
+  /** Opens the plate-styles menu instead of a plain link in the drawer */
+  styles?: boolean;
   Icon: typeof Home;
 };
 
 const NAV_ITEMS: NavItem[] = [
   { label: "Home", href: "/", Icon: Home },
-  { label: "Plate Styles", href: "/plate-styles", hasMenu: true, Icon: CarFront },
+  { label: "Plate Styles", href: "/plate-styles", hasMenu: true, styles: true, Icon: CarFront },
   {
     label: "Delivery & Collection",
     href: "/delivery-collection",
@@ -44,16 +47,49 @@ const NAV_ITEMS: NavItem[] = [
 export default function Navbar() {
   const pathname = usePathname();
   const menuId = useId();
+  const stylesPanelId = useId();
+  const stylesListId = useId();
   const [open, setOpen] = useState(false);
+  // Desktop "Plate Styles" mega menu, and its collapsible twin in the drawer
+  const [stylesOpen, setStylesOpen] = useState(false);
+  const [drawerStyles, setDrawerStyles] = useState(false);
+  const hoverTimer = useRef<number | undefined>(undefined);
+  const stylesGroup = useRef<HTMLDivElement>(null);
+  // Escape hands focus back to the trigger without reopening the menu
+  const keepClosed = useRef(false);
   const { count } = useCart();
   const itemsLabel = `${count} ${count === 1 ? "item" : "items"}`;
 
-  const closeMenu = useCallback(() => setOpen(false), []);
+  const closeMenu = useCallback(() => {
+    setOpen(false);
+    setDrawerStyles(false);
+  }, []);
   const openMenu = useCallback(() => setOpen(true), []);
 
-  useEffect(() => {
+  // A new page closes every menu
+  const [shownPath, setShownPath] = useState(pathname);
+  if (pathname !== shownPath) {
+    setShownPath(pathname);
     setOpen(false);
-  }, [pathname]);
+    setStylesOpen(false);
+    setDrawerStyles(false);
+  }
+
+  // Hover intent: a short pause before opening (no flicker when the pointer
+  // just passes over) and a grace period before closing (time to reach the panel)
+  const hoverStyles = (next: boolean) => {
+    window.clearTimeout(hoverTimer.current);
+    hoverTimer.current = window.setTimeout(() => setStylesOpen(next), next ? 70 : 180);
+  };
+  const closeStyles = useCallback(() => {
+    window.clearTimeout(hoverTimer.current);
+    setStylesOpen(false);
+  }, []);
+  useEffect(() => () => window.clearTimeout(hoverTimer.current), []);
+
+  const onStylesBlur = (e: FocusEvent<HTMLDivElement>) => {
+    if (!stylesGroup.current?.contains(e.relatedTarget as Node | null)) closeStyles();
+  };
 
   useEffect(() => {
     if (!open) return;
@@ -100,21 +136,62 @@ export default function Navbar() {
           <span className={styles.divider} aria-hidden="true" />
 
           <nav className={styles.nav} aria-label="Primary">
-            {NAV_ITEMS.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`${styles.navItem} ${
-                  isActive(item.href) ? styles.navItemActive : ""
-                }`}
-                aria-current={isActive(item.href) ? "page" : undefined}
-              >
-                {item.label}
-                {item.hasMenu ? (
-                  <ChevronDown aria-hidden="true" strokeWidth={2.25} />
-                ) : null}
-              </Link>
-            ))}
+            {NAV_ITEMS.map((item) => {
+              const link = (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`${styles.navItem} ${
+                    isActive(item.href) ? styles.navItemActive : ""
+                  } ${item.styles && stylesOpen ? styles.navItemOpen : ""}`}
+                  aria-current={isActive(item.href) ? "page" : undefined}
+                  aria-expanded={item.styles ? stylesOpen : undefined}
+                  aria-controls={item.styles ? stylesPanelId : undefined}
+                  onClick={item.styles ? closeStyles : undefined}
+                >
+                  {item.label}
+                  {item.hasMenu ? (
+                    <ChevronDown aria-hidden="true" strokeWidth={2.25} />
+                  ) : null}
+                </Link>
+              );
+              if (!item.styles) return link;
+              return (
+                <div
+                  key={item.href}
+                  ref={stylesGroup}
+                  className={styles.navGroup}
+                  onMouseEnter={() => hoverStyles(true)}
+                  onMouseLeave={() => hoverStyles(false)}
+                  onFocus={() => {
+                    window.clearTimeout(hoverTimer.current);
+                    if (keepClosed.current) {
+                      keepClosed.current = false;
+                      return;
+                    }
+                    setStylesOpen(true);
+                  }}
+                  onBlur={onStylesBlur}
+                  onKeyDown={(e) => {
+                    if (e.key !== "Escape" || !stylesOpen) return;
+                    closeStyles();
+                    const trigger = stylesGroup.current?.querySelector<HTMLElement>("a");
+                    if (trigger && trigger !== document.activeElement) {
+                      keepClosed.current = true;
+                      trigger.focus();
+                    }
+                  }}
+                >
+                  {link}
+                  <StylesPanel
+                    id={stylesPanelId}
+                    open={stylesOpen}
+                    pathname={pathname}
+                    onNavigate={closeStyles}
+                  />
+                </div>
+              );
+            })}
           </nav>
 
           <div className={styles.actions}>
@@ -212,6 +289,44 @@ export default function Navbar() {
             {NAV_ITEMS.map((item) => {
               const Icon = item.Icon;
               const Chevron = item.hasMenu ? ChevronDown : ChevronRight;
+              if (item.styles) {
+                return (
+                  <div key={item.href} className={styles.drawerGroup}>
+                    <button
+                      type="button"
+                      className={`${styles.drawerItem} ${
+                        isActive(item.href) ? styles.drawerItemActive : ""
+                      }`}
+                      aria-expanded={drawerStyles}
+                      aria-controls={stylesListId}
+                      tabIndex={open ? 0 : -1}
+                      onClick={() => setDrawerStyles((v) => !v)}
+                    >
+                      <span className={styles.drawerItemLeft}>
+                        <Icon
+                          className={styles.drawerItemIcon}
+                          aria-hidden="true"
+                          strokeWidth={1.85}
+                        />
+                        <span>{item.label}</span>
+                      </span>
+                      <ChevronDown
+                        className={`${styles.drawerChevron} ${
+                          drawerStyles ? styles.drawerChevronOpen : ""
+                        }`}
+                        aria-hidden="true"
+                        strokeWidth={2.1}
+                      />
+                    </button>
+                    <StylesDrawerList
+                      id={stylesListId}
+                      open={open && drawerStyles}
+                      pathname={pathname}
+                      onNavigate={closeMenu}
+                    />
+                  </div>
+                );
+              }
               return (
                 <Link
                   key={item.href}

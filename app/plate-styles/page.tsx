@@ -76,11 +76,11 @@ export default function PlateStylesPage() {
               return (
                 <Reveal as="li" key={id} index={i % 3}>
                   {hasPage ? (
-                    <Link href={p.href} className={`${c.card} ${c.cardLink}`}>
+                    <Link href={p.href} id={id} className={`${c.card} ${c.cardLink} ${c.anchor}`}>
                       {body}
                     </Link>
                   ) : (
-                    <div className={c.card}>{body}</div>
+                    <div id={id} className={`${c.card} ${c.anchor}`}>{body}</div>
                   )}
                 </Reveal>
               );
