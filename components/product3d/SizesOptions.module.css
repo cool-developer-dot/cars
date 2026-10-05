@@ -1,6 +1,23 @@
-/* Sizes and options — light section, three cards with drawn diagrams.
-   Shell, headings, glass and icon discs come from home.module.css. */
+/* Sizes and options — light section: heading, then three glass cards, each
+   with a drawn diagram. Shell, headings, glass and icon discs come from
+   home.module.css; sizes come from the global type tokens.
 
+   Layouts
+     < 640      one column, icon beside the copy, figure underneath
+     640–1023   one column, copy left and figure right
+     1024–1179  three across, icon beside the title, copy under it
+     1180+      three across, icon beside title and copy
+
+   The section is built to be low and wide: from 1024px it uses a wider
+   container than the other sections so the cards read as wide, short
+   panels, and it tightens further on short screens so the whole section
+   shows in one view. */
+
+.section {
+  --dim: #1668e3; /* dimension lines, arrows, fixing points */
+}
+
+/* Soft silk highlights drifting across the pale background */
 .section::before {
   content: "";
   position: absolute;
@@ -8,8 +25,16 @@
   z-index: 0;
   pointer-events: none;
   background:
-    linear-gradient(160deg, transparent 52%, rgba(255, 255, 255, 0.75) 64%, transparent 76%),
-    linear-gradient(160deg, transparent 8%, rgba(255, 255, 255, 0.55) 18%, transparent 30%);
+    radial-gradient(60% 55% at 92% 0%, rgba(255, 255, 255, 0.95), transparent 70%),
+    linear-gradient(162deg, transparent 6%, rgba(255, 255, 255, 0.6) 17%, transparent 29%),
+    linear-gradient(162deg, transparent 50%, rgba(255, 255, 255, 0.7) 63%, transparent 76%);
+}
+
+/* Written in Title Case, so the global capitalise rule must not turn
+   "and" / "for" / "a" into capitals */
+.title,
+.cardTitle {
+  text-transform: none;
 }
 
 .line {
@@ -17,44 +42,76 @@
 }
 
 .lead {
-  max-width: 60ch;
+  max-width: 42em;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+/* forced breaks only where the heading block has the room for them */
+.brWide {
+  display: none;
+}
+
+/* ——— Cards ——— */
+
+.section .head {
+  margin-bottom: 14px;
 }
 
 .cards {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 14px;
+  gap: 10px;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
 .card {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  padding: 20px 18px;
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding: 16px 14px;
   border-radius: 20px;
 }
 
 .cardHead {
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas:
+    "icon title"
+    "icon text";
+  grid-template-rows: auto 1fr;
+  align-items: start;
+  column-gap: 12px;
 }
 
 .icon {
-  width: 48px;
-  height: 48px;
+  grid-area: icon;
+  width: 46px;
+  height: 46px;
+  background:
+    radial-gradient(circle at 50% 38%, #f4f8ff 0%, #e4eeff 62%, #d8e7fd 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(10, 92, 255, 0.09),
+    0 0 0 4px rgba(255, 255, 255, 0.55),
+    0 8px 18px -8px rgba(10, 92, 255, 0.35);
 }
 
 .icon svg {
-  width: 22px;
-  height: 22px;
+  width: 64%;
+  height: auto;
+  color: var(--dim);
+}
+
+.icon .ruler {
+  width: 50%;
+  transform: scaleX(-1);
 }
 
 .cardTitle {
-  margin: 2px 0 6px;
+  grid-area: title;
+  margin: 1px 0 4px;
   font-size: var(--fs-h3);
   font-weight: 700;
   line-height: 1.25;
@@ -64,66 +121,143 @@
 }
 
 .cardText {
+  grid-area: text;
   margin: 0;
   font-size: var(--fs-body);
-  line-height: 1.55;
+  line-height: 1.5;
   color: var(--text);
   text-wrap: pretty;
 }
 
-/* the drawing fills the space under the copy, centred */
+/* The drawing fills the space under the copy, centred */
 .figure {
   display: flex;
-  flex: 1;
   align-items: center;
   justify-content: center;
-  min-height: 130px;
-  color: #0a5cff;
+  container-type: inline-size;
+  color: var(--dim);
 }
 
-.dimLine,
-.dimLineV {
+/* ——— Dimension line pieces ——— */
+
+.dimH,
+.dimV {
   position: relative;
   display: block;
-  background: currentColor;
+  color: var(--dim);
 }
 
-.dimLine {
+/* a 1.5px line with an optional end tick */
+.dimH {
   flex: 1;
-  height: 1.5px;
+  height: 13px;
+  background: linear-gradient(currentColor, currentColor) 0 50% / 100% 1.5px no-repeat;
 }
 
-.dimLineV {
-  flex: none;
+.dimV {
+  width: 13px;
   align-self: stretch;
-  width: 1.5px;
+  background: linear-gradient(currentColor, currentColor) 50% 0 / 1.5px 100% no-repeat;
 }
 
-/* end ticks */
-.dimLine::before,
-.dimLineV::before {
+.tickLeft {
+  background:
+    linear-gradient(currentColor, currentColor) 0 50% / 1.5px 100% no-repeat,
+    linear-gradient(currentColor, currentColor) 0 50% / 100% 1.5px no-repeat;
+}
+
+.tickRight {
+  background:
+    linear-gradient(currentColor, currentColor) 100% 50% / 1.5px 100% no-repeat,
+    linear-gradient(currentColor, currentColor) 0 50% / 100% 1.5px no-repeat;
+}
+
+.dimH.tickBoth {
+  background:
+    linear-gradient(currentColor, currentColor) 0 50% / 1.5px 100% no-repeat,
+    linear-gradient(currentColor, currentColor) 100% 50% / 1.5px 100% no-repeat,
+    linear-gradient(currentColor, currentColor) 0 50% / 100% 1.5px no-repeat;
+}
+
+.dimV.tickBoth {
+  background:
+    linear-gradient(currentColor, currentColor) 0 0 / 100% 1.5px no-repeat,
+    linear-gradient(currentColor, currentColor) 0 100% / 100% 1.5px no-repeat,
+    linear-gradient(currentColor, currentColor) 50% 0 / 1.5px 100% no-repeat;
+}
+
+/* small open arrowheads inside the ticks */
+.arrows::before,
+.arrows::after {
   content: "";
   position: absolute;
   background: currentColor;
 }
 
-.dimLine::before {
-  top: -6px;
-  width: 1.5px;
-  height: 13px;
+.dimH.arrows::before,
+.dimH.arrows::after {
+  top: 50%;
+  width: 8px;
+  height: 7px;
+  margin-top: -3.5px;
 }
 
-.dimLineV::before {
-  left: -6px;
-  width: 13px;
-  height: 1.5px;
+.dimH.arrows::before {
+  left: 1px;
+  clip-path: polygon(100% 0, 0 50%, 100% 100%);
+}
+
+.dimH.arrows::after {
+  right: 1px;
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+.dimV.arrows::before,
+.dimV.arrows::after {
+  left: 50%;
+  width: 7px;
+  height: 8px;
+  margin-left: -3.5px;
+}
+
+.dimV.arrows::before {
+  top: 1px;
+  clip-path: polygon(0 100%, 50% 0, 100% 100%);
+}
+
+.dimV.arrows::after {
+  bottom: 1px;
+  clip-path: polygon(0 0, 50% 100%, 100% 0);
+}
+
+.dimH.dashed {
+  background:
+    linear-gradient(currentColor, currentColor) 0 50% / 1.5px 100% no-repeat,
+    linear-gradient(currentColor, currentColor) 100% 50% / 1.5px 100% no-repeat,
+    repeating-linear-gradient(90deg, currentColor 0 5px, transparent 5px 8px) 0 50% / 100% 1.5px no-repeat;
 }
 
 .dimLabel {
   flex-shrink: 0;
   font-size: var(--fs-label);
-  font-weight: 600;
+  font-weight: 700;
+  line-height: 1;
   color: var(--ink);
+}
+
+/* ——— Flat number plates (shared by the 520 and motorcycle drawings) ——— */
+
+.flat {
+  display: grid;
+  place-items: center;
+  container-type: inline-size;
+  border-radius: 6px;
+  background: linear-gradient(172deg, #ffffff 0%, #f1f3f6 42%, #e0e5ea 100%);
+  box-shadow:
+    0 0 0 1.5px #9aa3af,
+    inset 0 0 0 2px rgba(255, 255, 255, 0.95),
+    inset 0 -3px 6px rgba(110, 124, 142, 0.18),
+    0 12px 16px -10px rgba(18, 52, 110, 0.42);
 }
 
 /* ——— 520 × 111 ——— */
@@ -134,55 +268,45 @@
   grid-template-areas:
     "top ."
     "plate side";
-  gap: 10px 12px;
+  gap: 10px 10px;
   width: 100%;
-  max-width: 400px;
+  max-width: 380px;
 }
 
-.dimTop {
+.stdTop {
   grid-area: top;
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.dimTop .dimLine:first-child::before {
-  left: 0;
-}
-
-.dimTop .dimLine:last-child::before {
-  right: 0;
-}
-
 .stdPlate {
   grid-area: plate;
-  display: block;
-  filter: drop-shadow(0 10px 14px rgba(18, 52, 110, 0.16));
+  aspect-ratio: 4.4;
 }
 
-.dimSide {
+.stdChars {
+  font-size: 20cqw; /* plate lettering scales with the plate, not a text role */
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.015em;
+  white-space: nowrap;
+  color: #060607;
+  text-shadow:
+    0 0.5cqw 0 #000,
+    0.3cqw 1.4cqw 1.4cqw rgba(0, 0, 0, 0.32);
+  transform: translateY(2%);
+}
+
+.stdSide {
   grid-area: side;
   display: flex;
-  align-items: center;
-  gap: 10px;
+  align-items: stretch;
+  gap: 9px;
 }
 
-.dimSide .dimLineV {
-  align-self: stretch;
-}
-
-.dimSide .dimLineV::before {
-  top: 0;
-}
-
-.dimSide .dimLineV::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: -6px;
-  width: 13px;
-  height: 1.5px;
-  background: currentColor;
+.stdSide .dimLabel {
+  align-self: center;
 }
 
 /* ——— Motorcycle plates ——— */
@@ -190,200 +314,346 @@
 .figMoto {
   display: flex;
   align-items: flex-end;
-  justify-content: space-evenly;
-  gap: 16px;
+  justify-content: space-around;
+  gap: 12px;
   width: 100%;
+  max-width: 420px;
 }
 
 .motoItem {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  min-width: 0;
 }
 
 .moto {
-  display: grid;
-  place-items: center;
-  container-type: inline-size;
   border-radius: 8px;
-  background: linear-gradient(168deg, #ffffff 0%, #f3f6f9 35%, #dfe5ec 75%, #cfd6df 100%);
-  box-shadow:
-    0 2px 0 #b8c0ca,
-    0 4px 0 #8b949f,
-    0 14px 18px -8px rgba(18, 52, 110, 0.35),
-    inset 0 2px 0 rgba(255, 255, 255, 0.8);
 }
 
 .std {
-  width: 128px;
-  aspect-ratio: 1.45;
+  width: clamp(88px, 30cqw, 124px);
+  aspect-ratio: 1.5;
 }
 
 .small {
-  width: 98px;
-  aspect-ratio: 1.3;
+  width: clamp(66px, 22cqw, 92px);
+  aspect-ratio: 1.38;
 }
 
 .motoChars {
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-size: 30cqw; /* plate lettering scales with the plate, not a text role */
+  font-size: 25cqw;
   font-weight: 700;
-  line-height: 0.98;
-  color: #050506;
+  line-height: 0.96;
+  color: #060607;
   text-shadow:
     0 0.6cqw 0 #000,
-    0.4cqw 2cqw 2cqw rgba(0, 0, 0, 0.35);
+    0.4cqw 2cqw 2cqw rgba(0, 0, 0, 0.3);
 }
 
 .caption {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
   font-size: var(--fs-small);
+  line-height: 1.3;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.capSize {
+  font-weight: 500;
+  color: var(--text);
+}
+
+.capName {
   color: var(--muted);
 }
 
 /* ——— Measuring ——— */
 
 .figMeasure {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 10px;
+  row-gap: 3px;
   align-items: center;
-  gap: 6px;
   width: 100%;
-  max-width: 380px;
-}
-
-.figMeasure .mLabel {
+  max-width: 340px;
   font-size: var(--fs-small);
-  font-weight: 600;
+  line-height: 1.25;
   color: var(--ink);
 }
 
-.mWidth,
-.mFix {
+.mTitle,
+.mFixLabel {
+  grid-column: 1;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* the width arrow spans the opening of the recess, not its outer rim */
+.mWidth {
+  grid-column: 1;
   display: flex;
-  width: calc(100% - 92px);
-  margin-right: 92px;
-}
-
-.mWidth .dimLine::before {
-  left: 0;
-}
-
-.mWidth .dimLine::after {
-  content: "";
-  position: absolute;
-  top: -6px;
-  right: 0;
-  width: 1.5px;
-  height: 13px;
-  background: currentColor;
-}
-
-.mRow {
-  display: flex;
-  align-items: stretch;
-  gap: 10px;
-  width: 100%;
+  margin: 0 4.8% 0 4%;
 }
 
 .recess {
+  grid-column: 1;
   position: relative;
-  flex: 1;
-  height: 74px;
-  padding: 10px 12px;
+  aspect-ratio: 620 / 170;
   border-radius: 14px;
-  background: linear-gradient(180deg, #f6f8fb 0%, #e3e8ef 100%);
+  background: linear-gradient(180deg, #fbfcfe 0%, #e9edf3 100%);
   box-shadow:
-    0 8px 18px -10px rgba(18, 52, 110, 0.35),
-    inset 0 1px 0 #fff;
+    0 0 0 1px rgba(255, 255, 255, 0.9),
+    0 10px 18px -10px rgba(18, 52, 110, 0.4),
+    inset 0 1px 0 #fff,
+    inset 0 -2px 4px rgba(130, 148, 175, 0.2);
 }
 
+/* the opening: a darker lip, then the flat floor of the recess */
 .recessInner {
-  display: block;
-  height: 100%;
-  border-radius: 8px;
-  background: linear-gradient(180deg, #d9e0e9 0%, #eef2f7 100%);
-  box-shadow: inset 0 3px 8px rgba(18, 52, 110, 0.22);
+  position: absolute;
+  inset: 14.7% 4.8% 14.7% 4%;
+  border-radius: 6px;
+  background: linear-gradient(180deg, #b9c2cf 0%, #d6dce6 100%);
+  box-shadow:
+    inset 0 2px 5px rgba(60, 80, 112, 0.4),
+    0 1px 0 rgba(255, 255, 255, 0.95);
 }
 
+.recessInner::after {
+  content: "";
+  position: absolute;
+  inset: 10% 2.4% 10% 2.4%;
+  border-radius: 4px;
+  background: linear-gradient(180deg, #e4e9f0 0%, #f3f5f9 100%);
+  box-shadow: inset 0 2px 4px rgba(70, 90, 120, 0.2);
+}
+
+/* fixing points: ring + dot, sitting on the lower lip */
 .fix {
   position: absolute;
-  bottom: 14px;
-  width: 12px;
-  height: 12px;
+  bottom: 17%;
+  width: 14px;
+  height: 14px;
+  margin-left: -7px;
   border-radius: 50%;
-  border: 2px solid currentColor;
+  border: 2px solid var(--dim);
   background: #fff;
-  box-shadow: 0 0 0 3px rgba(10, 92, 255, 0.12);
+  box-shadow: 0 0 0 3px rgba(22, 104, 227, 0.12);
+}
+
+.fix::after {
+  content: "";
+  position: absolute;
+  inset: 2.5px;
+  border-radius: 50%;
+  background: var(--dim);
 }
 
 .fixL {
-  left: 26%;
+  left: 23.7%;
 }
 
 .fixR {
-  right: 26%;
+  left: 75.8%;
 }
 
+/* height arrow spans the same opening, label to its right */
 .mHeight {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-shrink: 0;
-}
-
-.mHeight .dimLineV {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: 14.7fr 70.6fr 14.7fr;
   align-self: stretch;
+  column-gap: 8px;
 }
 
-.mHeight .dimLineV::before {
-  top: 0;
+.mHeight .dimV {
+  grid-area: 2 / 1;
 }
 
-.mHeight .dimLineV::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: -6px;
-  width: 13px;
-  height: 1.5px;
-  background: currentColor;
-}
-
-.mHeight .mLabel {
-  max-width: 6.5em;
-  line-height: 1.25;
+.mHeightLabel {
+  grid-area: 1 / 2 / 4 / 3;
+  align-self: center;
 }
 
 /* dashed line between the two fixing points */
 .mFix {
-  justify-content: center;
+  grid-column: 1;
+  display: flex;
+  margin-left: 23.7%;
+  width: 52.1%;
 }
 
-.dashed {
-  display: block;
-  width: 48%;
-  height: 0;
-  border-top: 1.5px dashed currentColor;
+/* ——— Phones: keep each card as short as the copy allows ——— */
+
+@media (max-width: 639px) {
+  .cards {
+    gap: 8px;
+  }
+
+  .card {
+    gap: 8px;
+    padding: 14px 14px 12px;
+  }
+
+  .icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  .figStd {
+    gap: 8px 10px;
+  }
+
+  .std {
+    width: clamp(84px, 29cqw, 112px);
+  }
+
+  .small {
+    width: clamp(62px, 21cqw, 84px);
+  }
+
+  .figMeasure {
+    max-width: 300px;
+  }
 }
 
-/* ——— Desktop: three across ——— */
+/* ——— Tablet: one card per row, copy left, figure right ——— */
 
-@media (min-width: 900px) {
+@media (min-width: 640px) {
+  .cards {
+    gap: 12px;
+  }
+
+  .card {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    align-items: center;
+    gap: 22px;
+    padding: 18px 22px;
+  }
+
+  .icon {
+    width: 52px;
+    height: 52px;
+  }
+}
+
+/* ——— Desktop: three wide, low cards across ——— */
+
+@media (min-width: 1024px) {
+  /* wider than the 1200px used elsewhere, so the cards are wide, not tall */
+  .section .wide {
+    max-width: 1480px;
+    padding-inline: clamp(32px, 4.6vw, 70px);
+  }
+
+  /* the heading lines up with the icons, as in the design */
+  .section .head {
+    margin-bottom: 14px;
+    padding-left: 20px;
+  }
+
+  .section[class] {
+    --neon-edge-h: clamp(30px, 2.6vw, 38px);
+  }
+
   .cards {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 16px;
+    grid-template-rows: auto minmax(0, 1fr);
+    column-gap: 18px;
+    row-gap: 0;
   }
 
+  /* all three cards share two rows, so the copy and the drawings line up */
   .card {
-    padding: 22px 20px 20px;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: subgrid;
+    grid-row: span 2;
+    align-items: stretch;
+    gap: 12px;
+    padding: 18px 20px 16px;
+  }
+
+  .cardHead {
+    grid-template-areas:
+      "icon title"
+      "text text";
+    grid-template-rows: auto auto;
+    column-gap: 14px;
+    row-gap: 10px;
+    align-items: center;
+  }
+
+  .cardTitle {
+    margin: 0;
+  }
+
+  .icon {
+    width: 48px;
+    height: 48px;
   }
 }
 
-@media (min-width: 1200px) {
+/* Wide enough for the icon to sit beside the copy */
+@media (min-width: 1180px) {
+  .cardHead {
+    grid-template-areas:
+      "icon title"
+      "icon text";
+    grid-template-rows: auto 1fr;
+    row-gap: 0;
+    align-items: start;
+  }
+
+  .cardTitle {
+    margin: 1px 0 4px;
+  }
+
+  .icon {
+    width: 54px;
+    height: 54px;
+  }
+
+  .brWide {
+    display: inline;
+  }
+}
+
+/* Short screens (13" laptops): tighten so the whole section shows at once */
+@media (min-width: 1024px) and (max-height: 820px) {
   .card {
-    padding: 24px 24px 22px;
+    gap: 8px;
+    padding-top: 14px;
+    padding-bottom: 12px;
+  }
+}
+
+@media (min-width: 1180px) and (max-height: 720px) {
+  /* two lines of intro instead of three */
+  .lead {
+    max-width: 64em;
+  }
+
+  .brWide {
+    display: none;
+  }
+}
+
+@media (min-width: 1180px) and (max-height: 660px) {
+  /* heading on one line */
+  .line {
+    display: inline;
+  }
+
+  .section .head {
+    margin-bottom: 10px;
   }
 }

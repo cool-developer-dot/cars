@@ -5,6 +5,11 @@ import Replacement3D from "@/components/product3d/Replacement3D";
 import GelExplained from "@/components/product3d/GelExplained";
 import SizesOptions from "@/components/product3d/SizesOptions";
 import LegalInfo from "@/components/product3d/LegalInfo";
+import Delivery3D from "@/components/product3d/Delivery3D";
+import CareWarranty3D from "@/components/product3d/CareWarranty3D";
+import GuidesReviews3D from "@/components/product3d/GuidesReviews/GuidesReviews3D";
+import HowToOrder3D from "@/components/product3d/HowToOrder3D";
+import Documents3D from "@/components/product3d/Documents3D";
 import { PRODUCTS } from "@/lib/products";
 import { COMPANY, PRICES, SITE_URL } from "@/lib/site";
 
@@ -62,6 +67,11 @@ export default function Page() {
       <GelExplained />
       <SizesOptions />
       <LegalInfo />
+      <HowToOrder3D />
+      <Documents3D />
+      <Delivery3D />
+      <CareWarranty3D />
+      <GuidesReviews3D />
     </>
   );
 }

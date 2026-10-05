@@ -1,0 +1,253 @@
+/* Care and warranty — dark section: heading and three liquid glass cards on
+   the left, a macro photo of a gel plate bleeding off the right. Shell,
+   headings and liquid glass come from home.module.css; sizes from the
+   global type tokens.
+
+   Layouts
+     < 640       photo banner under the intro, cards stacked (icon left)
+     640–899     photo banner, three cards across, icon on top
+     900–1279    photo banner, three cards across, icon left
+     1280+       photo bleeds off the right, cards on the left (one screen) */
+
+/* Cool light pooling in two corners of the night-blue background */
+.section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(50% 45% at 6% 0%, rgba(40, 110, 220, 0.16), transparent 70%),
+    radial-gradient(55% 50% at 100% 100%, rgba(30, 90, 200, 0.12), transparent 70%);
+}
+
+/* Written in Title Case, so "for" and "and" must not be capitalised */
+.title,
+.cardTitle {
+  text-transform: none;
+}
+
+.line {
+  display: block;
+}
+
+.section .head {
+  margin-bottom: clamp(14px, 1.5vw, 22px);
+}
+
+.lead {
+  max-width: 44em;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+/* ——— Photo ——— */
+
+/* phones and tablets: a banner, feathered into the section on every edge */
+.photo {
+  position: relative;
+  height: 210px;
+  margin: 6px -16px 10px;
+  pointer-events: none;
+  -webkit-mask-image:
+    linear-gradient(90deg, transparent 0%, #000 12%, #000 88%, transparent 100%),
+    linear-gradient(180deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(90deg, transparent 0%, #000 12%, #000 88%, transparent 100%),
+    linear-gradient(180deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
+  mask-composite: intersect;
+}
+
+.photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 62% 50%;
+}
+
+/* ——— Cards ——— */
+
+.cards {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas:
+    "tile title"
+    "tile text";
+  grid-template-rows: auto 1fr;
+  align-items: start;
+  column-gap: 14px;
+  padding: 14px;
+  border-radius: 18px;
+}
+
+.tile {
+  grid-area: tile;
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border: 1px solid rgba(120, 175, 255, 0.34);
+  border-radius: 16px;
+  background:
+    linear-gradient(150deg, rgba(90, 150, 255, 0.28), rgba(10, 28, 64, 0.7) 70%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    inset 0 0 14px rgba(70, 140, 255, 0.16),
+    0 0 14px rgba(30, 120, 255, 0.22);
+}
+
+.tile svg {
+  width: 62%;
+  height: 62%;
+}
+
+.cardTitle {
+  grid-area: title;
+  margin: 1px 0 4px;
+  font-size: var(--fs-h3);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+}
+
+.cardText {
+  grid-area: text;
+  margin: 0;
+  font-size: var(--fs-body);
+  line-height: 1.45;
+  color: var(--text);
+  text-wrap: pretty;
+}
+
+/* ——— Tablet: three across, icon on top ——— */
+
+@media (min-width: 640px) {
+  .photo {
+    height: 280px;
+    margin: 8px -24px 12px;
+  }
+
+  .cards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .card {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "tile"
+      "title"
+      "text";
+    grid-template-rows: auto auto 1fr;
+    row-gap: 8px;
+    padding: 16px;
+  }
+
+  .tile {
+    width: 56px;
+    height: 56px;
+    margin-bottom: 4px;
+  }
+
+  .cardTitle {
+    margin: 0;
+  }
+}
+
+/* ——— Small laptop: the icon goes beside the copy ——— */
+
+@media (min-width: 900px) {
+  .photo {
+    height: 320px;
+    margin: 6px -32px 14px;
+  }
+
+  .card {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas:
+      "tile title"
+      "tile text";
+    grid-template-rows: auto 1fr;
+    column-gap: 14px;
+    row-gap: 0;
+    padding: 16px;
+  }
+
+  .tile {
+    margin-bottom: 0;
+  }
+
+  .cardTitle {
+    margin: 1px 0 4px;
+  }
+}
+
+/* ——— Desktop: a wider container, photo bleeding off the right ——— */
+
+@media (min-width: 1024px) {
+  .section .wide {
+    max-width: 1552px;
+    padding-inline: clamp(32px, 5.2vw, 80px);
+  }
+}
+
+@media (min-width: 1280px) {
+  .section[class] {
+    --neon-edge-h: clamp(30px, 2.6vw, 38px);
+  }
+
+  .section .head {
+    margin-bottom: 16px;
+  }
+
+  .photo {
+    position: absolute;
+    /* from the section's top edge to under the neon divider */
+    top: calc(-1 * var(--sec-top));
+    bottom: calc(-1 * (var(--sec-bottom) + var(--neon-edge-h)));
+    right: calc((100% - 100vw) / 2);
+    width: min(57vw, 1040px);
+    height: auto;
+    margin: 0;
+    z-index: -1;
+    -webkit-mask-image:
+      linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.45) 26%, #000 52%, #000 100%),
+      linear-gradient(180deg, transparent 0%, #000 12%, #000 100%);
+    mask-image:
+      linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.45) 26%, #000 52%, #000 100%),
+      linear-gradient(180deg, transparent 0%, #000 12%, #000 100%);
+  }
+
+  .photo img {
+    object-position: 50% 50%;
+  }
+
+  /* heading and cards live in the left ~70% */
+  .cards {
+    width: 76%;
+    gap: clamp(14px, 1.3vw, 20px);
+  }
+
+  .card {
+    padding: 18px 16px 18px;
+    column-gap: 14px;
+  }
+
+  .tile {
+    width: 58px;
+    height: 58px;
+  }
+}

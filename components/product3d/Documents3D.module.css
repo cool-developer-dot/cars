@@ -1,0 +1,364 @@
+/* Identity and registration documents — dark section: heading, two liquid
+   glass cards, then a guidance bar. Shell, headings and liquid glass come
+   from home.module.css; sizes from the global type tokens.
+
+   Layouts
+     < 640      icon beside the title, copy and chips full width below
+     640–1023   one card per row, icon beside title, copy and chips
+     1024+      two cards across (fits one screen) */
+
+/* Cool light pooling in two corners of the night-blue background */
+.section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(55% 45% at 8% 0%, rgba(40, 110, 220, 0.2), transparent 70%),
+    radial-gradient(50% 50% at 100% 100%, rgba(30, 90, 200, 0.14), transparent 70%);
+}
+
+/* Written in Title Case, so "and" must not be capitalised */
+.title,
+.cardTitle {
+  text-transform: none;
+}
+
+.line {
+  display: block;
+}
+
+.lead {
+  max-width: 44em;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.brWide {
+  display: none;
+}
+
+.section .head {
+  margin-bottom: clamp(18px, 1.7vw, 26px);
+}
+
+/* ——— Cards ——— */
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+}
+
+.card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas:
+    "tile title"
+    "text text"
+    "chips chips";
+  align-content: start;
+  align-items: center;
+  column-gap: 14px;
+  row-gap: 10px;
+  padding: 16px 14px;
+  border-radius: 18px;
+}
+
+/* a card without chips has no chips row to leave space for */
+.plain {
+  grid-template-areas:
+    "tile title"
+    "text text";
+}
+
+.tile {
+  grid-area: tile;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border: 1px solid rgba(130, 185, 255, 0.5);
+  border-radius: 14px;
+  color: #62b0ff;
+  background: linear-gradient(145deg, rgba(70, 140, 255, 0.3), rgba(18, 48, 104, 0.62));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    inset 0 0 14px rgba(80, 150, 255, 0.18),
+    0 0 14px rgba(30, 120, 255, 0.3);
+}
+
+.tile svg {
+  width: 56%;
+  height: 56%;
+}
+
+.cardTitle {
+  grid-area: title;
+  margin: 0;
+  font-size: var(--fs-h3);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+.cardText {
+  grid-area: text;
+  margin: 0;
+  font-size: var(--fs-body);
+  line-height: 1.5;
+  color: var(--text);
+  text-wrap: pretty;
+}
+
+/* ——— Document chips ——— */
+
+.chips {
+  grid-area: chips;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 2px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px 8px 8px;
+  border: 1px solid rgba(150, 190, 255, 0.18);
+  border-radius: 12px;
+  font-size: var(--fs-label);
+  line-height: 1.2;
+  color: rgba(232, 240, 252, 0.95);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* five chips: the odd one fills its row, so no row is left half empty */
+.chip:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+.chip svg {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  color: #fff;
+  fill: #1e6bff;
+}
+
+/* ——— Guidance bar ——— */
+
+.bar {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas:
+    "tile text"
+    "btn btn";
+  align-items: center;
+  column-gap: 14px;
+  row-gap: 12px;
+  margin-top: 10px;
+  padding: 12px 14px;
+  border-radius: 16px;
+}
+
+.bar .tile {
+  grid-row: auto;
+  align-self: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+}
+
+.bar .tile svg {
+  width: 50%;
+  height: 50%;
+}
+
+.barText {
+  grid-area: text;
+  margin: 0;
+  font-size: var(--fs-body);
+  line-height: 1.5;
+  color: var(--text);
+  text-wrap: pretty;
+}
+
+.link {
+  color: #3d9bff;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.link:hover {
+  color: #7ab8ff;
+}
+
+.btn {
+  grid-area: btn;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 48px;
+  padding: 0 20px;
+  border: 1px solid rgba(110, 170, 255, 0.45);
+  border-radius: 12px;
+  font-size: var(--fs-btn);
+  font-weight: 600;
+  line-height: 1;
+  color: #fff;
+  text-decoration: none;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 0 16px rgba(30, 120, 255, 0.2);
+  transition:
+    transform 200ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 200ms;
+}
+
+.btn svg {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  color: #3d9bff;
+  transition: transform 200ms;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  border-color: rgba(140, 195, 255, 0.75);
+}
+
+.btn:hover svg:last-child {
+  transform: translateX(3px);
+}
+
+.btn:focus-visible {
+  outline: 2px solid #8ddcff;
+  outline-offset: 3px;
+}
+
+/* ——— Tablet: icon beside the title, copy and chips in line with it ——— */
+
+@media (min-width: 640px) {
+  .grid {
+    gap: 12px;
+  }
+
+  .card {
+    grid-template-areas:
+      "tile title"
+      "tile text"
+      "tile chips";
+    row-gap: 5px;
+    padding: 16px 20px;
+  }
+
+  .plain {
+    grid-template-areas:
+      "tile title"
+      "tile text";
+  }
+
+  .tile {
+    grid-row: 1 / -1;
+    align-self: start;
+    width: 60px;
+    height: 60px;
+  }
+
+  .cardTitle {
+    align-self: start;
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 10px;
+    margin-top: 8px;
+  }
+
+  /* button tucks under the text, left-aligned with it */
+  .bar {
+    grid-template-areas:
+      "tile text"
+      ". btn";
+    column-gap: 16px;
+    margin-top: 12px;
+    padding: 14px 16px;
+  }
+
+  .btn {
+    justify-self: start;
+  }
+
+  .bar .tile {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+/* ——— Desktop: a wider container than the other sections, two cards across ——— */
+
+@media (min-width: 1024px) {
+  .section .wide {
+    max-width: 1552px;
+    padding-inline: clamp(32px, 5.2vw, 80px);
+  }
+
+  /* one line on desktop, as in the design */
+  .line {
+    display: inline;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(16px, 1.6vw, 24px);
+  }
+
+  .card {
+    column-gap: 18px;
+    padding: 20px 22px;
+  }
+
+  .tile {
+    width: clamp(60px, 4.6vw, 70px);
+    height: clamp(60px, 4.6vw, 70px);
+    border-radius: 16px;
+  }
+
+  /* a soft glow on the glyph, desktop only (no filters on phones) */
+  .tile svg {
+    filter: drop-shadow(0 0 5px rgba(80, 160, 255, 0.65));
+  }
+
+  .bar {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas: "tile text btn";
+    margin-top: clamp(12px, 1.2vw, 18px);
+    padding: 12px 18px;
+  }
+
+  .btn {
+    justify-self: end;
+  }
+
+  .bar .tile {
+    width: 54px;
+    height: 54px;
+    border-radius: 14px;
+  }
+
+  .brWide {
+    display: inline;
+  }
+}

@@ -84,6 +84,9 @@ export const WARRANTY_MONTHS: Record<StyleId, number> = {
   bevel: 12,
 };
 
+/** Delivery fees in pounds — the numbers behind the copy in DELIVERY below */
+export const DELIVERY_FEES = { firstClass: 3, freeFrom: 15, tracked: 2 } as const;
+
 export const DELIVERY = {
   firstClass:
     "Standard Royal Mail First Class delivery is £3 on orders under £15 and free on orders of £15 or more.",

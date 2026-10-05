@@ -56,11 +56,13 @@ export const IS_SAMPLE = !hasReal && process.env.NODE_ENV !== "production";
 
 const SAMPLE_TEXT = "Sample review text. Replace with a real customer review.";
 
+const SAMPLE_RATING = { trustpilot: 4.7, google: 4.8, facebook: 4.9 } as const;
+
 const SAMPLE_PLATFORM_REVIEWS: PlatformSummary[] = (
   ["trustpilot", "google", "facebook"] as const
 ).map((platform) => ({
   platform,
-  rating: 5,
+  rating: SAMPLE_RATING[platform],
   count: 0,
   url: "#reviews",
   featured: { name: "Sample customer", when: "Sample date", rating: 5, text: SAMPLE_TEXT },
@@ -78,3 +80,36 @@ export const SITE_REVIEWS = IS_SAMPLE ? SAMPLE_SITE_REVIEWS : REAL_SITE_REVIEWS;
 export const ALL_REVIEWS_URL = IS_SAMPLE ? "#reviews" : REAL_ALL_REVIEWS_URL;
 
 export const hasReviews = PLATFORM_REVIEWS.length > 0 || SITE_REVIEWS.length > 0;
+
+/* ——— Totals (used by the 3D page's reviews section) ———
+   Real mode: derived from the lists above, never typed in by hand. Design
+   preview: placeholder figures, shown only while IS_SAMPLE is true. */
+
+export type RatingSummary = { rating: number; count: number };
+
+/** If the shop's own review system reports a total, put it here; otherwise
+    the total is worked out from SITE_REVIEWS */
+const REAL_SITE_SUMMARY: RatingSummary | null = null;
+
+const round1 = (n: number) => Math.round(n * 10) / 10;
+
+function summarisePlatforms(items: PlatformSummary[]): RatingSummary | null {
+  const count = items.reduce((n, p) => n + p.count, 0);
+  if (count <= 0) return null;
+  return { rating: round1(items.reduce((n, p) => n + p.rating * p.count, 0) / count), count };
+}
+
+function summariseReviews(items: Review[]): RatingSummary | null {
+  if (items.length === 0) return null;
+  return { rating: round1(items.reduce((n, r) => n + r.rating, 0) / items.length), count: items.length };
+}
+
+/** All independent platforms together (rating weighted by review count) */
+export const PLATFORM_TOTALS: RatingSummary | null = IS_SAMPLE
+  ? { rating: 4.8, count: 1081 }
+  : summarisePlatforms(REAL_PLATFORM_REVIEWS);
+
+/** Reviews left on this website */
+export const SITE_TOTALS: RatingSummary | null = IS_SAMPLE
+  ? { rating: 4.8, count: 320 }
+  : (REAL_SITE_SUMMARY ?? summariseReviews(REAL_SITE_REVIEWS));

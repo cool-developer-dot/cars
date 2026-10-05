@@ -1,0 +1,397 @@
+/* Helpful guides — dark section: heading and three liquid glass guide cards on
+   the left, a render of a white and a yellow 3D gel plate on a wet bumper
+   bleeding off the right. Shell, headings and liquid glass come from
+   home.module.css; sizes from the global type tokens.
+
+   Layouts
+     < 640       photo banner under the intro, cards stacked
+     640–899     photo banner (centred), three cards across
+     900–1279    heading left and photo right, three cards across below
+     1280+       photo bleeds off the right, cards on the left (one screen) */
+
+/* Night-blue background lit from the left, as in the design: a bright blue
+   glow top-left, a darker middle, and two light-leak streaks sweeping in
+   from the left edge. Pure gradients, so there is nothing to download. */
+.section {
+  background:
+    /* the join with the divider above is one flat colour; the glow fades in below it */
+    linear-gradient(180deg, #052946 0, rgba(5, 41, 70, 0) 56px),
+    radial-gradient(52% 70% at -8% -4%, rgba(70, 150, 235, 0.62), transparent 68%),
+    radial-gradient(34% 50% at -6% 100%, rgba(40, 110, 190, 0.34), transparent 70%),
+    linear-gradient(180deg, #052a47 0%, #031c31 45%, #02101d 100%);
+}
+
+.section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    /* upper diagonal rays */
+    linear-gradient(118deg, transparent 6%, rgba(170, 215, 255, 0.1) 12%, transparent 19%),
+    linear-gradient(112deg, transparent 15%, rgba(150, 205, 255, 0.07) 20%, transparent 26%),
+    /* soft vignette towards the photo side */
+    radial-gradient(55% 75% at 40% 62%, rgba(0, 8, 16, 0.7), transparent 75%);
+}
+
+/* the bright light-leak on the left edge: tapers to the right, fades top and bottom */
+.section::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 40%;
+  z-index: 0;
+  width: clamp(140px, 26%, 420px);
+  height: 34%;
+  pointer-events: none;
+  background:
+    linear-gradient(171deg, transparent 36%, rgba(215, 238, 255, 0.85) 47%, rgba(120, 190, 255, 0.34) 55%, transparent 66%),
+    linear-gradient(176deg, transparent 56%, rgba(150, 210, 255, 0.4) 64%, transparent 74%);
+  -webkit-mask-image:
+    linear-gradient(90deg, #000 0%, rgba(0, 0, 0, 0.65) 42%, transparent 100%),
+    linear-gradient(180deg, transparent 0%, #000 30%, #000 70%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(90deg, #000 0%, rgba(0, 0, 0, 0.65) 42%, transparent 100%),
+    linear-gradient(180deg, transparent 0%, #000 30%, #000 70%, transparent 100%);
+  mask-composite: intersect;
+}
+
+/* Written in Title Case, so "and" and "vs" must not be capitalised */
+.title,
+.cardTitle {
+  text-transform: none;
+}
+
+.section .head {
+  margin-bottom: 14px;
+}
+
+.lead {
+  max-width: 36em;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.brWide,
+.brText {
+  display: none;
+}
+
+.top {
+  display: block;
+}
+
+/* ——— Photo ——— */
+
+/* phones and tablets: a banner, feathered into the section on every edge
+   with an oval fade, so there is no photo box */
+.photo {
+  position: relative;
+  height: 210px;
+  margin: 4px -16px 10px;
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 52%, transparent 98%);
+  mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 52%, transparent 98%);
+}
+
+.photo picture,
+.photo img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.photo img {
+  object-fit: cover;
+  object-position: 55% 50%;
+}
+
+/* ——— Cards ——— */
+
+.cards {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+}
+
+/* Frosted steel-teal glass, lighter than the night around it: a soft sheen from
+   the top-left, a bright rim lit on the left edge and thin vertical highlights
+   down both sides. Built on the shared liquid glass, tuned for this section. */
+.item .card {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 16px 14px 14px;
+  border-radius: 22px;
+  color: inherit;
+  text-align: center;
+  text-decoration: none;
+  background:
+    linear-gradient(150deg, rgba(110, 180, 245, 0.16) 0%, rgba(50, 120, 190, 0.04) 40%, rgba(20, 80, 130, 0.07) 100%),
+    rgba(8, 38, 64, 0.62);
+  box-shadow:
+    inset 0 1px 0 rgba(190, 225, 255, 0.34),
+    inset 1px 0 0 rgba(160, 210, 255, 0.3),
+    inset -1px 0 0 rgba(120, 180, 240, 0.16),
+    inset 0 -1px 0 rgba(90, 150, 220, 0.14),
+    inset 0 0 36px rgba(60, 140, 220, 0.07),
+    0 20px 40px -26px rgba(0, 10, 30, 0.9);
+  transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* rim: bright on the left and top, cool and faint on the right */
+.item .card::before {
+  background: linear-gradient(
+    120deg,
+    rgba(210, 235, 255, 0.85) 0%,
+    rgba(120, 180, 240, 0.4) 22%,
+    rgba(70, 130, 200, 0.22) 60%,
+    rgba(130, 190, 250, 0.5) 100%
+  );
+}
+
+/* a vertical glint running down the left side */
+.item .card::after {
+  background:
+    linear-gradient(180deg, transparent 8%, rgba(190, 225, 255, 0.28) 50%, transparent 92%) left center / 1.5px 100% no-repeat,
+    radial-gradient(110% 60% at 15% -8%, rgba(255, 255, 255, 0.13), transparent 62%);
+}
+
+.card:focus-visible {
+  outline: 2px solid #8ddcff;
+  outline-offset: 3px;
+}
+
+.tile {
+  display: grid;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  margin-bottom: 6px;
+  border: 1px solid rgba(150, 205, 255, 0.4);
+  border-radius: 18px;
+  background:
+    linear-gradient(160deg, rgba(60, 130, 210, 0.3), rgba(2, 24, 50, 0.9) 62%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.26),
+    inset 0 0 18px rgba(60, 140, 235, 0.2),
+    0 8px 18px -10px rgba(0, 10, 30, 0.9);
+}
+
+.tile svg {
+  width: 74%;
+  height: 74%;
+}
+
+.cardTitle {
+  margin: 0;
+  font-size: var(--fs-h3);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+.cardText {
+  margin: 0;
+  font-size: var(--fs-body);
+  line-height: 1.45;
+  color: var(--text);
+  text-wrap: balance;
+}
+
+/* the round arrow sits on the card's floor, level across all three */
+.go {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  margin-top: auto;
+  padding: 0;
+  border-radius: 50%;
+  color: #fff;
+  background: rgba(30, 72, 108, 0.82);
+  box-shadow:
+    inset 0 1px 0 rgba(180, 220, 255, 0.2),
+    0 6px 14px -8px rgba(0, 10, 30, 0.8);
+  transition:
+    background 200ms,
+    transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.go svg {
+  width: 22px;
+  height: 22px;
+}
+
+@media (hover: hover) {
+  .item .card:hover {
+    transform: translateY(-3px);
+  }
+
+  .card:hover .go {
+    background: rgba(40, 100, 170, 0.92);
+    transform: translateX(2px);
+  }
+}
+
+/* ——— Tablet and small laptop: three across ——— */
+
+@media (min-width: 640px) {
+  .brText {
+    display: inline;
+  }
+
+  .photo {
+    width: min(calc(100% + 48px), 680px);
+    height: 300px;
+    margin: 6px 0 12px 50%;
+    transform: translateX(-50%);
+  }
+
+  .cards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .item .card {
+    gap: 8px;
+    padding: 18px 16px 16px;
+  }
+
+  .tile {
+    width: 68px;
+    height: 68px;
+    margin-bottom: 8px;
+  }
+
+  .go {
+    width: 46px;
+    height: 46px;
+  }
+}
+
+/* Laptops and tablets on their side: heading on the left, plates on the right */
+@media (min-width: 900px) {
+  .top {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    align-items: center;
+    column-gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .section .head {
+    margin-bottom: 0;
+  }
+
+  .photo {
+    width: auto;
+    height: 290px;
+    margin: 0 calc(-1 * clamp(32px, 5.2vw, 80px)) 0 0;
+    transform: none;
+    -webkit-mask-image:
+      linear-gradient(90deg, transparent 0%, #000 26%, #000 100%),
+      linear-gradient(180deg, transparent 0%, #000 14%, #000 86%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-image:
+      linear-gradient(90deg, transparent 0%, #000 26%, #000 100%),
+      linear-gradient(180deg, transparent 0%, #000 14%, #000 86%, transparent 100%);
+    mask-composite: intersect;
+  }
+
+  .photo img {
+    object-position: 45% 55%;
+  }
+}
+
+/* ——— Desktop: a wider container, photo bleeding off the right ——— */
+
+@media (min-width: 1024px) {
+  /* no max width: the design keeps the copy about 5% in from the left edge at
+     any screen size, with the plates bleeding off the right */
+  .section .wide {
+    max-width: none;
+    padding-inline: clamp(32px, 5.2vw, 110px);
+  }
+}
+
+@media (min-width: 1280px) {
+  .top {
+    display: block;
+    margin-bottom: 0;
+  }
+
+  .section[class] {
+    --neon-edge-h: clamp(30px, 2.6vw, 38px);
+  }
+
+  .section .head {
+    margin-bottom: 16px;
+  }
+
+  .lead {
+    max-width: none;
+  }
+
+  .brWide {
+    display: inline;
+  }
+
+  .photo {
+    position: absolute;
+    /* from the section's top edge to under the neon divider */
+    top: calc(-1 * var(--sec-top));
+    bottom: calc(-1 * (var(--sec-bottom) + var(--neon-edge-h)));
+    right: calc((100% - 100vw) / 2);
+    width: min(46vw, 960px);
+    height: auto;
+    margin: 0;
+    transform: none;
+    z-index: -1;
+    -webkit-mask-image:
+      linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.55) 10%, #000 26%, #000 100%),
+      linear-gradient(180deg, transparent 0%, #000 14%, #000 100%);
+    -webkit-mask-composite: source-in;
+    mask-image:
+      linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.55) 10%, #000 26%, #000 100%),
+      linear-gradient(180deg, transparent 0%, #000 14%, #000 100%);
+    mask-composite: intersect;
+  }
+
+  .photo img {
+    object-position: 30% 50%;
+  }
+
+  /* heading and cards live in the left ~62% */
+  .cards {
+    width: 62%;
+    gap: clamp(14px, 1.3vw, 20px);
+  }
+
+  .item .card {
+    gap: 8px;
+    padding: 18px 16px 16px;
+  }
+
+  .tile {
+    width: clamp(64px, 5vw, 76px);
+    height: clamp(64px, 5vw, 76px);
+    border-radius: 20px;
+  }
+}

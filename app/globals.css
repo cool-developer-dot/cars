@@ -65,6 +65,8 @@ html {
   --fs-small: 12px;
   --fs-eyebrow: 11.5px;
   --fs-btn: 15px;
+  /* Rating-ring figure (reviews): the only size outside the shared roles */
+  --fs-stat: 24px;
 
   /* Homepage section rhythm: every section uses these two, so the gap
      between any two sections (bottom pad + neon edge + top pad) is equal */
@@ -83,6 +85,7 @@ html {
     --fs-small: 13px;
     --fs-eyebrow: 12px;
     --fs-btn: 16px;
+    --fs-stat: 26px;
   }
 }
 
@@ -97,6 +100,7 @@ html {
     --fs-small: 13px;
     --fs-eyebrow: 13px;
     --fs-btn: 16px;
+    --fs-stat: 28px;
   }
 }
 

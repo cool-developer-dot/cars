@@ -67,7 +67,8 @@ export default function LegalInfo() {
         </div>
       </div>
 
-      <NeonEdge fill="#040c16" />
+      {/* Into "How to order" (light) */}
+      <NeonEdge fill="#f3f7fb" />
     </section>
   );
 }
