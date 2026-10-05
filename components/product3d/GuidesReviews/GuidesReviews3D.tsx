@@ -165,7 +165,7 @@ export default function GuidesReviews3D() {
               src="/3d/guides-reviews-plates-mobile.webp"
               alt=""
               width={1100}
-              height={642}
+              height={592}
               loading="lazy"
               decoding="async"
             />
