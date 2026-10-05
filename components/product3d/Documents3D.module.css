@@ -7,6 +7,14 @@
      640–1023   one card per row, icon beside title, copy and chips
      1024+      two cards across (fits one screen) */
 
+/* The glass edge on this section's top: --glass-h is its height (about 6% of
+   the width, as designed). The heading must clear its lowest point, so the
+   top padding is the shared one, or more where the edge is taller. */
+.section[class] {
+  --glass-h: clamp(40px, 5.9vw, 96px);
+  padding-top: max(var(--sec-top), calc(var(--glass-h) * 0.98 - 26px), 26px);
+}
+
 /* Cool light pooling in two corners of the night-blue background */
 .section::before {
   content: "";

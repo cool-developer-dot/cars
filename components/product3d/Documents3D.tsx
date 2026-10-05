@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowRight, CircleCheck, ExternalLink, SquareArrowOutUpRight } from "lucide-react";
 import Reveal from "@/components/content/Reveal";
 import NeonEdge from "@/components/NeonEdge/NeonEdge";
+import GlassEdge from "./GlassEdge";
 import h from "@/components/home/home.module.css";
 import { GOV_UK_DOCS_URL } from "@/lib/site";
 import { IdDocIcon, VehicleDocIcon } from "./orderIcons";
@@ -33,6 +34,9 @@ const GROUPS = [
 export default function Documents3D() {
   return (
     <section className={`${h.section} ${h.dark} ${s.section}`} aria-labelledby="docs3d-title">
+      {/* From "How to order" (light) */}
+      <GlassEdge fill="#eef3f9" />
+
       <div className={`${h.container} ${s.wide}`}>
         <Reveal className={`${h.head} ${s.head}`}>
           <p className={`${h.eyebrow} ${s.eyebrow}`}>Documents</p>

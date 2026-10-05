@@ -1,6 +1,5 @@
 import { ArrowRight, ChevronRight, Search, ShoppingCart } from "lucide-react";
 import Reveal from "@/components/content/Reveal";
-import NeonEdge from "@/components/NeonEdge/NeonEdge";
 import h from "@/components/home/home.module.css";
 import { plateFont } from "@/lib/fonts";
 import { CarFrontIcon, CarRearIcon, PairIcon } from "./orderIcons";
@@ -131,7 +130,7 @@ export default function HowToOrder3D() {
         </ol>
       </div>
 
-      <NeonEdge fill="#06111f" light />
+      {/* The join with "Documents" is drawn by that section (GlassEdge) */}
     </section>
   );
 }
