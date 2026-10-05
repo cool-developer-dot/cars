@@ -35,7 +35,7 @@ export default function Documents3D() {
     <section className={`${h.section} ${h.dark} ${s.section}`} aria-labelledby="docs3d-title">
       <div className={`${h.container} ${s.wide}`}>
         <Reveal className={`${h.head} ${s.head}`}>
-          <p className={h.eyebrow}>Documents</p>
+          <p className={`${h.eyebrow} ${s.eyebrow}`}>Documents</p>
           <h2 id="docs3d-title" className={`${h.title} ${s.title}`}>
             Identity and <span className={`${h.accent} ${s.line}`}>Registration Documents</span>
           </h2>

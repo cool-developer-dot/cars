@@ -90,7 +90,7 @@ export default function HowToOrder3D() {
     <section className={`${h.section} ${h.light} ${s.section}`} aria-labelledby="order3d-title">
       <div className={`${h.container} ${s.wide}`}>
         <Reveal className={`${h.head} ${s.head}`}>
-          <p className={h.eyebrow}>How to order</p>
+          <p className={`${h.eyebrow} ${s.eyebrow}`}>How to order</p>
           <h2 id="order3d-title" className={`${h.title} ${s.title}`}>
             How to Order 3D <span className={`${h.accent} ${s.line}`}>Number Plates Online</span>
           </h2>
