@@ -8,6 +8,7 @@ import LegalInfo from "@/components/product3d/LegalInfo";
 import Delivery3D from "@/components/product3d/Delivery3D";
 import CareWarranty3D from "@/components/product3d/CareWarranty3D";
 import GuidesReviews3D from "@/components/product3d/GuidesReviews/GuidesReviews3D";
+import FaqCta3D from "@/components/product3d/FaqCta/FaqCta3D";
 import HowToOrder3D from "@/components/product3d/HowToOrder3D";
 import Documents3D from "@/components/product3d/Documents3D";
 import { PRODUCTS } from "@/lib/products";
@@ -42,6 +43,14 @@ export default function Page() {
               },
             },
             {
+              "@type": "FAQPage",
+              mainEntity: product.faqs.map((f) => ({
+                "@type": "Question",
+                name: f.q,
+                acceptedAnswer: { "@type": "Answer", text: f.a },
+              })),
+            },
+            {
               "@type": "BreadcrumbList",
               itemListElement: [
                 { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
@@ -72,6 +81,7 @@ export default function Page() {
       <Delivery3D />
       <CareWarranty3D />
       <GuidesReviews3D />
+      <FaqCta3D />
     </>
   );
 }

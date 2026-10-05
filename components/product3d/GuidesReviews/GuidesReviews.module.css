@@ -778,8 +778,6 @@
 
   .foot {
     grid-column: 1 / -1;
-    /* the neon line sits further back, behind the plates and a little dimmer */
-    filter: brightness(0.74) saturate(0.8);
   }
 
   /* panels become transparent: the root draws the backdrop and the chevron */
@@ -851,10 +849,10 @@
   .art {
     position: absolute;
     right: 0;
-    bottom: calc(-1 * var(--neon-edge-h));
+    bottom: 0;
     left: 0;
     z-index: 1;
-    height: calc(var(--art-h) + var(--neon-edge-h));
+    height: var(--art-h);
     margin: 0;
     -webkit-mask-image:
       linear-gradient(180deg, transparent 0%, #000 6%, #000 100%),

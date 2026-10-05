@@ -1,0 +1,538 @@
+/* FAQs (light) and the final call to action (dark) — the end of the 3D page.
+   Panel shell, headings, button and themes come from home.module.css; every
+   font size comes from the --fs-* tokens in globals.css; spacing is the shared
+   --sec-top / --sec-bottom. Each panel ends on the shared neon divider.
+
+   Layouts
+     < 1024      car photo as a banner, then the questions; the call to
+                 action stacks (button, then three equal trust cards)
+     1024+       car photo bleeds off the left, questions on the right;
+                 the call to action has the plate photo bleeding off the
+                 bottom-right and the trust points in a row with the button */
+
+/* Written in Title Case, so nothing here should be re-capitalised */
+.title,
+.qHeading {
+  text-transform: none;
+}
+
+.head {
+  margin-bottom: 14px;
+}
+
+.lead {
+  max-width: 42em;
+  margin-top: 6px;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+/* ——— FAQs ——— */
+
+.faq {
+  --blue: #1668e3;
+}
+
+.faqInner {
+  position: relative;
+  z-index: 2;
+  padding-inline: 16px;
+}
+
+/* the car: a banner on phones and tablets, feathered into the section */
+.car {
+  position: relative;
+  z-index: 1;
+  height: 190px;
+  margin: 0 -16px 8px;
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 62%, transparent 100%);
+  mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 62%, transparent 100%);
+}
+
+.car picture,
+.car img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.car img {
+  object-fit: cover;
+  object-position: 30% 62%;
+}
+
+/* ——— The question rows ——— */
+
+.list {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* phones: inset rings only, no stacked outer shadows */
+.item {
+  border-radius: 14px;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.92), rgba(244, 249, 255, 0.78));
+  box-shadow:
+    inset 0 0 0 1px rgba(210, 223, 243, 0.9),
+    inset 0 1px 0 #fff;
+}
+
+.qHeading {
+  margin: 0;
+  font-size: var(--fs-body);
+  font-weight: 500;
+}
+
+.question {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 48px;
+  padding: 6px 12px 6px 8px;
+  border: 0;
+  border-radius: inherit;
+  font: inherit;
+  text-align: left;
+  color: var(--ink);
+  background: none;
+  cursor: pointer;
+}
+
+.question:focus-visible {
+  outline: 2px solid #0a5cff;
+  outline-offset: 2px;
+}
+
+.num {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: var(--fs-label);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--blue);
+  background: radial-gradient(circle at 50% 35%, #f4f9ff 0%, #e2eeff 62%, #d3e5ff 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(10, 92, 255, 0.1),
+    0 0 0 3px rgba(255, 255, 255, 0.6);
+}
+
+.qText {
+  font-size: var(--fs-body);
+  font-weight: 500;
+  line-height: 1.35;
+  text-wrap: pretty;
+}
+
+.chev {
+  display: grid;
+  place-items: center;
+  color: #46557a;
+  transition: transform 240ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.chev svg {
+  width: 20px;
+  height: 20px;
+}
+
+.itemOpen .chev {
+  transform: rotate(180deg);
+}
+
+/* answers open by growing from zero (no JS measuring) */
+.panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 260ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.itemOpen .panel {
+  grid-template-rows: 1fr;
+}
+
+.panelInner {
+  min-height: 0;
+  overflow: clip;
+}
+
+.answer {
+  margin: 0;
+  padding: 0 14px 12px 56px;
+  font-size: var(--fs-body);
+  line-height: 1.55;
+  color: var(--text);
+  text-wrap: pretty;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel,
+  .chev {
+    transition: none;
+  }
+}
+
+/* ——— Call to action ——— */
+
+.ctaInner {
+  position: relative;
+  z-index: 5; /* above the plate photo, which runs in front of the divider */
+  padding-inline: 16px;
+}
+
+/* the plate: a banner under the copy on phones and tablets */
+.plate {
+  position: relative;
+  z-index: 1;
+  height: 190px;
+  margin: 12px -16px 0;
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 62%, transparent 100%);
+  mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 62%, transparent 100%);
+}
+
+.plate picture,
+.plate img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.plate img {
+  object-fit: cover;
+  object-position: 50% 50%;
+}
+
+.actions {
+  display: grid;
+  gap: 14px;
+  margin-top: 4px;
+}
+
+.btn {
+  width: 100%;
+  min-height: 48px;
+  box-shadow:
+    0 10px 20px -12px rgba(0, 90, 255, 0.65),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+
+/* three equal cards on phones: icon on top, centred text */
+.trust {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.point {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 6px;
+  border-radius: 14px;
+  text-align: center;
+  background:
+    linear-gradient(135deg, rgba(150, 200, 255, 0.1) 0%, rgba(40, 90, 150, 0.03) 60%),
+    rgba(12, 40, 76, 0.7);
+  box-shadow:
+    inset 0 0 0 1px rgba(120, 175, 240, 0.2),
+    inset 0 1px 0 rgba(200, 228, 255, 0.16);
+}
+
+.pointIcon {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  color: #3d8dff;
+}
+
+.pointCopy {
+  display: grid;
+  gap: 2px;
+}
+
+.pointTitle {
+  font-size: var(--fs-label);
+  font-weight: 600;
+  line-height: 1.25;
+  color: #fff;
+}
+
+.pointText {
+  font-size: var(--fs-small);
+  line-height: 1.3;
+  color: var(--muted);
+}
+
+/* ——— Tablet ——— */
+
+@media (min-width: 560px) {
+  .faqInner,
+  .ctaInner {
+    padding-inline: 24px;
+  }
+
+  .car,
+  .plate {
+    width: min(calc(100% + 48px), 700px);
+    height: 250px;
+    margin-inline: 50% 0;
+    transform: translateX(-50%);
+  }
+
+  .list {
+    gap: 6px;
+  }
+
+  .btn {
+    width: auto;
+    min-width: 300px;
+    justify-self: start;
+  }
+
+  .point {
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    text-align: left;
+  }
+
+  .pointIcon {
+    width: 34px;
+    height: 34px;
+  }
+}
+
+@media (min-width: 900px) {
+  .item {
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.95),
+      0 0 0 1px rgba(214, 226, 244, 0.45),
+      0 8px 16px -14px rgba(18, 52, 110, 0.3);
+  }
+
+  .btn {
+    box-shadow:
+      0 0 0 1px rgba(120, 200, 255, 0.28),
+      0 0 24px rgba(10, 120, 255, 0.4),
+      0 12px 26px -10px rgba(0, 90, 255, 0.6),
+      inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  }
+
+  .faqInner,
+  .ctaInner {
+    padding-inline: 32px;
+  }
+
+  .car,
+  .plate {
+    width: min(calc(100% + 64px), 700px);
+  }
+}
+
+/* ——— Desktop ——— */
+
+@media (min-width: 1024px) {
+  .faq .head,
+  .cta .head {
+    margin-bottom: 12px;
+  }
+
+  /* the car bleeds off the left of the section, feathered on its other edges */
+  .car {
+    position: absolute;
+    z-index: -1;
+    top: calc(-1 * var(--sec-top));
+    bottom: calc(-1 * (var(--sec-bottom) + var(--neon-edge-h)));
+    left: 0;
+    width: min(50%, 800px);
+    height: auto;
+    margin: 0;
+    transform: none;
+    -webkit-mask-image:
+      linear-gradient(90deg, #000 0%, #000 66%, transparent 100%),
+      linear-gradient(180deg, transparent 0%, #000 10%, #000 84%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-image:
+      linear-gradient(90deg, #000 0%, #000 66%, transparent 100%),
+      linear-gradient(180deg, transparent 0%, #000 10%, #000 84%, transparent 100%);
+    mask-composite: intersect;
+  }
+
+  .car img {
+    object-position: 35% 40%;
+  }
+
+  /* questions in the right half, as designed */
+  .faqInner {
+    margin-left: 49.7%;
+    margin-right: 3.4%;
+    padding-inline: 0;
+  }
+
+  .qHeading,
+  .qText {
+    font-size: var(--fs-body);
+  }
+
+  .question {
+    min-height: 44px;
+    padding-block: 4px;
+  }
+
+  .list {
+    gap: 4px;
+  }
+
+  /* the plate bleeds off the bottom-right, in front of the divider so the
+     neon line runs behind it; it fades out into the dark below */
+  .plate {
+    position: absolute;
+    z-index: 4;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: auto;
+    width: min(40%, 640px);
+    height: auto;
+    margin: 0;
+    transform: none;
+    -webkit-mask-image:
+      linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.12) 26%, #000 64%, #000 100%),
+      linear-gradient(180deg, transparent 0%, #000 26%, #000 76%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-image:
+      linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.12) 26%, #000 64%, #000 100%),
+      linear-gradient(180deg, transparent 0%, #000 26%, #000 76%, transparent 100%);
+    mask-composite: intersect;
+  }
+
+  .plate img {
+    object-position: 100% 50%;
+  }
+
+  .ctaInner {
+    padding-inline: clamp(32px, 5.2vw, 110px) 0;
+  }
+
+  .cta .lead {
+    max-width: 62%;
+  }
+
+  .actions {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(20px, 2.4vw, 40px);
+    max-width: 62%;
+    margin-top: 18px;
+  }
+
+  .btn {
+    width: clamp(260px, 22vw, 340px);
+    min-width: 0;
+  }
+
+  /* three points in a row, separated by hairlines */
+  .trust {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0;
+  }
+
+  .point {
+    flex-direction: row;
+    gap: 10px;
+    padding: 2px 0 2px clamp(12px, 1.4vw, 24px);
+    border-radius: 0;
+    text-align: left;
+    background: none;
+    box-shadow: none;
+  }
+
+  .point + .point {
+    border-left: 1px solid rgba(120, 160, 220, 0.22);
+  }
+
+  .point:first-child {
+    padding-left: 0;
+  }
+
+  .pointIcon {
+    width: 34px;
+    height: 34px;
+  }
+}
+
+/* Laptops: the button sits above the trust points and the copy keeps clear of the photo */
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .cta .lead,
+  .actions {
+    max-width: 56%;
+  }
+
+  .actions {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+  }
+
+  .btn {
+    width: 280px;
+  }
+
+  .trust {
+    justify-content: flex-start;
+  }
+
+  .point + .point {
+    margin-left: 22px;
+    padding-left: 22px;
+  }
+
+  .car img {
+    object-position: 70% 40%;
+  }
+}
+
+/* Large screens: button and trust points on one line, the photo wider */
+@media (min-width: 1440px) {
+  .plate {
+    width: min(46%, 860px);
+  }
+
+  .actions {
+    max-width: 68%;
+  }
+
+  .btn {
+    width: clamp(260px, 20vw, 320px);
+  }
+
+  .pointTitle,
+  .pointText {
+    white-space: nowrap;
+  }
+}
+
+@media (min-width: 1280px) and (max-width: 1439px) {
+  .car img {
+    object-position: 30% 40%;
+  }
+}

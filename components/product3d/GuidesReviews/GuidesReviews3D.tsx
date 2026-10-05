@@ -286,9 +286,9 @@ export default function GuidesReviews3D() {
         </div>
       </section>
 
-      {/* Into the footer */}
+      {/* Into the FAQs (light) */}
       <div className={s.foot}>
-        <NeonEdge fill="#040c16" light />
+        <NeonEdge fill="#f3f7fb" light />
       </div>
     </div>
   );

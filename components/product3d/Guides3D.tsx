@@ -89,8 +89,8 @@ export default function Guides3D() {
         </ul>
       </div>
 
-      {/* Into the footer */}
-      <NeonEdge fill="#040c16" />
+      {/* Into the FAQs (light) */}
+      <NeonEdge fill="#f3f7fb" />
     </section>
   );
 }

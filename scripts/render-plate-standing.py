@@ -25,7 +25,8 @@ try:
 except Exception as e:
     print("gpu setup:", e)
 
-W, H = (1920, 1100) if MODE == "final" else (768, 440)
+RW, RH = int(E("RW", "1920")), int(E("RH", "1100"))
+W, H = (RW, RH) if MODE == "final" else (RW * 2 // 5, RH * 2 // 5)
 sc.render.resolution_x, sc.render.resolution_y = W, H
 sc.render.resolution_percentage = 100
 cy.samples = 200 if MODE == "final" else 40
