@@ -10,6 +10,14 @@
                  the call to action has the plate photo bleeding off the
                  bottom-right and the trust points in a row with the button */
 
+/* How far the page container is inset from each screen edge: nothing until the
+   screen is wider than --page-max. The photos bleed off the screen edge up to
+   that width; beyond it they stay with the container (and feather out). */
+.faq,
+.cta {
+  --bleed: max(0px, calc((100% - var(--page-max)) / 2));
+}
+
 /* Written in Title Case, so nothing here should be re-capitalised */
 .title,
 .qHeading {
@@ -348,7 +356,8 @@
     z-index: -1;
     top: calc(-1 * var(--sec-top));
     bottom: calc(-1 * (var(--sec-bottom) + var(--neon-edge-h)));
-    left: 0;
+    /* the screen edge up to the container's width, then the container's edge */
+    left: var(--bleed);
     width: min(50%, 800px);
     height: auto;
     margin: 0;
@@ -393,7 +402,7 @@
     position: absolute;
     z-index: 4;
     top: 0;
-    right: 0;
+    right: var(--bleed);
     bottom: 0;
     left: auto;
     width: min(40%, 640px);
@@ -516,5 +525,31 @@
 @media (min-width: 1280px) and (max-width: 1439px) {
   .car img {
     object-position: 30% 40%;
+  }
+}
+
+/* Screens wider than the container: the photos keep to the container's edge, so
+   their outer edge fades out instead of ending in a straight cut */
+@media (min-width: 1921px) {
+  .car {
+    -webkit-mask-image:
+      linear-gradient(90deg, #000 0%, #000 66%, transparent 100%),
+      linear-gradient(180deg, transparent 0%, #000 10%, #000 84%, transparent 100%),
+      linear-gradient(90deg, transparent 0%, #000 16%);
+    mask-image:
+      linear-gradient(90deg, #000 0%, #000 66%, transparent 100%),
+      linear-gradient(180deg, transparent 0%, #000 10%, #000 84%, transparent 100%),
+      linear-gradient(90deg, transparent 0%, #000 16%);
+  }
+
+  .plate {
+    -webkit-mask-image:
+      linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.12) 26%, #000 64%, #000 100%),
+      linear-gradient(180deg, transparent 0%, #000 26%, #000 76%, transparent 100%),
+      linear-gradient(270deg, transparent 0%, #000 16%);
+    mask-image:
+      linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.12) 26%, #000 64%, #000 100%),
+      linear-gradient(180deg, transparent 0%, #000 26%, #000 76%, transparent 100%),
+      linear-gradient(270deg, transparent 0%, #000 16%);
   }
 }

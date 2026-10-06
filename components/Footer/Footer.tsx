@@ -50,6 +50,14 @@ const PAYMENTS = [
 
 const colV = cardRevealV(0.05);
 
+// Pages whose closing call to action already shows the feature points, so the
+// footer skips its night-scene band of the same badges
+const NO_SCENE_ROUTES = ["/", "/3d-number-plates"];
+
+// Pages laid out on the shared page container (--page-max / --page-pad in
+// app/globals.css): their footer columns sit on the same two edges
+const PAGE_CONTAINER_ROUTES = ["/3d-number-plates"];
+
 function Subscribe() {
   const [email, setEmail] = useState("");
   const [agreed, setAgreed] = useState(false);
@@ -132,12 +140,16 @@ export default function Footer() {
     viewport: { once: true, amount: 0.2 },
   });
 
-  const showScene = usePathname() !== "/";
+  const pathname = usePathname();
+  const showScene = !NO_SCENE_ROUTES.includes(pathname);
+  const pageContainer = PAGE_CONTAINER_ROUTES.includes(pathname);
 
   return (
-    <footer className={`${styles.footer} ${showScene ? "" : styles.footerPlain}`}>
+    <footer
+      className={`${styles.footer} ${showScene ? "" : styles.footerPlain} ${pageContainer ? styles.footerPage : ""}`}
+    >
       {/* ——— Night-scene band with the feature bar ———
-          Not on the homepage: its closing CTA already shows these points */}
+          Not on the homepage or the 3D page: their closing CTA already shows these points */}
       {showScene && (
       <div className={styles.scene}>
         <div className={styles.sceneImage} aria-hidden="true">
