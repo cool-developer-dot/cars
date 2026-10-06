@@ -7,6 +7,13 @@ import bpy, bmesh, math, random, sys, os
 from mathutils import Vector, Quaternion
 
 E = os.environ.get
+
+# FINISH (env): gel (default, the original 3D art) | acrylic | acrylicGel | bevel.
+# Non-gel finishes are built by plate_finish.py; their origin is the plate face.
+FINISH = os.environ.get("FINISH", "gel")
+if FINISH != "gel":
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import plate_finish
 argv = sys.argv[sys.argv.index("--") + 1:]
 MODE, OUT = argv[0], argv[1]
 random.seed(int(E("SEED", "5")))
@@ -152,7 +159,17 @@ def make_plate(name, face_mat):
     return o
 
 
+CHAR_Z = EXT + 0.0004 if FINISH == "gel" else 0.0002
+
+
 def make_chars(name):
+    if FINISH != "gel":
+        return plate_finish.build(
+            sc, name, FINISH,
+            font="/System/Library/Fonts/Supplemental/" + E("FONT", "DIN Alternate Bold.ttf"),
+            size=float(E("FS", "0.104")), height=float(E("CH", str(2 * EXT))),
+            spc=float(E("SPC", "1.04")), spw=float(E("SPW", "0.9")),
+        )
     fc = bpy.data.curves.new(name, "FONT")
     fc.body = "AB12 CDE"
     fc.font = bpy.data.fonts.load("/System/Library/Fonts/Supplemental/" + E("FONT", "DIN Alternate Bold.ttf"))
@@ -174,11 +191,11 @@ def make_chars(name):
 white = make_plate("White", white_face)
 wchars = make_chars("WChars")
 NUDGE = float(E("NUDGE", "0.014"))
-wchars.location = (NUDGE, -0.0004, EXT + 0.0004)
+wchars.location = (NUDGE, -0.0004, CHAR_Z)
 yellow = make_plate("Yellow", yellow_face)
 ychars = make_chars("YChars")
 yellow.location = (float(E("YX", "0.085")), float(E("YY", "0.185")), 0.0)
-ychars.location = (yellow.location.x + NUDGE, yellow.location.y - 0.0004, EXT + 0.0004)
+ychars.location = (yellow.location.x + NUDGE, yellow.location.y - 0.0004, CHAR_Z)
 yellow.rotation_euler = (0, 0, math.radians(float(E("YRZ", "2.0"))))
 ychars.rotation_euler = yellow.rotation_euler
 

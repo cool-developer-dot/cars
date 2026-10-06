@@ -29,6 +29,9 @@ if VIEW == "wide":
     W, H = (1700, 1300) if MODE == "final" else (680, 520)
 else:  # tall crop for phones
     W, H = (1300, 1300) if MODE == "final" else (520, 520)
+_rw, _rh = __import__("os").environ.get("RW"), __import__("os").environ.get("RH")
+if _rw and _rh:  # an explicit size (preview = 2/5 of it)
+    W, H = (int(_rw), int(_rh)) if MODE == "final" else (int(_rw) * 2 // 5, int(_rh) * 2 // 5)
 sc.render.resolution_x, sc.render.resolution_y = W, H
 sc.render.resolution_percentage = 100
 cy.samples = 160 if MODE == "final" else 40
@@ -106,6 +109,11 @@ for p in plate.data.polygons:
     p.material_index = 0 if abs(p.normal.z) > 0.7 else 1
 
 # ------------------------------------------------------------------ gel characters
+FINISH = __import__("os").environ.get("FINISH", "gel")
+if FINISH != "gel":
+    import os as _os
+    sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
+    import plate_finish
 fcurve = bpy.data.curves.new("Chars", "FONT")
 fcurve.body = "AB12 CDE"
 fcurve.font = bpy.data.fonts.load("/System/Library/Fonts/Supplemental/" + __import__("os").environ.get("FONT", "DIN Condensed Bold.ttf"))
@@ -121,6 +129,14 @@ chars = bpy.data.objects.new("Chars", fcurve)
 sc.collection.objects.link(chars)
 chars.location = (0, -0.0004, PT / 2 + 0.0015)
 chars.data.materials.append(gel_black)
+if FINISH != "gel":
+    # swap the gel curve for the chosen finish, sitting on the plate face
+    bpy.data.objects.remove(chars)
+    chars = plate_finish.build(
+        sc, "Chars", FINISH, font=fcurve.font, size=fcurve.size, spc=1.04, spw=1.1,
+        height=float(__import__("os").environ.get("CH", "0.0034")),
+    )
+    chars.location = (0, -0.0004, PT / 2)
 
 # ------------------------------------------------------------------ the car behind: gloss-black body with a drain of water beads
 body_mat = mat("Body", (0.01, 0.014, 0.025, 1), rough=0.12, coat=1.0, coat_rough=0.02)

@@ -38,13 +38,31 @@ const SIDES: { id: Side; label: string; Icon: (p: { className?: string }) => Rea
   { id: "pair", label: "Pair", Icon: (p) => <PairIcon {...p} /> },
 ];
 
-/** The four finishes offered in the card; prices come from lib/site.ts */
-const STYLE_TILES: { id: StyleId; label: string; mark?: string }[] = [
+type StyleTile = { id: StyleId; label: string; mark?: string; bevel?: boolean; smoked?: boolean };
+
+/** Finishes offered in the card; prices come from lib/site.ts */
+const STYLE_TILES: StyleTile[] = [
   { id: "standard", label: "Standard" },
   { id: "3d", label: "3D Gel" },
   { id: "4d", label: "4D", mark: "4D" },
   { id: "5d", label: "5D", mark: "5D" },
 ];
+/** Styles without a standard tile, and the tile each one takes the place of */
+const EXTRA_TILES: Partial<Record<StyleId, { tile: StyleTile; replaces: StyleId }>> = {
+  bevel: { tile: { id: "bevel", label: "Bevel", bevel: true }, replaces: "3d" },
+  // Ghost sits beside 3D Gel, its closest relative
+  ghost: { tile: { id: "ghost", label: "Ghost", smoked: true }, replaces: "5d" },
+};
+
+/** Four tiles, always including the page's own style */
+const tilesFor = (id: StyleId) => {
+  const extra = EXTRA_TILES[id];
+  if (!extra) return STYLE_TILES;
+  return STYLE_TILES.map((t) => (t.id === extra.replaces ? extra.tile : t)).sort(
+    // the extra tile goes last, after the standard ones
+    (a, b) => Number(a.id === id) - Number(b.id === id),
+  );
+};
 
 /** "Build my 3D plates" */
 const SHORT: Partial<Record<StyleId, string>> = {
@@ -52,6 +70,8 @@ const SHORT: Partial<Record<StyleId, string>> = {
   "3d": "3D",
   "4d": "4D",
   "5d": "5D",
+  ghost: "Ghost",
+  bevel: "Bevel",
 };
 
 const TRUST = [
@@ -109,10 +129,23 @@ function PlateIcon({ pair }: { pair?: boolean }) {
   );
 }
 
-function StyleGlyph({ mark }: { mark?: string }) {
+function StyleGlyph({ mark, bevel, smoked }: { mark?: string; bevel?: boolean; smoked?: boolean }) {
   return (
     <svg viewBox="0 0 48 30" fill="none" aria-hidden="true">
       <rect x="2" y="2" width="44" height="26" rx="5" stroke="currentColor" strokeWidth="2.4" />
+      {smoked && (
+        // smoked characters: a tinted bar in place of a black one
+        <rect x="11" y="11" width="26" height="8" rx="2.5" fill="currentColor" opacity="0.38" />
+      )}
+      {bevel && (
+        // a faceted inner face: the angled, diamond-cut edge
+        <path
+          d="M15 10h18v10H15zM8 6l7 4M40 6l-7 4M8 24l7-4M40 24l-7-4"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinejoin="round"
+        />
+      )}
       {mark && (
         <text x="24" y="20.5" textAnchor="middle" fill="currentColor" fontSize="14" fontWeight="800" fontFamily="inherit">
           {mark}
@@ -323,7 +356,7 @@ export default function ProductHero({
               Plate style
             </span>
             <div className={styles.tiles} role="group" aria-labelledby="product-hero-style">
-              {STYLE_TILES.map((t) => (
+              {tilesFor(product.id).map((t) => (
                 <button
                   key={t.id}
                   type="button"
@@ -337,7 +370,7 @@ export default function ProductHero({
                     </span>
                   )}
                   <span className={styles.tileGlyph}>
-                    <StyleGlyph mark={t.mark} />
+                    <StyleGlyph mark={t.mark} bevel={t.bevel} smoked={t.smoked} />
                   </span>
                   {t.label}
                 </button>

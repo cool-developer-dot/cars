@@ -49,7 +49,7 @@ export default function LegalCompliance() {
             Our Standard, 3D, 4D, 5D and Bevel styles are made to these requirements.
             Ghost&rsquo;s specific construction and compliance information is being
             finalised — see the{" "}
-            <Link href="/plate-styles#ghost">Ghost product page</Link> for its current
+            <Link href="/ghost-number-plates">Ghost product page</Link> for its current
             status before ordering that style.
           </p>
         </Reveal>

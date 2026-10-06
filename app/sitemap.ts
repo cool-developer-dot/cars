@@ -8,6 +8,7 @@ const ROUTES = [
   "/3d-number-plates",
   "/4d-number-plates",
   "/5d-number-plates",
+  "/ghost-number-plates",
   "/bevel-number-plates",
   "/faqs",
   "/delivery-collection",

@@ -1,15 +1,7 @@
-import type { Metadata } from "next";
-import ProductPage from "@/components/content/ProductPage";
-import { PRODUCTS } from "@/lib/products";
+import ProductLanding, { productMetadata } from "@/components/productPage/ProductLanding";
 
-const product = PRODUCTS["5d"];
-
-export const metadata: Metadata = {
-  title: { absolute: product.metaTitle },
-  description: product.metaDescription,
-  alternates: { canonical: product.path },
-};
+export const metadata = productMetadata("5d");
 
 export default function Page() {
-  return <ProductPage product={product} />;
+  return <ProductLanding id="5d" />;
 }

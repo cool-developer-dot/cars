@@ -51,7 +51,7 @@ const STYLE_INFO: Record<StyleId, { name: string; what: string; href: string }> 
   "3d": { name: "3D gel", what: "Raised, domed resin characters", href: "/3d-number-plates" },
   "4d": { name: "4D", what: "Laser-cut acrylic characters", href: "/4d-number-plates" },
   "5d": { name: "5D", what: "Acrylic characters with a gel layer (4D gel)", href: "/5d-number-plates" },
-  ghost: { name: "Ghost", what: "A distinctive styled character finish", href: "/plate-styles#ghost" },
+  ghost: { name: "Ghost", what: "Dark smoked characters for a stealth look", href: "/ghost-number-plates" },
   bevel: { name: "Bevel", what: "Angled, diamond-cut character edges", href: "/bevel-number-plates" },
 };
 
@@ -68,6 +68,13 @@ export const PRICES: Record<
     { ...STYLE_INFO[id], ...headlinePrices(STYLE_KEY[id]) },
   ]),
 ) as Record<StyleId, { name: string; what: string; single: number; pair: number; href: string }>;
+
+/** The plate-style pages (3D, 4D, 5D, Bevel) and the style each one sells */
+export const STYLE_PAGES: Record<string, StyleId> = Object.fromEntries(
+  (Object.keys(STYLE_INFO) as StyleId[])
+    .filter((id) => !STYLE_INFO[id].href.includes("#"))
+    .map((id) => [STYLE_INFO[id].href, id]),
+);
 
 export const gbp = (n: number) => `£${n.toFixed(2)}`;
 export const pairPrice = (id: StyleId) => PRICES[id].pair;

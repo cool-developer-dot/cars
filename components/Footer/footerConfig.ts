@@ -19,8 +19,8 @@ export const FOOTER_COLUMNS: { title: string; links: FooterLink[] }[] = [
       { label: "3D Gel Plates", href: "/3d-number-plates" },
       { label: "4D Plates", href: "/4d-number-plates" },
       { label: "5D (4D Gel) Plates", href: "/5d-number-plates" },
+      { label: "Ghost Plates", href: "/ghost-number-plates" },
       { label: "Bevel Plates", href: "/bevel-number-plates" },
-      { label: "Price List", href: "/plate-styles" },
     ],
   },
   {

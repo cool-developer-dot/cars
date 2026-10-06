@@ -2,7 +2,7 @@ import type { Faq } from "./faqs";
 import { DELIVERY, PRICES, gbp, type StyleId } from "./site";
 
 export type ProductContent = {
-  id: Extract<StyleId, "3d" | "4d" | "5d" | "bevel">;
+  id: Extract<StyleId, "3d" | "4d" | "5d" | "ghost" | "bevel">;
   path: string;
   metaTitle: string;
   metaDescription: string;
@@ -38,6 +38,9 @@ const MOT_SCOPE =
   "This is separate from the DVSA MOT check, which looks at whether characters are correctly formed, evenly spaced, secure and not obscured — it doesn't check for the supplier's name, postcode or BS mark on the plate.";
 const WARRANTY_TAIL =
   "A warranty covers manufacturing defects; it is not a statement that a product is approved for road use. If you think a plate has a fault, contact us and we'll assess it.";
+/** The client hasn't confirmed Ghost's construction and compliance yet (see the homepage and /plate-styles) */
+const GHOST_STATUS =
+  "Ghost's specific construction and compliance information is being finalised. Please contact us for its current status before ordering Ghost plates for road use.";
 const COLLECT_FAQ: Faq = {
   id: "collect",
   q: "Can I collect the same day?",
@@ -278,6 +281,78 @@ export const PRODUCTS: Record<ProductContent["id"], ProductContent> = {
       COLLECT_FAQ,
       { id: "tracked", q: "Is Tracked 24 worth the upgrade?", a: "It adds tracking and Royal Mail's own next-working-day aim, on top of the standard First Class service." },
       { id: "fault", q: "What if my plate develops a fault?", a: "Contact us and we'll assess it." },
+    ],
+  },
+
+  ghost: {
+    id: "ghost",
+    path: "/ghost-number-plates",
+    metaTitle: `Ghost Number Plates from ${single("ghost")} | Smoked Characters`,
+    metaDescription:
+      `Ghost number plates with dark smoked characters for a stealth look, made to order. Single plates from ${single("ghost")}, pairs from ${pair("ghost")}. Royal Mail delivery or Ilford collection.`,
+    short: "Ghost",
+    h1: "Ghost Number Plates",
+    lead: "Dark smoked characters for a stealth look — single plates or matching pairs, made to order.",
+    intro: {
+      eyebrow: "Our Ghost finish",
+      heading: "What are ghost number plates?",
+      paragraphs: [
+        "Ghost is our styled finish with dark smoked characters and a glossy surface, for a subtler, stealth look than solid black characters. It's chosen for its appearance, and is made to order like every style we sell.",
+        GHOST_STATUS,
+      ],
+    },
+    replacement: {
+      heading: "Replacement Ghost number plates",
+      items: [
+        {
+          title: "Damaged or worn characters",
+          text: "If a character is damaged or its finish has worn, the fix is a new plate. If it's one of ours and you believe it's a manufacturing fault, contact us and we'll assess it.",
+        },
+        {
+          title: "Matching a single plate",
+          text: "Order a single front or rear plate and we'll match it to our own Ghost finish. An exact match to another supplier's ghost-style plate isn't guaranteed, as tint and finish vary between makers.",
+        },
+      ],
+    },
+    compare: {
+      heading: "Ghost vs 3D gel — smoked or solid black?",
+      columns: ["3D gel", "Ghost"],
+      highlight: 1,
+      rows: [
+        { label: "Characters", values: ["Domed resin over solid black characters", "Dark smoked characters"] },
+        { label: "Look", values: ["Smooth, glossy black", "Subtle, tinted stealth look"] },
+        { label: "From", values: [single("3d"), single("ghost")] },
+      ],
+      note: { text: GHOST_STATUS, href: "/contact", linkLabel: "Contact us" },
+    },
+    sizes: {
+      heading: "Ghost sizes and options",
+      paragraphs: [
+        COMMON_SIZE,
+        "Measure your existing plate and the mounting area before ordering a replacement size.",
+      ],
+    },
+    legal: {
+      heading: "Are ghost number plates legal?",
+      paragraphs: [
+        `Number plates for road use must have solid black, non-reflective characters at the legal size and spacing, on the correct reflective background, with the required supplier and British Standard markings. ${GHOST_STATUS}`,
+        MOT_SCOPE,
+      ],
+    },
+    care: {
+      heading: "Caring for Ghost plates",
+      text: `Wash with car shampoo and a soft cloth. New orders carry a 12-month manufacturing-defect warranty from the delivery or collection date, in addition to your statutory rights. ${WARRANTY_TAIL}`,
+    },
+    faqs: [
+      { id: "look", q: "What does a Ghost plate look like?", a: "Dark smoked characters with a glossy finish, for a subtler, stealth look than solid black characters." },
+      { id: "per-plate", q: `Is ${single("ghost")} the price per plate or per pair?`, a: `Per plate. A pair is ${pair("ghost")}.` },
+      { id: "legal", q: "Are Ghost plates road legal?", a: GHOST_STATUS, links: [{ label: "Contact us", href: "/contact" }] },
+      { id: "vs3d", q: "How is Ghost different from 3D gel?", a: "3D gel has solid black characters under a domed resin; Ghost has dark smoked characters for a tinted look." },
+      { id: "match", q: "Can you match another supplier's ghost plate?", a: "We'll match the size and use our own Ghost finish; an identical match to a different manufacturer's plate isn't guaranteed, as tint and finish vary between suppliers." },
+      { id: "formats", q: "What sizes are available?", a: "The builder shows the sizes and options offered for your registration once you enter it." },
+      COLLECT_FAQ,
+      { id: "tracked", q: "Is the Tracked 24 upgrade available on Ghost orders?", a: "Yes. The same delivery options and charges apply across every style." },
+      { id: "fault", q: "What if my plate develops a fault?", a: "New orders carry a 12-month manufacturing-defect warranty. Contact us and we'll assess it." },
     ],
   },
 

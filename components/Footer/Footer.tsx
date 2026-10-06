@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { cardRevealV, inViewOnce } from "@/lib/motion";
 import HeroPhoto from "@/components/HeroPhoto";
-import { COMPANY, CONTACT } from "@/lib/site";
+import { COMPANY, CONTACT, STYLE_PAGES } from "@/lib/site";
 import { FOOTER_COLUMNS, LEGAL_LINKS, SOCIALS } from "./footerConfig";
 import {
   ApplePayMark,
@@ -50,13 +50,16 @@ const PAYMENTS = [
 
 const colV = cardRevealV(0.05);
 
+// The plate-style pages (3D, 4D, 5D, Bevel) all share one layout
+const STYLE_ROUTES = Object.keys(STYLE_PAGES);
+
 // Pages whose closing call to action already shows the feature points, so the
 // footer skips its night-scene band of the same badges
-const NO_SCENE_ROUTES = ["/", "/3d-number-plates"];
+const NO_SCENE_ROUTES = ["/", ...STYLE_ROUTES];
 
 // Pages laid out on the shared page container (--page-max / --page-pad in
 // app/globals.css): their footer columns sit on the same two edges
-const PAGE_CONTAINER_ROUTES = ["/3d-number-plates"];
+const PAGE_CONTAINER_ROUTES = STYLE_ROUTES;
 
 function Subscribe() {
   const [email, setEmail] = useState("");
@@ -149,7 +152,7 @@ export default function Footer() {
       className={`${styles.footer} ${showScene ? "" : styles.footerPlain} ${pageContainer ? styles.footerPage : ""}`}
     >
       {/* ——— Night-scene band with the feature bar ———
-          Not on the homepage or the 3D page: their closing CTA already shows these points */}
+          Not on the homepage or the plate-style pages: their closing CTA already shows these points */}
       {showScene && (
       <div className={styles.scene}>
         <div className={styles.sceneImage} aria-hidden="true">

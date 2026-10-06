@@ -20,6 +20,8 @@ import {
   X,
 } from "lucide-react";
 import { useCart } from "@/contexts/cart/CartProvider";
+import { builderUrl } from "@/lib/builderLink";
+import { STYLE_PAGES } from "@/lib/site";
 import styles from "./Navbar.module.css";
 import { StylesDrawerList, StylesPanel } from "./StylesMenu";
 
@@ -109,8 +111,17 @@ export default function Navbar() {
     };
   }, [open]);
 
+  // On a plate-style page (/4d-number-plates …) "Plate Styles" is the current
+  // section, and "Build my plates" starts the builder on that style
+  const pageStyle = STYLE_PAGES[pathname];
   const isActive = (href: string) =>
-    href === "/" ? pathname === "/" : pathname.startsWith(href);
+    href === "/"
+      ? pathname === "/"
+      : pathname.startsWith(href) || (href === "/plate-styles" && !!pageStyle);
+  const buildHref = builderUrl({ style: pageStyle });
+  // "page" for the page itself; "true" for its section (a style page under Plate Styles)
+  const current = (href: string) =>
+    !isActive(href) ? undefined : pageStyle && href === "/plate-styles" ? "true" : "page";
 
   return (
     <>
@@ -144,7 +155,7 @@ export default function Navbar() {
                   className={`${styles.navItem} ${
                     isActive(item.href) ? styles.navItemActive : ""
                   } ${item.styles && stylesOpen ? styles.navItemOpen : ""}`}
-                  aria-current={isActive(item.href) ? "page" : undefined}
+                  aria-current={current(item.href)}
                   aria-expanded={item.styles ? stylesOpen : undefined}
                   aria-controls={item.styles ? stylesPanelId : undefined}
                   onClick={item.styles ? closeStyles : undefined}
@@ -215,7 +226,7 @@ export default function Navbar() {
               </Link>
             </div>
 
-            <Link href="/#builder" className={styles.cta}>
+            <Link href={buildHref} className={styles.cta}>
               Build my plates →
             </Link>
 
@@ -334,7 +345,7 @@ export default function Navbar() {
                   className={`${styles.drawerItem} ${
                     isActive(item.href) ? styles.drawerItemActive : ""
                   }`}
-                  aria-current={isActive(item.href) ? "page" : undefined}
+                  aria-current={current(item.href)}
                   tabIndex={open ? 0 : -1}
                   onClick={closeMenu}
                 >
@@ -404,7 +415,7 @@ export default function Navbar() {
             </Link>
 
             <Link
-              href="/#builder"
+              href={buildHref}
               className={styles.drawerCta}
               tabIndex={open ? 0 : -1}
               onClick={closeMenu}
