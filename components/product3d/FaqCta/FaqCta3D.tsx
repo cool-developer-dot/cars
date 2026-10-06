@@ -7,6 +7,7 @@ import { PRODUCTS } from "@/lib/products";
 import { COMPANY } from "@/lib/site";
 import Rise from "../GuidesReviews/Rise";
 import FaqList from "./FaqList";
+import page from "../page3d.module.css";
 import s from "./FaqCta.module.css";
 
 const product = PRODUCTS["3d"];
@@ -41,18 +42,20 @@ export default function FaqCta3D() {
           </picture>
         </div>
 
-        <div className={s.faqInner}>
-          <Rise className={s.head}>
-            <p className={h.eyebrow}>FAQs</p>
-            <h2 id="faq3d-title" className={`${h.title} ${s.title}`}>
-              3D Number Plate <span className={h.accent}>FAQs</span>
-            </h2>
-            <p className={`${h.lead} ${s.lead}`}>
-              Quick answers to the most common questions about our 3D number plates.
-            </p>
-          </Rise>
+        <div className={`${page.wrap} ${s.faqInner}`}>
+          <div className={s.faqCol}>
+            <Rise className={s.head}>
+              <p className={h.eyebrow}>FAQs</p>
+              <h2 id="faq3d-title" className={`${h.title} ${s.title}`}>
+                3D Number Plate <span className={h.accent}>FAQs</span>
+              </h2>
+              <p className={`${h.lead} ${s.lead}`}>
+                Quick answers to the most common questions about our 3D number plates.
+              </p>
+            </Rise>
 
-          <FaqList items={product.faqs} label="3D number plate questions" />
+            <FaqList items={product.faqs} label="3D number plate questions" />
+          </div>
         </div>
 
         {/* Into "Order your 3D number plates" (dark) */}
@@ -75,15 +78,15 @@ export default function FaqCta3D() {
           </picture>
         </div>
 
-        <div className={s.ctaInner}>
+        <div className={`${page.wrap} ${s.ctaInner}`}>
           <Rise className={s.head}>
             <p className={h.eyebrow}>Ready to order</p>
             <h2 id="cta3d-title" className={`${h.title} ${s.title}`}>
               Order Your <span className={h.accent}>3D Number Plates</span>
             </h2>
             <p className={`${h.lead} ${s.lead}`}>
-              Enter your registration, choose your options, and preview your 3D number plates
-              before you buy.
+              Enter your registration, choose your options, and preview your 3D number plates before
+              you buy.
             </p>
           </Rise>
 

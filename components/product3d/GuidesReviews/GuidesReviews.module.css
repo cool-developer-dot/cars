@@ -17,6 +17,12 @@
   --neon-edge-h: clamp(38px, 3.4vw, 52px);
   --blue: #1668e3;
   --ring: 72px;
+  /* The page container's side edge, as a distance from the screen edge. This
+     unit is full width (so its two panels can bleed), but its copy sits on the
+     same edges as every other section: --page-pad, or more where the page is
+     wider than --page-max. cqw = this unit's own width. */
+  --edge: max(var(--page-pad), calc((100cqw - var(--page-max)) / 2 + var(--page-pad)));
+  container-type: inline-size;
   position: relative;
   isolation: isolate;
   overflow: clip; /* clip, not hidden: decorative bleed must never be scrollable */
@@ -52,7 +58,7 @@
 .guidesInner {
   position: relative;
   z-index: 2;
-  padding-inline: 16px;
+  padding-inline: var(--page-pad);
 }
 
 .guideList {
@@ -201,7 +207,7 @@
 .reviewsInner {
   position: relative;
   z-index: 2;
-  padding-inline: 16px;
+  padding-inline: var(--page-pad);
 }
 
 .sampleTag {
@@ -640,11 +646,6 @@
 /* ——— Phones: compact ——— */
 
 @media (max-width: 559px) {
-  .guidesInner,
-  .reviewsInner {
-    padding-inline: 16px;
-  }
-
   .tile {
     padding: 12px 2px;
   }
@@ -660,11 +661,6 @@
 /* ——— Tablet ——— */
 
 @media (min-width: 560px) {
-  .guidesInner,
-  .reviewsInner {
-    padding-inline: 24px;
-  }
-
   .guideList {
     max-width: 640px;
     gap: 10px;
@@ -688,7 +684,7 @@
 
   .art {
     height: 220px;
-    margin-inline: -24px;
+    margin-inline: calc(-1 * var(--page-pad));
   }
 
   .rcard {
@@ -744,13 +740,8 @@
     gap: 14px;
   }
 
-  .guidesInner,
-  .reviewsInner {
-    padding-inline: 32px;
-  }
-
   .art {
-    margin-inline: -32px;
+    margin-inline: calc(-1 * var(--page-pad));
   }
 
   .dot {
@@ -795,7 +786,7 @@
   }
 
   .guidesInner {
-    padding-inline: clamp(28px, calc(7.3vw - 38px), 130px) 0;
+    padding-inline: var(--edge) 0;
   }
 
   .head {
@@ -869,13 +860,13 @@
     transform: none;
   }
 
+  /* left: clear of the glass edge; right: the page edge */
   .reviewsInner {
-    padding-inline: clamp(12px, 1.6vw, 40px) clamp(16px, 2.5vw, 48px);
+    padding-inline: clamp(12px, 1.6vw, 40px) var(--edge);
   }
 
   .reviews .head {
     margin-bottom: 16px;
-    padding-left: clamp(6px, 1.3vw, 24px);
   }
 
   .reviews .lead {
@@ -885,7 +876,7 @@
   .sampleTag {
     position: absolute;
     top: 8px;
-    right: clamp(16px, 2.5vw, 48px);
+    right: var(--edge);
     max-width: none;
     margin: 0;
   }

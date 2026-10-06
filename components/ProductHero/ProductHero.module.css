@@ -58,9 +58,9 @@
     "options"
     "trust";
   width: 100%;
-  max-width: 640px;
+  max-width: var(--page-max); /* the page container: see page3d.module.css */
   margin: 0 auto;
-  padding: calc(72px + 22px) 16px calc(var(--neon-edge-h) + var(--sec-bottom));
+  padding: calc(72px + 22px) var(--page-pad) calc(var(--neon-edge-h) + var(--sec-bottom));
 }
 
 .copy {
@@ -724,14 +724,12 @@
 /* ——— Tablet ——— */
 
 @media (min-width: 560px) {
-  .inner {
-    padding-left: 24px;
-    padding-right: 24px;
-  }
-
+  /* the render keeps the size it had in the old 640px column, centred in the container */
   .art {
-    margin-left: -6%;
-    margin-right: -6%;
+    width: min(100% + 12%, 680px);
+    max-width: none;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .option {
@@ -772,7 +770,7 @@
   }
 
   .inner {
-    /* free space beside the 1180px column, as the homepage hero */
+    /* free space beside the old 1180px column: it sizes the art, as before */
     --side: max(0px, calc((100vw - 1180px) / 2));
     grid-template-columns: minmax(0, 1fr) minmax(360px, 0.78fr);
     grid-template-areas:
@@ -783,8 +781,7 @@
     align-content: center;
     flex: 1;
     column-gap: clamp(28px, 3.4vw, 52px);
-    max-width: 1244px;
-    padding: calc(96px + 40px) 32px var(--neon-edge-h);
+    padding: calc(96px + 40px) var(--page-pad) var(--neon-edge-h);
   }
 
   .copy {
@@ -902,8 +899,10 @@
 
   /* The render bleeds left into the free margin and tucks under the cards */
   .art {
-    width: calc(100% + min(var(--side), 120px) + 40px);
-    margin: -56px 0 -86px calc(-1 * min(var(--side), 120px));
+    /* capped at the size it had beside the old 1180px column, so a wider
+       container moves the copy's edges without growing the hero */
+    width: min(calc(100% + min(var(--side), 120px) + 40px), 790px);
+    margin: -56px 0 -86px calc(-1 * min(var(--page-pad), 120px));
   }
 
   .options {
@@ -990,6 +989,14 @@
   }
 }
 
+/* The container's side padding takes a little width on laptops; a slightly
+   smaller gap beside the card hands it back, so the heading keeps its two lines */
+@media (min-width: 1280px) and (max-width: 1439px) {
+  .inner {
+    column-gap: 28px;
+  }
+}
+
 /* Phones: art comes from the lighter file, tighter scrims for small type */
 @media (max-width: 899px) {
   /* portrait crop that already fades into the navy below it */
@@ -1006,11 +1013,6 @@
 }
 
 @media (max-width: 374px) {
-  .inner {
-    padding-left: 12px;
-    padding-right: 12px;
-  }
-
   .card {
     padding: 16px 12px 14px;
   }

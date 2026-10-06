@@ -5,6 +5,7 @@ import PlateArt from "@/components/home/PlateArt";
 import h from "@/components/home/home.module.css";
 import { PRODUCTS } from "@/lib/products";
 import s from "./Replacement3D.module.css";
+import p from "./page3d.module.css";
 
 const items = PRODUCTS["3d"].replacement.items;
 
@@ -55,7 +56,7 @@ function UpgradeArt() {
 export default function Replacement3D() {
   return (
     <section className={`${h.section} ${h.light} ${s.section}`} aria-labelledby="replace-title">
-      <div className={h.container}>
+      <div className={p.wrap}>
         <Reveal className={h.head}>
           <p className={h.eyebrow}>Replacement plates</p>
           <h2 id="replace-title" className={h.title}>

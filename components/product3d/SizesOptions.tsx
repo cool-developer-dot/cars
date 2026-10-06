@@ -5,6 +5,7 @@ import h from "@/components/home/home.module.css";
 import { plateFont } from "@/lib/fonts";
 import { PRODUCTS } from "@/lib/products";
 import s from "./SizesOptions.module.css";
+import p from "./page3d.module.css";
 
 const sizes = PRODUCTS["3d"].sizes.paragraphs;
 
@@ -162,7 +163,7 @@ const CARDS = [
 export default function SizesOptions() {
   return (
     <section className={`${h.section} ${h.light} ${s.section}`} aria-labelledby="sizes-title">
-      <div className={`${h.container} ${s.wide}`}>
+      <div className={p.wrap}>
         <Reveal className={`${h.head} ${s.head}`}>
           <p className={h.eyebrow}>Sizes and options</p>
           <h2 id="sizes-title" className={`${h.title} ${s.title}`}>

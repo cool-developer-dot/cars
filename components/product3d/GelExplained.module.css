@@ -290,10 +290,11 @@
     padding: 18px 20px;
   }
 
-  /* the plates lean out into the free margin on the right */
+  /* the plates lean out into the free margin on the right; capped at the size
+     they had in the old 1200px column, so a wider page container doesn't grow them */
   .art {
     align-self: center;
-    width: calc(100% + min(var(--side), 120px) + 32px);
+    width: min(calc(100% + min(var(--side), 120px) + 32px), 705px);
     margin: -20px 0 0;
   }
 

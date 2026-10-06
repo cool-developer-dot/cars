@@ -7,6 +7,7 @@ import h from "@/components/home/home.module.css";
 import { GOV_UK_DOCS_URL } from "@/lib/site";
 import { IdDocIcon, VehicleDocIcon } from "./orderIcons";
 import s from "./Documents3D.module.css";
+import p from "./page3d.module.css";
 
 const GROUPS = [
   {
@@ -37,7 +38,7 @@ export default function Documents3D() {
       {/* From "How to order" (light) */}
       <GlassEdge fill="#eef3f9" />
 
-      <div className={`${h.container} ${s.wide}`}>
+      <div className={p.wrap}>
         <Reveal className={`${h.head} ${s.head}`}>
           <p className={`${h.eyebrow} ${s.eyebrow}`}>Documents</p>
           <h2 id="docs3d-title" className={`${h.title} ${s.title}`}>

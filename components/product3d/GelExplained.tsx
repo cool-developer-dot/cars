@@ -6,6 +6,7 @@ import h from "@/components/home/home.module.css";
 import { PRODUCTS } from "@/lib/products";
 import { PRICES, gbp } from "@/lib/site";
 import s from "./GelExplained.module.css";
+import page from "./page3d.module.css";
 
 const p = PRODUCTS["3d"];
 /** Characters / Edge / Look rows from the product's comparison table */
@@ -51,7 +52,7 @@ const CARDS = [
 export default function GelExplained() {
   return (
     <section className={`${h.section} ${h.dark} ${s.section}`} aria-labelledby="gel-title">
-      <div className={h.container}>
+      <div className={page.wrap}>
         <div className={s.top}>
           <Reveal className={s.head}>
             <p className={h.eyebrow}>Know the difference</p>

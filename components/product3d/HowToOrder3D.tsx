@@ -4,6 +4,7 @@ import h from "@/components/home/home.module.css";
 import { plateFont } from "@/lib/fonts";
 import { CarFrontIcon, CarRearIcon, PairIcon } from "./orderIcons";
 import s from "./HowToOrder3D.module.css";
+import p from "./page3d.module.css";
 
 /* The little drawings under each step. They show what the step looks like in
    the builder; they aren't controls, so they're hidden from assistive tech. */
@@ -87,7 +88,7 @@ const STEPS = [
 export default function HowToOrder3D() {
   return (
     <section className={`${h.section} ${h.light} ${s.section}`} aria-labelledby="order3d-title">
-      <div className={`${h.container} ${s.wide}`}>
+      <div className={p.wrap}>
         <Reveal className={`${h.head} ${s.head}`}>
           <p className={`${h.eyebrow} ${s.eyebrow}`}>How to order</p>
           <h2 id="order3d-title" className={`${h.title} ${s.title}`}>

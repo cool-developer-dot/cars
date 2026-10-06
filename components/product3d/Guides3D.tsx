@@ -5,6 +5,7 @@ import NeonEdge from "@/components/NeonEdge/NeonEdge";
 import h from "@/components/home/home.module.css";
 import { GuideDocIcon, GuideLayersIcon, GuideScalesIcon } from "./guideIcons";
 import s from "./Guides3D.module.css";
+import p from "./page3d.module.css";
 
 // There are no standalone guide pages yet: each card points at the page that
 // answers it today.
@@ -35,7 +36,7 @@ const GUIDES = [
 export default function Guides3D() {
   return (
     <section className={`${h.section} ${h.dark} ${s.section}`} aria-labelledby="guides3d-title">
-      <div className={`${h.container} ${s.wide}`}>
+      <div className={p.wrap}>
         <div className={s.top}>
           <Reveal className={`${h.head} ${s.head}`}>
             <p className={h.eyebrow}>Guides</p>

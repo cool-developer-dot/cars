@@ -68,6 +68,14 @@ html {
   /* Rating-ring figure (reviews): the only size outside the shared roles */
   --fs-stat: 24px;
 
+  /* ——— Page container ———
+     One width and one side padding for every section of a product page
+     (the 3D page): every section's content starts and ends on the same two
+     edges. Sections that bleed a photo off the screen edge still keep their
+     copy on these edges. */
+  --page-max: 1920px;
+  --page-pad: 16px;
+
   /* Homepage section rhythm: every section uses these two, so the gap
      between any two sections (bottom pad + neon edge + top pad) is equal */
   --sec-top: clamp(22px, 2.4vw, 34px);
@@ -86,6 +94,7 @@ html {
     --fs-eyebrow: 12px;
     --fs-btn: 16px;
     --fs-stat: 26px;
+    --page-pad: 24px;
   }
 }
 
@@ -101,6 +110,8 @@ html {
     --fs-eyebrow: 13px;
     --fs-btn: 16px;
     --fs-stat: 28px;
+    /* 32px at 1024, the designed 80px at 1536, 104px from about 1800 */
+    --page-pad: clamp(32px, calc(9.6vw - 66px), 104px);
   }
 }
 

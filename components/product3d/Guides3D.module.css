@@ -320,15 +320,9 @@
   }
 }
 
-/* ——— Desktop: a wider container, photo bleeding off the right ——— */
+/* ——— Desktop: photo bleeding off the right ——— */
 
 @media (min-width: 1024px) {
-  /* no max width: the design keeps the copy about 5% in from the left edge at
-     any screen size, with the plates bleeding off the right */
-  .section .wide {
-    max-width: none;
-    padding-inline: clamp(32px, 5.2vw, 110px);
-  }
 }
 
 @media (min-width: 1280px) {

@@ -8,10 +8,9 @@
      1024–1179  three across, icon beside the title, copy under it
      1180+      three across, icon beside title and copy
 
-   The section is built to be low and wide: from 1024px it uses a wider
-   container than the other sections so the cards read as wide, short
+   The section is built to be low and wide: the cards read as wide, short
    panels, and it tightens further on short screens so the whole section
-   shows in one view. */
+   shows in one view. Its side edges are the page container's (page3d). */
 
 .section {
   --dim: #1668e3; /* dimension lines, arrows, fixing points */
@@ -549,16 +548,8 @@
 /* ——— Desktop: three wide, low cards across ——— */
 
 @media (min-width: 1024px) {
-  /* wider than the 1200px used elsewhere, so the cards are wide, not tall */
-  .section .wide {
-    max-width: 1480px;
-    padding-inline: clamp(32px, 4.6vw, 70px);
-  }
-
-  /* the heading lines up with the icons, as in the design */
   .section .head {
     margin-bottom: 14px;
-    padding-left: 20px;
   }
 
   .section[class] {

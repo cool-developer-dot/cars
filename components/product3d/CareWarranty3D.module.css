@@ -195,13 +195,9 @@
   }
 }
 
-/* ——— Desktop: a wider container, photo bleeding off the right ——— */
+/* ——— Desktop: photo bleeding off the right ——— */
 
 @media (min-width: 1024px) {
-  .section .wide {
-    max-width: 1552px;
-    padding-inline: clamp(32px, 5.2vw, 80px);
-  }
 }
 
 @media (min-width: 1280px) {

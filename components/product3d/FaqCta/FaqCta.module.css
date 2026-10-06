@@ -33,10 +33,9 @@
   --blue: #1668e3;
 }
 
+/* side edges: the page container (page3d); the car is outside it so it can bleed */
 .faqInner {
-  position: relative;
   z-index: 2;
-  padding-inline: 16px;
 }
 
 /* the car: a banner on phones and tablets, feathered into the section */
@@ -185,9 +184,7 @@
 /* ——— Call to action ——— */
 
 .ctaInner {
-  position: relative;
   z-index: 5; /* above the plate photo, which runs in front of the divider */
-  padding-inline: 16px;
 }
 
 /* the plate: a banner under the copy on phones and tablets */
@@ -283,11 +280,6 @@
 /* ——— Tablet ——— */
 
 @media (min-width: 560px) {
-  .faqInner,
-  .ctaInner {
-    padding-inline: 24px;
-  }
-
   .car,
   .plate {
     width: min(calc(100% + 48px), 700px);
@@ -336,11 +328,6 @@
       inset 0 1px 0 rgba(255, 255, 255, 0.28);
   }
 
-  .faqInner,
-  .ctaInner {
-    padding-inline: 32px;
-  }
-
   .car,
   .plate {
     width: min(calc(100% + 64px), 700px);
@@ -380,11 +367,10 @@
     object-position: 35% 40%;
   }
 
-  /* questions in the right half, as designed */
-  .faqInner {
-    margin-left: 49.7%;
-    margin-right: 3.4%;
-    padding-inline: 0;
+  /* the questions take the right half of the container, as designed */
+  .faqCol {
+    width: 50.4%;
+    margin-left: auto;
   }
 
   .qHeading,
@@ -426,10 +412,6 @@
 
   .plate img {
     object-position: 100% 50%;
-  }
-
-  .ctaInner {
-    padding-inline: clamp(32px, 5.2vw, 110px) 0;
   }
 
   .cta .lead {
@@ -485,7 +467,7 @@
 @media (min-width: 1024px) and (max-width: 1439px) {
   .cta .lead,
   .actions {
-    max-width: 56%;
+    max-width: 62%;
   }
 
   .actions {

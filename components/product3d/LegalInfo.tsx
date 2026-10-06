@@ -4,6 +4,7 @@ import NeonEdge from "@/components/NeonEdge/NeonEdge";
 import h from "@/components/home/home.module.css";
 import { PRODUCTS } from "@/lib/products";
 import s from "./LegalInfo.module.css";
+import p from "./page3d.module.css";
 
 const legal = PRODUCTS["3d"].legal.paragraphs[0];
 const HL = "correct reflective";
@@ -19,7 +20,7 @@ const BADGES = [
 export default function LegalInfo() {
   return (
     <section className={`${h.section} ${h.dark} ${s.section}`} aria-labelledby="legal3d-title">
-      <div className={h.container}>
+      <div className={p.wrap}>
         <div className={s.copy}>
           <Reveal>
             <p className={h.eyebrow}>Legal information</p>

@@ -3,6 +3,7 @@ import NeonEdge from "@/components/NeonEdge/NeonEdge";
 import h from "@/components/home/home.module.css";
 import { BanGlyph, ShieldTickGlyph, SparklesGlyph } from "./deliveryIcons";
 import s from "./CareWarranty3D.module.css";
+import p from "./page3d.module.css";
 
 const CARDS = [
   {
@@ -28,7 +29,7 @@ const CARDS = [
 export default function CareWarranty3D() {
   return (
     <section className={`${h.section} ${h.dark} ${s.section}`} aria-labelledby="care3d-title">
-      <div className={`${h.container} ${s.wide}`}>
+      <div className={p.wrap}>
         <Reveal className={`${h.head} ${s.head}`}>
           <p className={h.eyebrow}>Care and support</p>
           <h2 id="care3d-title" className={`${h.title} ${s.title}`}>

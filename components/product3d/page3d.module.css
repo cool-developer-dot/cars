@@ -1,0 +1,12 @@
+/* The 3D page's one container. Every section's content sits inside it, so
+   the left and right edges are the same all the way down the page. Its width
+   and side padding are the --page-max / --page-pad tokens in globals.css;
+   nothing else should set a section's side padding or maximum width. */
+.wrap {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: var(--page-pad);
+}

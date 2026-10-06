@@ -5,6 +5,7 @@ import h from "@/components/home/home.module.css";
 import { COMPANY, CONTACT, DELIVERY_FEES } from "@/lib/site";
 import { MapStreets, PinGlyph, RoyalMailMark, WhatsAppIcon } from "./deliveryIcons";
 import s from "./Delivery3D.module.css";
+import p from "./page3d.module.css";
 
 const { freeFrom, tracked } = DELIVERY_FEES;
 const [street, ...town] = COMPANY.collection.split(", ");
@@ -44,7 +45,7 @@ const COURIERS: {
 export default function Delivery3D() {
   return (
     <section className={`${h.section} ${h.light} ${s.section}`} aria-labelledby="delivery3d-title">
-      <div className={`${h.container} ${s.wide}`}>
+      <div className={p.wrap}>
         <Reveal className={`${h.head} ${s.head}`}>
           <p className={h.eyebrow}>Delivery and collection</p>
           <h2 id="delivery3d-title" className={`${h.title} ${s.title}`}>
