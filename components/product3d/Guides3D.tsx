@@ -37,33 +37,16 @@ export default function Guides3D() {
   return (
     <section className={`${h.section} ${h.dark} ${s.section}`} aria-labelledby="guides3d-title">
       <div className={p.wrap}>
-        <div className={s.top}>
-          <Reveal className={`${h.head} ${s.head}`}>
-            <p className={h.eyebrow}>Guides</p>
-            <h2 id="guides3d-title" className={`${h.title} ${s.title}`}>
-              Helpful Guides and <span className={h.accent}>Information</span>
-            </h2>
-            <p className={`${h.lead} ${s.lead}`}>
-              Answering the most common questions and helping you choose the right
-              <br className={s.brWide} /> number plate for your vehicle.
-            </p>
-          </Reveal>
-
-          {/* Two plates on a wet bumper: a banner on phones, bleeding off the right on desktop */}
-          <div className={s.photo} aria-hidden="true">
-            <picture>
-              <source media="(min-width: 900px)" srcSet="/3d/guides-plates.webp" />
-              <img
-                src="/3d/guides-plates-mobile.webp"
-                alt=""
-                width={1100}
-                height={640}
-                loading="lazy"
-                decoding="async"
-              />
-            </picture>
-          </div>
-        </div>
+        <Reveal className={`${h.head} ${s.head}`}>
+          <p className={h.eyebrow}>Guides</p>
+          <h2 id="guides3d-title" className={`${h.title} ${s.title}`}>
+            Helpful Guides and <span className={h.accent}>Information</span>
+          </h2>
+          <p className={`${h.lead} ${s.lead}`}>
+            Answering the most common questions and helping you choose the right number plate for
+            your vehicle.
+          </p>
+        </Reveal>
 
         <ul className={s.cards}>
           {GUIDES.map(({ id, Icon, lines, lines2, href }, i) => (
