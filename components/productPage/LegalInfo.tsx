@@ -39,7 +39,15 @@ export default function LegalInfo({ page }: { page: ProductPageContent }) {
           <Reveal>
             <p className={h.eyebrow}>Legal information</p>
             <h2 id="legal-info-title" className={h.title}>
-              Are {page.name} Number Plates <span className={`${h.accent} ${s.line}`}>Legal in the UK?</span>
+{page.legal.heading ? (
+              <>
+                {page.legal.heading[0]} <span className={`${h.accent} ${s.line}`}>{page.legal.heading[1]}</span>
+              </>
+            ) : (
+              <>
+                Are {page.name} Number Plates <span className={`${h.accent} ${s.line}`}>Legal in the UK?</span>
+              </>
+            )}
             </h2>
             <p className={`${h.lead} ${s.lead}`}>
               {before}

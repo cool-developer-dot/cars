@@ -236,7 +236,11 @@ export default function ProductHero({
 
         <div className={styles.options}>
           <h2 className={`${styles.buyTitle} ${styles.anim}`} style={delay(3)}>
-            Buy {own.name} number plates from {gbp(own.single)} per&nbsp;plate
+            {product.buy?.title ?? (
+              <>
+                Buy {own.name} number plates from {gbp(own.single)} per&nbsp;plate
+              </>
+            )}
           </h2>
           <div className={styles.optionGrid}>
             <button
@@ -253,10 +257,12 @@ export default function ProductHero({
                 <PlateIcon />
               </span>
               <span className={styles.optionText}>
-                <strong>{copy?.single.title ?? `Single front or rear ${SHORT[ownStyle]} plates`}</strong>
+                <strong>
+                  {copy?.single.title ?? product.buy?.single.title ?? `Single front or rear ${SHORT[ownStyle]} plates`}
+                </strong>
                 <span>
-                  {copy ? (
-                    copy.single.text
+                  {copy || product.buy ? (
+                    (copy ?? product.buy)!.single.text
                   ) : (
                     <>Order one plate — front or rear&nbsp;— at&nbsp;{gbp(own.single)}.</>
                   )}
@@ -277,10 +283,10 @@ export default function ProductHero({
                 <PlateIcon pair />
               </span>
               <span className={styles.optionText}>
-                {copy ? (
+                {copy || product.buy ? (
                   <>
-                    <strong>{copy.pair.title}</strong>
-                    <span>{copy.pair.text}</span>
+                    <strong>{(copy ?? product.buy)!.pair.title}</strong>
+                    <span>{(copy ?? product.buy)!.pair.text}</span>
                   </>
                 ) : (
                   <>

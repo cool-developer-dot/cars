@@ -135,9 +135,17 @@ export default function FinishExplained({ page: content }: { page: ProductPageCo
           <Reveal className={s.compareHead}>
             <p className={h.eyebrow}>Comparison</p>
             <h2 className={h.title}>
-              {COMPARE_CARDS[first].name.replace(/ Gel$/, "")} <span className={s.lower}>vs</span>{" "}
-              {COMPARE_CARDS[second].name.replace(/ Gel$/, "")} Number Plates{" "}
-              <span className={h.accent}>{explained.compare.tail}</span>
+{explained.compare.heading ? (
+              <>
+                {explained.compare.heading[0]} <span className={h.accent}>{explained.compare.heading[1]}</span>
+              </>
+            ) : (
+              <>
+                {COMPARE_CARDS[first].name.replace(/ Gel$/, "")} <span className={s.lower}>vs</span>{" "}
+                {COMPARE_CARDS[second].name.replace(/ Gel$/, "")} Number Plates{" "}
+                <span className={h.accent}>{explained.compare.tail}</span>
+              </>
+            )}
             </h2>
           </Reveal>
 

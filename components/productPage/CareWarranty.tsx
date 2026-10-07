@@ -35,7 +35,15 @@ export default function CareWarranty({ page }: { page: ProductPageContent }) {
         <Reveal className={`${h.head} ${s.head}`}>
           <p className={h.eyebrow}>Care and support</p>
           <h2 id="care-title" className={`${h.title} ${s.title}`}>
-            Caring for Your {page.name} Plates <span className={`${h.accent} ${s.line}`}>and Warranty Support</span>
+{care.heading ? (
+              <>
+                {care.heading[0]} <span className={`${h.accent} ${s.line}`}>{care.heading[1]}</span>
+              </>
+            ) : (
+              <>
+                Caring for Your {page.name} Plates <span className={`${h.accent} ${s.line}`}>and Warranty Support</span>
+              </>
+            )}
           </h2>
           <p className={`${h.lead} ${s.lead}`}>{care.lead}</p>
         </Reveal>

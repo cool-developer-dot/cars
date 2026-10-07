@@ -1,6 +1,6 @@
 import type { PlateFinish } from "@/components/home/PlateArt";
 import { PRODUCTS, type ProductContent } from "@/lib/products";
-import { PRICES, SPECIALITY, formatPrices, type SpecialityId } from "@/lib/site";
+import { PRICES, SPECIALITY, formatPrices, gbp, type SpecialityId } from "@/lib/site";
 
 /*
  * Everything that differs between the plate-style pages (3D, 4D, 5D, Bevel).
@@ -63,6 +63,9 @@ export type GuideLink = {
   href: string;
 };
 
+/** A section heading as [plain words, highlighted words] — the docs' SEO headings */
+export type Heading = readonly [string, string];
+
 export type ProductPageContent = {
   id: ProductPageId;
   product: ProductContent;
@@ -72,6 +75,7 @@ export type ProductPageContent = {
   nameInText: string;
   hero: PageImage & { srcMobile: string };
   replacement: {
+    heading?: Heading;
     lead: string;
     cards: {
       id: "cracked" | "lost" | "match";
@@ -88,9 +92,18 @@ export type ProductPageContent = {
     note: string;
     art: PageImage;
     /** "3D vs 4D Number Plates — Gel or Acrylic?" */
-    compare: { pair: readonly [CompareId, CompareId]; tail: string; images?: Partial<Record<CompareId, string>> };
+    compare: {
+      pair: readonly [CompareId, CompareId];
+      tail: string;
+      /** Replaces "3D vs 4D Number Plates — tail" */
+      heading?: Heading;
+      images?: Partial<Record<CompareId, string>>;
+    };
   };
   sizes: {
+    heading?: Heading;
+    /** Replaces the measuring card's text */
+    measure?: string;
     moto: string;
     /** First card (defaults to the 520 × 111mm standard size) */
     first?: { title: string; text: string; figure?: { w: string; h: string; reg: string } };
@@ -98,16 +111,25 @@ export type ProductPageContent = {
     lead?: string;
   };
   legal: {
+    heading?: Heading;
     photo: PageImage;
     /** The four badges under the copy (defaults: the legal requirements) */
     badges?: { label: string; icon: "type" | "spacing" | "background" | "markings" | "display" | "events" | "custom" | "noRoad" }[];
     /** Replaces the paragraph on what an MOT tester checks */
     note?: string;
   };
-  care: { lead: string; scratch: { title: string; text: string }; photo: { src: string; srcMobile: string } };
+  care: {
+    heading?: Heading;
+    lead: string;
+    scratch: { title: string; text: string };
+    photo: { src: string; srcMobile: string };
+  };
+  order?: { heading?: Heading; lead?: string };
+  documents?: { heading?: Heading };
+  delivery?: { heading?: Heading; lead?: string };
   guides: readonly GuideLink[];
   guidesArt: { src: string; srcMobile: string };
-  faq: { car: PageImage & { srcMobile: string } };
+  faq: { heading?: Heading; car: PageImage & { srcMobile: string } };
   cta: { plate: { src: string; srcMobile: string } };
 };
 
@@ -896,10 +918,10 @@ export const COMPARE_CARDS: Record<CompareId, CompareCard> = {
     name: "Ghost",
     price: PRICES.ghost.single,
     img: "/finishes/ghost.webp",
-    alt: "Close-up of a Ghost character: a glossy, dark smoked finish",
-    characters: "Dark smoked characters",
+    alt: "Close-up of a Ghost character with its styled, glossy finish",
+    characters: "A distinctive styled character finish",
     edge: "Rounded, glossy",
-    look: "Subtle, tinted stealth look",
+    look: "Styled characters, same legal layout",
   },
   bevel: {
     name: "Bevel",
@@ -911,3 +933,208 @@ export const COMPARE_CARDS: Record<CompareId, CompareCard> = {
     look: "Faceted, catches the light",
   },
 };
+
+/* ——— SEO copy from the content docs (Product Pages/02_product-pages) ———
+   Each page's headings, card titles, guides and section leads as the docs set
+   them, laid over the entries above. Prices stay computed from lib/pricing.ts
+   (the client's builder pricing), and links point at pages that exist. */
+
+const ORDER_LEAD = "Enter your registration, choose front, rear or a pair, and preview before you buy.";
+const guide = (id: string, lines: readonly [string, string], lines2: readonly [string, string], href: string): GuideLink => ({
+  id,
+  lines,
+  lines2,
+  href,
+});
+const RULES_GUIDE = guide("rules", ["UK Number Plate", "Rules Explained"], ["Character, size and", "marking rules."], "/faqs#legal");
+const ALL_STYLES_GUIDE = guide("styles", ["Standard vs 3D vs", "4D vs 5D Plates"], ["Compare styles,", "looks and features."], "/plate-styles");
+const items = (p: ProductContent) => p.replacement.items;
+
+const DOCS: Partial<Record<ProductPageId, (page: ProductPageContent) => void>> = {
+  standard(page) {
+    const it = items(ps);
+    page.replacement.heading = ["Replace a Cracked, Faded,", "Lost or Stolen Plate"];
+    page.replacement.cards = [
+      { id: "cracked", title: it[0].title, text: it[0].text, img: aStd.cracked },
+      { id: "lost", title: it[1].title, text: it[1].text, img: aStd.lost },
+      { id: "match", title: "Can we match your existing plate?", text: "Order a single front or rear plate in the size of the one you're keeping. We'll make it in our standard printed finish; an exact match to another supplier's plate isn't guaranteed, as acrylic and print vary between makers.", img: aStd.match },
+    ];
+    page.explained.title = "Standard, 2D and Printed";
+    page.explained.accent = "Number Plates Explained";
+    page.explained.lead = ps.intro.paragraphs[0];
+    page.explained.note = ps.intro.paragraphs[1];
+    page.explained.compare.heading = ["Standard vs 3D and 4D", "Number Plates"];
+    page.sizes.heading = ["Standard Plate Sizes and", "Reflective Acrylic Construction"];
+    page.sizes.lead = ps.sizes.paragraphs[0];
+    page.sizes.measure = ps.sizes.paragraphs[2];
+    page.legal.heading = ["Road-Use Requirements", "for Standard Plates"];
+    page.legal.note = ps.legal.paragraphs[1];
+    page.order = { heading: ["How to Order Replacement", "Printed Plates Online"], lead: ORDER_LEAD };
+    page.documents = { heading: ["Documents for", "Your Registration"] };
+    page.delivery = { heading: ["Standard Plate Delivery", "and Ilford Collection"] };
+    page.care.heading = ["Fitting Options and", "Warranty Support"];
+    page.care.lead = ps.care.text;
+    page.guides = [
+      guide("replace", ["How to Replace a", "Number Plate in the UK"], ["Ordering, documents", "and fitting."], "/faqs#ordering"),
+      guide("single", ["Single Front or Rear", "Number Plates"], ["When to buy", "just one plate."], "/faqs#ordering"),
+      guide("mot", ["Number Plate MOT", "Failure Checklist"], ["What testers check", "and why plates fail."], "/faqs#legal"),
+    ];
+    page.faq.heading = ["Standard Replacement", "Plate FAQs"];
+  },
+
+  "3d"(page) {
+    page.sizes.lead = p3.sizes.paragraphs[0];
+    page.delivery = {
+      lead: "Standard Royal Mail First Class delivery is £3 on orders under £15 and free on orders of £15 or more. Upgrade to Royal Mail Tracked 24 for an additional £2. Royal Mail delivery times are aims, not guarantees. Order before 2pm Monday to Friday and, once your documents are checked, we aim to dispatch the same day.",
+    };
+    page.care.lead = p3.care.text;
+  },
+
+  "4d"(page) {
+    const it = items(p4);
+    page.replacement.heading = ["Replacement 4D", "Number Plates"];
+    page.replacement.cards = [
+      { id: "cracked", title: it[0].title, text: it[0].text, img: a4.cracked },
+      { id: "lost", title: "Replacing a lost front or rear plate", text: LOST_TEXT, img: a4.lost },
+      { id: "match", title: it[1].title, text: it[1].text, img: a4.match },
+    ];
+    page.replacement.upgrade = { title: it[2].title, text: it[2].text, tag: "4D", finish: "acrylic" };
+    page.explained.title = "Laser-Cut Acrylic Characters —";
+    page.explained.accent = "What Makes a Plate 4D?";
+    page.explained.lead = p4.intro.paragraphs[0];
+    page.explained.note = p4.intro.paragraphs[1];
+    page.explained.compare.heading = ["4D vs 3D vs 4D Gel —", "Which Finish Suits You?"];
+    page.sizes.heading = ["4D Number Plate Thickness,", "Sizes and Options"];
+    page.sizes.lead = p4.sizes.paragraphs[0];
+    page.legal.heading = ["Are 4D Number", "Plates Legal?"];
+    page.legal.note = p4.legal.paragraphs[1];
+    page.order = { heading: ["Order 4D Plates Online —", "Documents and Preview"], lead: ORDER_LEAD };
+    page.delivery = { heading: ["4D Plate Delivery and", "Same-Day Ilford Collection"] };
+    page.care.heading = ["Fitting, Cleaning and", "Warranty Support"];
+    page.care.lead = p4.care.text;
+    page.guides = [
+      guide("legal", ["Are 4D Number", "Plates Legal?"], ["Rules, requirements", "and what to know."], "/faqs#legal"),
+      guide("3d-4d", ["3D vs 4D", "Number Plates"], ["Key differences", "and which to choose."], "/3d-number-plates"),
+      ALL_STYLES_GUIDE,
+    ];
+  },
+
+  "5d"(page) {
+    const it = items(p5);
+    page.replacement.heading = ["Replacement 5D and", "4D Gel Number Plates"];
+    page.replacement.cards = [
+      { id: "cracked", title: it[0].title, text: it[0].text, img: a5.cracked },
+      { id: "lost", title: "Replacing a lost front or rear plate", text: LOST_TEXT, img: a5.lost },
+      { id: "match", title: it[1].title, text: it[1].text, img: a5.match },
+    ];
+    page.explained.title = "4D Gel Number Plates —";
+    page.explained.accent = "Our 5D Finish Explained";
+    page.explained.compare.heading = ["5D vs 4D vs 3D —", "Acrylic, Gel or Both?"];
+    page.sizes.heading = ["5D Plate Sizes and", "Finish Options"];
+    page.sizes.lead = p5.sizes.paragraphs[0];
+    page.sizes.measure = p5.sizes.paragraphs[1];
+    page.legal.heading = ["Are 5D and 4D Gel", "Plates Legal?"];
+    page.legal.note = p5.legal.paragraphs[1];
+    page.order = { heading: ["Order 5D Plates Online —", "Documents and Preview"], lead: ORDER_LEAD };
+    page.delivery = { heading: ["5D Plate Delivery and", "Ilford Collection"] };
+    page.care.heading = ["Caring for Layered Plates", "and Warranty Support"];
+    page.care.lead = p5.care.text;
+    page.guides = [
+      ALL_STYLES_GUIDE,
+      RULES_GUIDE,
+      guide("4d-5d", ["4D vs 5D", "Number Plates"], ["Flat acrylic", "or a gel top."], "/4d-number-plates"),
+    ];
+  },
+
+  ghost(page) {
+    const it = items(pg);
+    page.replacement.heading = ["Replacement Ghost", "Number Plates"];
+    page.replacement.cards = [
+      { id: "cracked", title: it[0].title, text: it[0].text, img: ag.cracked },
+      { id: "lost", title: "Replacing a lost front or rear plate", text: LOST_TEXT, img: ag.lost },
+      { id: "match", title: it[1].title, text: it[1].text, img: ag.match },
+    ];
+    page.explained.title = "Ghost Number Plates";
+    page.explained.accent = `from ${gbp(PRICES.ghost.single)} per Plate`;
+    page.explained.lead = pg.intro.paragraphs[0];
+    page.explained.note = pg.intro.paragraphs[1];
+    page.explained.compare = { pair: ["ghost", "4d"], tail: "", heading: ["Ghost vs 4D and Bevel", "Number Plates"] };
+    page.sizes.heading = ["Ghost Plate Sizes and", "Specifications"];
+    page.sizes.lead = pg.sizes.paragraphs[0];
+    page.sizes.measure = pg.sizes.paragraphs[1];
+    page.legal.heading = ["Ghost Number Plates and", "the Legal Requirements"];
+    page.legal.note = pg.legal.paragraphs[1];
+    page.order = { heading: ["Ordering, Documents and", "Registration Checks"], lead: ORDER_LEAD };
+    page.delivery = { heading: ["Ghost Plate Delivery", "and Ilford Collection"] };
+    page.care.heading = ["Care and", "Warranty Support"];
+    page.care.lead = pg.care.text;
+    page.guides = [
+      guide("ghost-style", ["Ghost Plates: Styling", "vs Illegal Stealth Plates"], ["What's decorative", "and what isn't."], "/faqs#legal"),
+      RULES_GUIDE,
+      guide("anpr", ["Number Plates and", "ANPR Cameras"], ["Why plates must", "read clearly."], "/faqs#legal"),
+    ];
+  },
+
+  bevel(page) {
+    const it = items(pb);
+    page.replacement.heading = ["Replacement Bevel", "Number Plates"];
+    page.replacement.cards = [
+      { id: "cracked", title: it[0].title, text: it[0].text, img: ab.cracked },
+      { id: "lost", title: "Replacing a lost front or rear plate", text: LOST_TEXT, img: ab.lost },
+      { id: "match", title: it[1].title, text: it[1].text, img: ab.match },
+    ];
+    page.explained.title = "Diamond-Cut Number Plates —";
+    page.explained.accent = "The Bevelled Edge Explained";
+    page.explained.lead = pb.intro.paragraphs[0];
+    page.explained.note = pb.intro.paragraphs[1];
+    page.explained.compare.heading = ["Bevel vs 4D and 5D —", "Edge Shape or Gel Finish?"];
+    page.sizes.heading = ["Bevel Plate Sizes and", "Profile Options"];
+    page.sizes.lead = pb.sizes.paragraphs[0];
+    page.sizes.measure = pb.sizes.paragraphs[1];
+    page.legal.heading = ["Are Bevelled Number", "Plates Legal?"];
+    page.legal.note = pb.legal.paragraphs[1];
+    page.order = { heading: ["Order Bevel Plates Online —", "Documents and Preview"], lead: ORDER_LEAD };
+    page.delivery = { heading: ["Bevel Plate Delivery and", "Same-Day Ilford Collection"] };
+    page.care.heading = ["Bevel Plate Care and", "Warranty Support"];
+    page.care.lead = pb.care.text;
+    page.guides = [
+      ALL_STYLES_GUIDE,
+      RULES_GUIDE,
+      guide("premium", ["Bevel vs 4D vs 5D:", "Which Premium Finish?"], ["Edge, depth", "and gloss compared."], "/5d-number-plates"),
+    ];
+  },
+
+  oversized(page) {
+    const it = items(pOver);
+    page.replacement.heading = ["Replacing an Oversized", "Rear Plate"];
+    page.replacement.cards = [
+      { id: "cracked", title: it[0].title, text: it[0].text, img: aOver.cracked },
+      { id: "lost", title: it[2].title, text: it[2].text, img: aOver.lost },
+      { id: "match", title: it[1].title, text: it[1].text, img: aOver.match },
+    ];
+    page.explained.title = "Oversized Plate,";
+    page.explained.accent = "Not Oversized Characters";
+    page.explained.lead = pOver.intro.paragraphs[0];
+    page.explained.note = pOver.intro.paragraphs[1];
+    page.sizes.heading = ["Measure Your", "Rear Plate Recess"];
+    page.sizes.lead =
+      "Measure the width and height of the recess where the rear plate sits, check that the plate would sit flat without covering trim, lights or sensors, and compare with the sizes in the builder. If yours falls between sizes, contact us before ordering.";
+    page.sizes.measure = "Please don't trim a plate to make it fit: trimming can remove required margins and markings.";
+    page.documents = { heading: ["Documents", "You'll Need"] };
+    page.delivery = {
+      heading: ["Oversized Plate Delivery", "and Collection"],
+      lead: "Standard Royal Mail First Class delivery is £3 on orders under £15 and free on orders of £15 or more. Upgrade to Royal Mail Tracked 24 for an additional £2. If your order and document checks are complete before 2pm on a working weekday we aim to dispatch that day. Delivery times are Royal Mail's aims, not guarantees. We deliver by Royal Mail to addresses in Great Britain; if your address is in Northern Ireland, the Channel Islands or the Isle of Man, please contact us before ordering.",
+    };
+    page.care.lead = pOver.care.text;
+    page.guides = [
+      guide("recess", ["Oversized Plates", "and Recess Fit"], ["Measuring before", "you order."], "/faqs#ordering"),
+      RULES_GUIDE,
+      guide("mot", ["Number Plate MOT", "Failure Checklist"], ["What testers check", "and why plates fail."], "/faqs#legal"),
+    ];
+    page.faq.heading = ["Oversized Number", "Plate Questions"];
+  },
+};
+
+for (const [id, apply] of Object.entries(DOCS) as [ProductPageId, (page: ProductPageContent) => void][]) {
+  apply(PRODUCT_PAGES[id]);
+}

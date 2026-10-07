@@ -94,11 +94,23 @@ export default function HowToOrder({ page }: { page: ProductPageContent }) {
         <Reveal className={`${h.head} ${s.head}`}>
           <p className={`${h.eyebrow} ${s.eyebrow}`}>How to order</p>
           <h2 id="order-title" className={`${h.title} ${s.title}`}>
-            How to Order {page.name} <span className={`${h.accent} ${s.line}`}>Number Plates Online</span>
+{page.order?.heading ? (
+              <>
+                {page.order?.heading[0]} <span className={`${h.accent} ${s.line}`}>{page.order?.heading[1]}</span>
+              </>
+            ) : (
+              <>
+                How to Order {page.name} <span className={`${h.accent} ${s.line}`}>Number Plates Online</span>
+              </>
+            )}
           </h2>
           <p className={`${h.lead} ${s.lead}`}>
-            Enter your registration, choose front, rear or a pair, and preview
-            <br className={s.brWide} /> your plate before you buy.
+            {page.order?.lead ?? (
+              <>
+                Enter your registration, choose front, rear or a pair, and preview
+                <br className={s.brWide} /> your plate before you buy.
+              </>
+            )}
           </p>
         </Reveal>
 

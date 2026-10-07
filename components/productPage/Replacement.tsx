@@ -33,8 +33,16 @@ export default function Replacement({ page }: { page: ProductPageContent }) {
         <Reveal className={h.head}>
           <p className={h.eyebrow}>Replacement plates</p>
           <h2 id="replace-title" className={h.title}>
-            Replacement {page.name} Number Plates for{" "}
-            <span className={`${h.accent} ${s.line}`}>Damaged, Lost or Worn Plates</span>
+{replacement.heading ? (
+              <>
+                {replacement.heading[0]} <span className={`${h.accent} ${s.line}`}>{replacement.heading[1]}</span>
+              </>
+            ) : (
+              <>
+                Replacement {page.name} Number Plates for{" "}
+                <span className={`${h.accent} ${s.line}`}>Damaged, Lost or Worn Plates</span>
+              </>
+            )}
           </h2>
           <p className={`${h.lead} ${s.lead}`}>{replacement.lead}</p>
         </Reveal>

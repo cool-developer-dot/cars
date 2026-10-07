@@ -46,7 +46,15 @@ export default function FaqCta({ page: content }: { page: ProductPageContent }) 
             <Rise className={s.head}>
               <p className={h.eyebrow}>FAQs</p>
               <h2 id="faq-title" className={`${h.title} ${s.title}`}>
-                {name} Number Plate <span className={h.accent}>FAQs</span>
+                {faq.heading ? (
+                  <>
+                    {faq.heading[0]} <span className={h.accent}>{faq.heading[1]}</span>
+                  </>
+                ) : (
+                  <>
+                    {name} Number Plate <span className={h.accent}>FAQs</span>
+                  </>
+                )}
               </h2>
               <p className={`${h.lead} ${s.lead}`}>
                 Quick answers to the most common questions about our {nameInText} number plates.

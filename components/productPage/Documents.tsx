@@ -6,6 +6,7 @@ import GlassEdge from "./GlassEdge";
 import h from "@/components/home/home.module.css";
 import { GOV_UK_DOCS_URL } from "@/lib/site";
 import { IdDocIcon, VehicleDocIcon } from "./orderIcons";
+import type { ProductPageContent } from "./pageContent";
 import s from "./Documents.module.css";
 import p from "./page.module.css";
 
@@ -32,7 +33,7 @@ const GROUPS = [
   },
 ] as const;
 
-export default function Documents() {
+export default function Documents({ page }: { page: ProductPageContent }) {
   return (
     <section className={`${h.section} ${h.dark} ${s.section}`} aria-labelledby="docs-title">
       {/* From "How to order" (light) */}
@@ -42,7 +43,15 @@ export default function Documents() {
         <Reveal className={`${h.head} ${s.head}`}>
           <p className={`${h.eyebrow} ${s.eyebrow}`}>Documents</p>
           <h2 id="docs-title" className={`${h.title} ${s.title}`}>
-            Identity and <span className={`${h.accent} ${s.line}`}>Registration Documents</span>
+{page.documents?.heading ? (
+              <>
+                {page.documents?.heading[0]} <span className={`${h.accent} ${s.line}`}>{page.documents?.heading[1]}</span>
+              </>
+            ) : (
+              <>
+                Identity and <span className={`${h.accent} ${s.line}`}>Registration Documents</span>
+              </>
+            )}
           </h2>
           <p className={`${h.lead} ${s.lead}`}>
             To order number plates, we need to verify your identity and that you&rsquo;re entitled

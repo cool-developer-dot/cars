@@ -24,6 +24,12 @@ export type ProductContent = {
   format?: PlateFormat;
   /** The registration the hero's builder card starts with (a short one on the short page) */
   sampleReg?: string;
+  /** The docs' hero wording on a style page: the "Buy …" heading and the two option cards */
+  buy?: {
+    title: string;
+    single: { title: string; text: string };
+    pair: { title: string; text: string };
+  };
   /** Hero wording where the style-page defaults don't fit (speciality pages) */
   hero?: {
     eyebrow: string;
@@ -89,6 +95,14 @@ const WARRANTY_ALL =
   "New orders carry a manufacturing-defect warranty from the delivery or collection date — 6 months for Standard, 3D Gel and 4D, and 12 months for 5D, Ghost and Bevel — in addition to your statutory rights.";
 const ANY_STYLE =
   "Yes. Choose Standard, 3D Gel, 4D, 5D, Ghost or Bevel in the builder; the price updates as you choose.";
+/** The docs' warranty paragraph: months follow the style (lib/site.ts WARRANTY_MONTHS) */
+const warranty = (months: number) =>
+  `New orders carry a ${months}-month manufacturing-defect warranty from the delivery or collection date, in addition to your statutory rights. ${WARRANTY_TAIL}`;
+const TRACKED_FAQ = (q: string): Faq => ({
+  id: "tracked",
+  q,
+  a: "It adds tracking and Royal Mail's own next-working-day aim, on top of the standard First Class service.",
+});
 const COLLECT_FAQ: Faq = {
   id: "collect",
   q: "Can I collect the same day?",
@@ -99,69 +113,82 @@ export const PRODUCTS: Record<ProductContent["id"], ProductContent> = {
   standard: {
     id: "standard",
     path: "/standard-number-plates",
-    metaTitle: `Standard Number Plates from ${single("standard")} | Printed Plates`,
+    metaTitle: `Standard Number Plates from ${single("standard")} | 2D Printed`,
     metaDescription:
-      `Standard printed number plates, made to order to the legal requirements. Single plates from ${single("standard")}, pairs from ${pair("standard")}. Royal Mail delivery or Ilford collection.`,
+      `Standard printed number plates made to order, from ${single("standard")} per plate. The simplest, lowest-priced way to replace a plate. Royal Mail delivery or Ilford collection.`,
     short: "Standard",
-    h1: "Standard Number Plates",
-    lead: "Classic flat printed characters — single plates or matching pairs, made to order.",
+    h1: "Standard Replacement Number Plates",
+    lead: "Flat, printed characters on a reflective acrylic plate — our lowest-priced style, single or in a pair.",
+    buy: {
+      title: `Standard Replacement Number Plates from ${single("standard")} per plate`,
+      single: {
+        title: "White front or yellow rear replacement plates",
+        text: `${single("standard")} per plate — order just the front or the rear.`,
+      },
+      pair: { title: `Front and rear pairs — ${pair("standard")} per pair`, text: "Order both together." },
+    },
     intro: {
       eyebrow: "Printed plates",
-      heading: "What are standard number plates?",
+      heading: "Standard, 2D and printed number plates explained",
       paragraphs: [
-        "Standard number plates have solid black characters printed flat onto a reflective acrylic plate — the classic UK plate, with nothing raised above the face.",
-        "They're our most affordable style, made to the same legal character size, spacing and markings as every road plate we make.",
+        "A standard number plate — also called 2D or printed — has flat characters printed directly onto a reflective acrylic plate, with no raised or domed finish.",
+        "It's the simplest and least expensive of our styles, and it meets exactly the same legal requirements for character size, spacing, colour and markings as our raised-character styles.",
       ],
     },
     replacement: {
-      heading: "Replacement standard number plates",
+      heading: "Replace a cracked, faded, lost or stolen plate",
       items: [
         {
-          title: "Cracked, faded or damaged plates",
-          text: "A cracked, faded or peeling plate can make your registration hard to read. A new plate is the fix — order a single front or rear plate, or a matching pair.",
+          title: "Correcting a damaged or incorrectly displayed plate",
+          text: "If your current plate is cracked, faded, or was made with incorrect spacing, a new standard plate made to the current rules fixes all three. We make your registration to the legal layout, so a replacement for a non-compliant original may look different from it.",
         },
         {
-          title: "Matching your existing plate",
-          text: "Order a single front or rear plate in the size of the one you're keeping. We'll make it in our standard printed finish; an exact match to another supplier's plate isn't guaranteed, as acrylic and print vary between makers.",
+          title: "Replace only the plate you need",
+          text: "Order a single front or rear plate, or a pair — whichever you need.",
         },
       ],
     },
     compare: {
-      heading: "Standard vs 3D — printed or raised?",
-      columns: ["Standard", "3D gel"],
+      heading: "Standard vs 3D and 4D number plates",
+      columns: ["Standard", "3D gel", "4D"],
       highlight: 0,
       rows: [
-        { label: "Characters", values: ["Printed flat", "Domed resin over printed characters"] },
-        { label: "Look", values: ["Classic and clean", "Raised and glossy"] },
-        { label: "From", values: [single("standard"), single("3d")] },
+        { label: "Characters", values: ["Printed flat", "Domed resin", "Laser-cut acrylic"] },
+        { label: "Look", values: ["Classic", "Smooth, glossy", "Sharp, defined"] },
+        { label: "From", values: [single("standard"), single("3d"), single("4d")] },
       ],
+      note: { text: "Standard is our lowest-priced style and the simplest like-for-like replacement. For a raised finish, see 3D or 4D.", href: "/3d-number-plates", linkLabel: "3D plates" },
     },
     sizes: {
-      heading: "Standard plate sizes and options",
+      heading: "Standard plate sizes and reflective acrylic construction",
       paragraphs: [
+        "Standard plates are made on the same reflective acrylic base as our other styles — white reflective at the front, yellow reflective at the rear — with printed rather than raised characters.",
         COMMON_SIZE,
-        "Printed finishes may be available on selected motorcycle plate formats — the builder will show what's currently offered for your registration.",
-        "Measuring for a replacement: measure your existing plate and the mounting area on the car — a size that matches on paper still needs to fit the actual recess and fixings.",
+        "Measure your existing plate and the mounting area on the car before ordering a replacement size.",
       ],
     },
     legal: {
-      heading: "Are standard number plates legal?",
-      paragraphs: [LEGAL_CORE, MOT_SCOPE],
+      heading: "Road-use requirements for standard plates",
+      paragraphs: [
+        "Standard plates meet the same legal requirements as every style we make: correct Charles Wright characters, correct spacing, the right reflective background, solid black non-reflective characters, and the required supplier and British Standard markings.",
+        "This is separate from the DVSA MOT check, which looks at condition, legibility, security and fitting rather than the supplier markings.",
+      ],
     },
     care: {
-      heading: "Caring for your standard plates",
-      text: `Wash with car shampoo and a soft cloth. New orders carry a 6-month manufacturing-defect warranty from the delivery or collection date, in addition to your statutory rights. ${WARRANTY_TAIL}`,
+      heading: "Fitting options and warranty support",
+      text: `If a fixing option such as sticky pads or a screw kit is available for your order, you'll see it at checkout. ${warranty(6)}`,
     },
     faqs: [
-      { id: "per-plate", q: `Is ${single("standard")} per plate or per pair?`, a: `Per plate. A pair (front and rear) is ${pair("standard")}.` },
-      { id: "legal", q: "Are standard number plates legal?", a: "Yes, when made to the current rules — see the legal section above." },
-      { id: "one", q: "Can I replace just one plate?", a: "Yes. Order a single front or rear plate in the size of the one you're keeping." },
-      { id: "vs3d", q: "What's the difference between standard and 3D plates?", a: "Standard plates have flat printed characters; 3D gel plates have raised, domed resin characters over them.", links: [{ label: "3D plates", href: "/3d-number-plates" }] },
-      { id: "short", q: "Can I get a short or oversized standard plate?", a: "Yes. Enter your registration in the builder to see the sizes offered.", links: [{ label: "Short plates", href: "/short-number-plates" }, { label: "Oversized plates", href: "/oversized-number-plates" }] },
-      { id: "badge", q: "Can I add a UK flag or EV green flash?", a: "If your vehicle is eligible, choose the badge in the builder. The green flash is only for zero-emission vehicles.", links: [{ label: "EV plates", href: "/ev-number-plates" }] },
+      { id: "per-plate", q: `Is ${single("standard")} the price for one plate or a pair?`, a: `One plate. A front-and-rear pair is ${pair("standard")}.` },
+      { id: "one", q: "Can I order just a rear, or just a front, plate?", a: "Yes — choose front, rear or both in the builder." },
+      { id: "2d", q: "What's the difference between “standard” and “2D”?", a: "Same product — flat, printed characters, as opposed to a raised 3D, 4D, 5D, Ghost or Bevel finish." },
+      { id: "material", q: "What's the plate made from?", a: "Reflective acrylic, with the registration printed directly onto it." },
+      { id: "fixings", q: "Do you offer fixing pads or screws?", a: "Where available, you'll see fixing options at checkout." },
       COLLECT_FAQ,
-      { id: "tracked", q: "Is the Tracked 24 upgrade worth it?", a: "It adds tracking and Royal Mail's own next-working-day delivery aim, subject to their service terms." },
-      { id: "fault", q: "What if my plate has a fault?", a: "Contact us and we'll assess it." },
+      { id: "tracked", q: "Is the Tracked 24 upgrade worth it for a standard plate?", a: "It adds tracking and Royal Mail's own next-working-day aim — the same option applies whichever style you order." },
+      { id: "private-reg", q: "Can I order a plate for a newly assigned private registration?", a: "Yes, with the matching entitlement document — your V5C or retention certificate showing that registration.", links: [{ label: "Documents you'll need", href: "/faqs#documents" }] },
+      { id: "trailer", q: "I need a plate for a trailer — can it be a standard plate?", a: "A trailer must display the same number plate as the vehicle towing it. Order the plate in the size that fits your trailer." },
+      { id: "stolen", q: "My plate was lost or stolen — what next?", a: "Report a theft to the police, keep the reference number, then order a replacement.", links: [{ label: "Lost or stolen plates", href: "/faqs#warranty" }] },
     ],
   },
 
@@ -183,28 +210,28 @@ export const PRODUCTS: Record<ProductContent["id"], ProductContent> = {
       ],
     },
     replacement: {
-      heading: "Replacement 3D plates for damaged, lost or worn plates",
+      heading: "Replacement 3D number plates for damaged, lost or worn plates",
       items: [
         {
-          title: "Lifted, cracked or cloudy gel",
+          title: "Replacing lifted, cracked or cloudy gel characters",
           text: "If the resin on a plate has lifted, cracked or clouded, contact us and we'll assess it — if it's a plate we made and it's a manufacturing fault, we'll advise on next steps. Otherwise a new plate is usually the practical fix.",
         },
         {
-          title: "A lost front or rear plate",
+          title: "Replacing a lost front or rear plate",
           text: "Order just the one you've lost, in the size of the plate you're keeping.",
         },
         {
-          title: "Matching your existing 3D plate",
+          title: "Can we match your existing 3D plate?",
           text: "We can make your replacement in the same size and 3D gel finish from our range. We can't guarantee it will look identical to a plate made by a different supplier, since gel depth and finish vary between manufacturers.",
         },
         {
-          title: "Correcting spacing or upgrading from print",
-          text: "We can only make your registration in the correct legal layout, so a replacement may look different from a non-compliant original. You can switch from printed to 3D gel, or to another finish, without telling the DVLA, as long as the registration itself isn't changing.",
+          title: "Correcting illegal spacing or upgrading from printed plates",
+          text: "If an existing plate has incorrect character spacing, we can only make your registration in the correct legal layout — so a replacement may look different from a non-compliant original. You can also switch from a standard printed plate to 3D gel, or from 3D to another finish, without needing to tell the DVLA, as long as the registration itself isn't changing.",
         },
       ],
     },
     compare: {
-      heading: "3D vs 4D — gel or acrylic?",
+      heading: "3D vs 4D number plates — gel or acrylic?",
       columns: ["3D gel", "4D"],
       highlight: 0,
       rows: [
@@ -216,11 +243,11 @@ export const PRODUCTS: Record<ProductContent["id"], ProductContent> = {
       note: {
         text: "Looking for a gel finish with the depth of laser-cut acrylic underneath it?",
         href: "/5d-number-plates",
-        linkLabel: "See our 5D plates (4D gel)",
+        linkLabel: "See our 5D plates (also called 4D gel)",
       },
     },
     sizes: {
-      heading: "3D plate sizes and options",
+      heading: "3D number plate sizes and options",
       paragraphs: [
         COMMON_SIZE,
         "3D gel finishes may be available on selected motorcycle plate formats — the builder will show what's currently offered for your registration.",
@@ -235,16 +262,16 @@ export const PRODUCTS: Record<ProductContent["id"], ProductContent> = {
       ],
     },
     care: {
-      heading: "Caring for your 3D plates",
-      text: `Wash with car shampoo and a soft cloth; avoid scraping ice or dirt off the raised characters with anything hard. New orders carry a 6-month manufacturing-defect warranty from the delivery or collection date, in addition to your statutory rights. ${WARRANTY_TAIL}`,
+      heading: "Caring for your 3D plates and warranty support",
+      text: `Wash with car shampoo and a soft cloth; avoid scraping ice or dirt off the raised characters with anything hard. ${warranty(6)}`,
     },
     faqs: [
       { id: "per-plate", q: `Is the ${single("3d")} price per plate or for a pair?`, a: `Per plate. A pair (front and rear) is ${pair("3d")}.` },
-      { id: "legal", q: "Are 3D gel number plates legal in the UK?", a: "Yes, when made correctly — see the legal section above." },
+      { id: "legal", q: "Are 3D gel number plates legal in the UK?", a: "Yes, when made correctly — see “Are 3D Number Plates Legal” above." },
       { id: "one", q: "Can I replace just one 3D plate?", a: "Yes. Order a single front or rear plate in the size of the one you're keeping." },
       { id: "match", q: "Can you match a 3D plate made by another supplier?", a: "We'll match the size and use our 3D gel finish, but an exact visual match to a different manufacturer's plate isn't guaranteed — gel depth and finish vary between suppliers." },
-      { id: "raised", q: "Are raised characters legal, or only printed ones?", a: "Raised characters are permitted, provided the plate meets the size, spacing, colour and marking rules." },
-      { id: "moto", q: "Can I get 3D gel on a short or motorcycle plate?", a: "Enter your registration in the builder to see the sizes offered; for motorcycle, choose “motorcycle” to see current 3D options for your registration." },
+      { id: "raised", q: "Are raised characters legal, or only printed ones?", a: "Raised characters are permitted, provided the plate meets the size, spacing, colour and marking rules — see above." },
+      { id: "moto", q: "Can I get 3D gel on a short or motorcycle plate?", a: "Enter your registration in the builder to see the sizes offered; for motorcycle, choose “motorcycle” in the builder to see current 3D options for your registration.", links: [{ label: "Short plates", href: "/short-number-plates" }] },
       { id: "private-reg", q: "Do I need new documents if I'm putting on a newly assigned private registration?", a: "Whether you need a fresh entitlement document depends on whether the registration has just been assigned or retained to your vehicle — check your V5C or retention certificate (V778) matches what you're ordering against." },
       COLLECT_FAQ,
       { id: "tracked", q: "Is the Tracked 24 upgrade worth it?", a: "It adds tracking and Royal Mail's own next-working-day delivery aim, subject to their service terms — useful if you want visibility on your order's progress." },
@@ -262,26 +289,32 @@ export const PRODUCTS: Record<ProductContent["id"], ProductContent> = {
     short: "4D",
     h1: "4D Number Plates",
     lead: "Laser-cut acrylic characters, bonded to the plate — single plates or matching pairs, made to order.",
+    buy: {
+      title: `Buy 4D Number Plates from ${single("4d")} per plate`,
+      single: { title: "Single front or rear 4D plates", text: `${single("4d")} per plate.` },
+      pair: { title: `4D number plate pairs — ${pair("4d")} per pair`, text: `Order both plates together at ${pair("4d")}.` },
+    },
     intro: {
       eyebrow: "Laser-cut acrylic",
-      heading: "What makes a plate 4D?",
+      heading: "Laser-cut acrylic characters — what makes a plate 4D?",
       paragraphs: [
         "4D number plates have characters cut from solid black acrylic and bonded onto a reflective acrylic plate, rather than printed or gel-domed on top of it. The result is a sharp, flat-topped character with a defined edge.",
+        "Some suppliers call an acrylic-plus-gel finish “4D gel” — on ReplacementPlates that's our 5D product.",
       ],
     },
     replacement: {
       heading: "Replacement 4D number plates",
       items: [
         {
-          title: "Cracked acrylic or missing characters",
-          text: "If a character has come loose, cracked, or the backing plate is damaged, the fix is a full replacement plate — we don't sell individual replacement characters as a repair, since a plate with mismatched or re-applied characters may not meet the display requirements.",
+          title: "Cracked acrylic, damaged backing or missing characters",
+          text: "If a character has come loose, cracked, or the backing plate is damaged, the fix is a full replacement plate — we don't sell individual replacement characters as a repair for a plate that's already on the road, since a plate with mismatched or re-applied characters may not meet the display requirements.",
         },
         {
-          title: "Replacing one plate",
+          title: "Replacing one plate and matching character depth",
           text: "Order a single front or rear plate. We'll match our own acrylic depth and finish; an exact match to another manufacturer's 4D plate isn't guaranteed, as acrylic thickness varies between suppliers.",
         },
         {
-          title: "A compliant layout",
+          title: "A new compliant layout for incorrectly spaced plates",
           text: "We make your registration to the correct legal spacing, so a replacement for a non-compliant plate may look different from the original — that's the version that meets the current rules.",
         },
       ],
@@ -296,13 +329,13 @@ export const PRODUCTS: Record<ProductContent["id"], ProductContent> = {
         { label: "From", values: [single("3d"), single("4d"), single("5d")] },
       ],
       note: {
-        text: "Some suppliers call an acrylic-plus-gel finish “4D gel” — on ReplacementPlates that's our 5D product.",
+        text: "Looking for 4D gel? Some suppliers call an acrylic-plus-gel finish “4D gel” — on ReplacementPlates that's our 5D product.",
         href: "/5d-number-plates",
         linkLabel: "See 5D plates",
       },
     },
     sizes: {
-      heading: "4D sizes and options",
+      heading: "4D number plate thickness, sizes and options",
       paragraphs: [
         "Our 4D characters are laser-cut from solid acrylic. If you're looking for a deeper, gel-topped finish, see our 5D plates, also known as 4D gel.",
         COMMON_SIZE,
@@ -314,19 +347,19 @@ export const PRODUCTS: Record<ProductContent["id"], ProductContent> = {
       paragraphs: [LEGAL_CORE, MOT_SCOPE],
     },
     care: {
-      heading: "Fitting, cleaning and warranty",
-      text: `Wash with car shampoo and a soft cloth. New orders carry a 6-month manufacturing-defect warranty from the delivery or collection date, in addition to your statutory rights. ${WARRANTY_TAIL}`,
+      heading: "Fitting, cleaning and warranty support",
+      text: `Wash with car shampoo and a soft cloth. ${warranty(6)}`,
     },
     faqs: [
       { id: "per-plate", q: `Is ${single("4d")} per plate or per pair?`, a: `Per plate. A pair is ${pair("4d")}.` },
       { id: "thickness", q: "What thickness are your 4D characters?", a: "We're confirming the exact specification against our current catalogue and will update this page once it's verified." },
       { id: "gel", q: "What's the difference between 4D acrylic and 4D gel?", a: "Acrylic-only 4D has sharp, flat-topped characters. A gel-topped version — sometimes called 4D gel — is our 5D product.", links: [{ label: "5D plates", href: "/5d-number-plates" }] },
-      { id: "legal", q: "Are 4D plates legal? Will they pass an MOT?", a: "They're legal when made to the current rules. Passing an MOT depends on the plate being correctly fitted, clean and undamaged, not just correctly made." },
+      { id: "legal", q: "Are 4D plates legal? Will they pass an MOT?", a: "They're legal when made to the current rules — see above. Passing an MOT depends on the plate being correctly fitted, clean and undamaged, not just correctly made." },
       { id: "match", q: "Can you match a 4D plate from another maker?", a: "We'll match size and use our own acrylic finish; an identical visual match to a different supplier's plate isn't guaranteed." },
-      { id: "formats", q: "Do you sell 4D in short formats?", a: "The builder shows the sizes and options offered for your registration." },
+      { id: "formats", q: "Do you sell 4D in short or hex formats?", a: "The builder shows the sizes and options offered for your registration.", links: [{ label: "Short plates", href: "/short-number-plates" }] },
       COLLECT_FAQ,
       { id: "dispatch", q: "What's the difference between dispatch and delivery?", a: "Dispatch is when we send your order; delivery is when Royal Mail gets it to you, on their own next-working-day aim, not a guarantee." },
-      { id: "ev", q: "Can I get an EV badge on a 4D plate?", a: "If your vehicle is eligible, choose the EV or UK+EV option in the builder." },
+      { id: "ev", q: "Can I get an EV badge on a 4D plate?", a: "If your vehicle is eligible, choose the EV or UK+EV option in the builder.", links: [{ label: "EV plates", href: "/ev-number-plates" }] },
       { id: "loose", q: "Loose or damaged character — is that covered?", a: "If it's a manufacturing fault, contact us and we'll assess it." },
     ],
   },
@@ -340,23 +373,28 @@ export const PRODUCTS: Record<ProductContent["id"], ProductContent> = {
     short: "5D",
     h1: "5D Number Plates",
     lead: "Laser-cut acrylic characters with a gel top layer — also known as 4D gel — single plates or matching pairs.",
+    buy: {
+      title: `Buy 5D Gel Number Plates from ${single("5d")} per plate`,
+      single: { title: "Single front or rear 5D plates", text: `${single("5d")} per plate.` },
+      pair: { title: `Single 5D plates and pairs — ${pair("5d")} per pair`, text: `${single("5d")} per plate, or ${pair("5d")} for a front-and-rear pair.` },
+    },
     intro: {
       eyebrow: "Our 5D finish explained",
-      heading: "4D gel number plates — what is 5D?",
+      heading: "4D gel number plates — our 5D finish explained",
       paragraphs: [
         "Some suppliers call this construction “4D gel”; on ReplacementPlates we call it 5D. It starts the same way as our 4D plates — laser-cut solid acrylic characters — with a gel layer added on top.",
         "The result combines the sharp edge of laser-cut acrylic with the glossy finish of a gel top. Naming for this construction varies across the market; this section describes our own product.",
       ],
     },
     replacement: {
-      heading: "Replacement 5D and 4D gel plates",
+      heading: "Replacement 5D and 4D gel number plates",
       items: [
         {
-          title: "Damaged acrylic or lifting gel",
+          title: "Damaged acrylic, gel lifting or worn backing",
           text: "If the acrylic has cracked or the gel layer has lifted, the fix is a new plate. If it's one of ours and you think it's a manufacturing fault, contact us and we'll assess it.",
         },
         {
-          title: "Matching a single plate",
+          title: "Matching a single plate's finish and overall depth",
           text: "Order a single front or rear plate and we'll match it to our own 5D construction. We can't guarantee an identical match to a different supplier's acrylic-plus-gel plate, since construction and depth vary between makers.",
         },
       ],
@@ -372,7 +410,7 @@ export const PRODUCTS: Record<ProductContent["id"], ProductContent> = {
       ],
     },
     sizes: {
-      heading: "5D sizes and finish options",
+      heading: "5D plate sizes and finish options",
       paragraphs: [
         COMMON_SIZE,
         "Measure your existing plate and the mounting area before ordering a replacement size.",
@@ -381,22 +419,24 @@ export const PRODUCTS: Record<ProductContent["id"], ProductContent> = {
     legal: {
       heading: "Are 5D and 4D gel plates legal?",
       paragraphs: [
-        `${LEGAL_CORE} This is separate from the DVSA MOT check, which looks at condition, legibility, security and fitting.`,
+        LEGAL_CORE,
+        "This is separate from the DVSA MOT check, which looks at condition, legibility, security and fitting.",
       ],
     },
     care: {
-      heading: "Caring for layered plates",
-      text: `Wash with car shampoo and a soft cloth. New orders carry a 12-month manufacturing-defect warranty from the delivery or collection date, in addition to your statutory rights. ${WARRANTY_TAIL}`,
+      heading: "Caring for layered plates and warranty support",
+      text: `Wash with car shampoo and a soft cloth. ${warranty(12)}`,
     },
     faqs: [
       { id: "name", q: "Why do you call it 5D when some sites say 4D gel?", a: "It's our name for an acrylic-plus-gel construction; other suppliers use different terms for similar or different builds. Our specification is described above." },
-      { id: "vs3d", q: "How is 5D different from 3D gel?", a: "3D gel domes resin over printed characters. 5D starts with laser-cut acrylic (like 4D) and adds a gel top layer." },
+      { id: "vs3d", q: "How is 5D different from 3D gel?", a: "3D gel domes resin over printed characters. 5D starts with laser-cut acrylic (like 4D) and adds a gel top layer.", links: [{ label: "3D plates", href: "/3d-number-plates" }, { label: "4D plates", href: "/4d-number-plates" }] },
       { id: "per-plate", q: `Is ${single("5d")} per plate or per pair?`, a: `Per plate. A pair is ${pair("5d")}.` },
-      { id: "match", q: "Can you match another maker's 4D gel plate?", a: "We'll match size and use our own 5D construction; an identical visual match to a plate made by a different supplier isn't guaranteed, as construction varies between manufacturers." },
-      { id: "sizes", q: "What sizes are available?", a: "The builder will show what fits your registration once you enter it." },
-      { id: "legal", q: "Are 5D plates legal?", a: "Yes, when made to the current rules — see the legal section above." },
+      { id: "match-other", q: "Can you match another maker's 4D gel plate?", a: "We'll match it to our own 5D construction; an identical visual match to a different supplier isn't guaranteed." },
+      { id: "match", q: "Can I order a 5D plate to match one I already have?", a: "We'll match size and use our own 5D construction; an identical visual match to a plate made by a different supplier isn't guaranteed, as construction varies between manufacturers." },
+      { id: "sizes", q: "What sizes are available?", a: "See the sizes above; the builder will show what fits your registration." },
+      { id: "legal", q: "Are 5D plates legal?", a: "Yes, when made to the current rules — see above." },
       COLLECT_FAQ,
-      { id: "tracked", q: "Is Tracked 24 worth the upgrade?", a: "It adds tracking and Royal Mail's own next-working-day aim, on top of the standard First Class service." },
+      TRACKED_FAQ("Is Tracked 24 worth the upgrade?"),
       { id: "fault", q: "What if my plate develops a fault?", a: "Contact us and we'll assess it." },
     ],
   },
@@ -404,72 +444,77 @@ export const PRODUCTS: Record<ProductContent["id"], ProductContent> = {
   ghost: {
     id: "ghost",
     path: "/ghost-number-plates",
-    metaTitle: `Ghost Number Plates from ${single("ghost")} | Smoked Characters`,
+    metaTitle: `Ghost Number Plates from ${single("ghost")} | Royal Mail Delivery`,
     metaDescription:
-      `Ghost number plates with dark smoked characters for a stealth look, made to order. Single plates from ${single("ghost")}, pairs from ${pair("ghost")}. Royal Mail delivery or Ilford collection.`,
+      `Ghost number plates, made to order from ${single("ghost")} per plate. A distinctive character finish. Royal Mail delivery or Ilford collection.`,
     short: "Ghost",
     h1: "Ghost Number Plates",
-    lead: "Dark smoked characters for a stealth look — single plates or matching pairs, made to order.",
+    lead: "A distinctive styled character finish, made to order — single plates or matching pairs.",
+    buy: {
+      title: `Buy Ghost Plates from ${single("ghost")} per plate`,
+      single: { title: "Single front or rear Ghost plates", text: `${single("ghost")} per plate.` },
+      pair: { title: `Single plates and pairs — ${pair("ghost")} per pair`, text: `${single("ghost")} per plate, or ${pair("ghost")} for a front-and-rear pair.` },
+    },
     intro: {
       eyebrow: "Our Ghost finish",
-      heading: "What are ghost number plates?",
+      heading: `Ghost number plates from ${single("ghost")} per plate`,
       paragraphs: [
-        "Ghost is our styled finish with dark smoked characters and a glossy surface, for a subtler, stealth look than solid black characters. It's chosen for its appearance, and is made to order like every style we sell.",
-        GHOST_STATUS,
+        "Ghost is a styled character finish available on request. It refers to a distinctive visual treatment of the characters rather than a change to the plate's legal layout, size or colour rules.",
+        "“Ghost” is used differently by different suppliers in this market — this page describes our own product, not a generic industry standard.",
       ],
     },
     replacement: {
       heading: "Replacement Ghost number plates",
       items: [
         {
-          title: "Damaged or worn characters",
-          text: "If a character is damaged or its finish has worn, the fix is a new plate. If it's one of ours and you believe it's a manufacturing fault, contact us and we'll assess it.",
+          title: "Replacing a damaged plate",
+          text: "If a Ghost plate is damaged, order a replacement in the same size. If it's one of ours and you think it's a manufacturing fault, contact us and we'll assess it.",
         },
         {
-          title: "Matching a single plate",
-          text: "Order a single front or rear plate and we'll match it to our own Ghost finish. An exact match to another supplier's ghost-style plate isn't guaranteed, as tint and finish vary between makers.",
+          title: "Matching your existing finish",
+          text: "Order a single front or rear plate and we'll match it to our own Ghost finish. An identical visual match to a different supplier's product isn't guaranteed, since Ghost styling varies between makers.",
         },
       ],
     },
     compare: {
-      heading: "Ghost vs 3D gel — smoked or solid black?",
-      columns: ["3D gel", "Ghost"],
-      highlight: 1,
+      heading: "Ghost vs 4D and Bevel number plates",
+      columns: ["4D", "Bevel", "Ghost"],
+      highlight: 2,
       rows: [
-        { label: "Characters", values: ["Domed resin over solid black characters", "Dark smoked characters"] },
-        { label: "Look", values: ["Smooth, glossy black", "Subtle, tinted stealth look"] },
-        { label: "From", values: [single("3d"), single("ghost")] },
+        { label: "What changes", values: ["Character depth (laser-cut acrylic)", "Character edge (angled cut)", "Character styling"] },
+        { label: "From", values: [single("4d"), single("bevel"), single("ghost")] },
       ],
       note: { text: GHOST_STATUS, href: "/contact", linkLabel: "Contact us" },
     },
     sizes: {
-      heading: "Ghost sizes and options",
+      heading: "Ghost plate sizes and specifications",
       paragraphs: [
         COMMON_SIZE,
         "Measure your existing plate and the mounting area before ordering a replacement size.",
       ],
     },
     legal: {
-      heading: "Are ghost number plates legal?",
+      heading: "Ghost number plates and the legal requirements",
       paragraphs: [
-        `Number plates for road use must have solid black, non-reflective characters at the legal size and spacing, on the correct reflective background, with the required supplier and British Standard markings. ${GHOST_STATUS}`,
-        MOT_SCOPE,
+        "UK number plates must meet requirements covering character shape, size, spacing, colour and markings. We're completing a specific check to confirm exactly how our Ghost finish meets each of those requirements, and we'll update this page once that's done. If it matters for your purchase now, contact us and we can give you the latest position.",
+        "“Ghost” describes a styling choice, not a change to the underlying rules — the characters still need to read clearly against the reflective background. It's a separate matter from plates or coatings designed to defeat automatic number plate recognition cameras: we don't make or sell anything designed for that purpose, and we don't promote Ghost on that basis.",
       ],
     },
     care: {
-      heading: "Caring for Ghost plates",
-      text: `Wash with car shampoo and a soft cloth. New orders carry a 12-month manufacturing-defect warranty from the delivery or collection date, in addition to your statutory rights. ${WARRANTY_TAIL}`,
+      heading: "Care and warranty support",
+      text: `Wash with car shampoo and a soft cloth. ${warranty(12)}`,
     },
     faqs: [
-      { id: "look", q: "What does a Ghost plate look like?", a: "Dark smoked characters with a glossy finish, for a subtler, stealth look than solid black characters." },
-      { id: "per-plate", q: `Is ${single("ghost")} the price per plate or per pair?`, a: `Per plate. A pair is ${pair("ghost")}.` },
-      { id: "legal", q: "Are Ghost plates road legal?", a: GHOST_STATUS, links: [{ label: "Contact us", href: "/contact" }] },
-      { id: "vs3d", q: "How is Ghost different from 3D gel?", a: "3D gel has solid black characters under a domed resin; Ghost has dark smoked characters for a tinted look." },
-      { id: "match", q: "Can you match another supplier's ghost plate?", a: "We'll match the size and use our own Ghost finish; an identical match to a different manufacturer's plate isn't guaranteed, as tint and finish vary between suppliers." },
-      { id: "formats", q: "What sizes are available?", a: "The builder shows the sizes and options offered for your registration once you enter it." },
+      { id: "what", q: "What is a Ghost number plate?", a: "A styled character finish, available on our standard plate sizes. See the description above for what our version involves." },
+      { id: "per-plate", q: `Is ${single("ghost")} per plate or per pair?`, a: `Per plate. A pair is ${pair("ghost")}.` },
+      { id: "legal", q: "Are Ghost plates road legal?", a: "We're finalising a specific check of how this exact finish meets the current number plate requirements — see the section above, and contact us if you'd like the latest position before ordering.", links: [{ label: "Contact us", href: "/contact" }] },
+      { id: "anpr", q: "Do Ghost plates help avoid speed or ANPR cameras?", a: "No — we don't make or sell anything designed to defeat number plate recognition cameras. The characters still need to read clearly against the reflective background." },
+      { id: "one", q: "Can I replace just one Ghost plate?", a: "Yes. Order a single front or rear plate and we'll match it to our own finish." },
+      { id: "match", q: "Can you match a Ghost plate from another supplier?", a: "We'll match it to our own version of the finish; other suppliers' Ghost products may be built differently, so an identical match isn't guaranteed." },
+      { id: "sizes", q: "What sizes are available?", a: "See the sizes above; the builder will show what fits your registration." },
       COLLECT_FAQ,
-      { id: "tracked", q: "Is the Tracked 24 upgrade available on Ghost orders?", a: "Yes. The same delivery options and charges apply across every style." },
-      { id: "fault", q: "What if my plate develops a fault?", a: "New orders carry a 12-month manufacturing-defect warranty. Contact us and we'll assess it." },
+      { id: "tracked", q: "Is Tracked 24 available for Ghost orders?", a: "Yes. Upgrade to Royal Mail Tracked 24 for an additional £2 on any style." },
+      { id: "fault", q: "What if my plate has a fault?", a: "Contact us and we'll assess it." },
     ],
   },
 
@@ -558,12 +603,12 @@ export const PRODUCTS: Record<ProductContent["id"], ProductContent> = {
     style: "standard",
     format: SPECIALITY.oversized.format,
     path: SPECIALITY.oversized.path,
-    metaTitle: `Oversized Number Plates 533 × 152mm | Rear Plates from ${fSingle("oversized")}`,
+    metaTitle: "Oversized Number Plates | ReplacementPlates",
     metaDescription:
-      `Oversized 533 × 152mm rear number plates for larger plate recesses, made to order in any style. Rear plates from ${fSingle("oversized")}; standard front + oversized rear from ${fPair("oversized")}.`,
+      "Oversized rear number plates for vehicles with a larger plate recess, made to order. Royal Mail delivery or Ilford collection.",
     short: "Oversized",
     h1: "Oversized Number Plates",
-    lead: "A taller 533 × 152mm rear plate for larger plate recesses — legal characters, made to order in any style.",
+    lead: "Oversized rear number plates for vehicles whose rear plate recess is larger than a standard plate. Each is made to order.",
     hero: {
       eyebrow: "Oversized plates",
       noun: "oversized",
@@ -572,22 +617,26 @@ export const PRODUCTS: Record<ProductContent["id"], ProductContent> = {
     },
     intro: {
       eyebrow: "Oversized rear",
-      heading: "What are oversized number plates?",
+      heading: "Oversized plate, not oversized characters",
       paragraphs: [
-        "An oversized plate is a taller rear plate, 533mm × 152mm, for vehicles whose rear recess is bigger than a standard 520 × 111mm plate — such as some imported vehicles.",
-        "The characters stay at the legal size and spacing; only the plate around them is larger. It's a rear-only size: your front plate stays standard.",
+        "An oversized plate has a larger blank. The characters are not made larger: their size, stroke and spacing follow the rules that apply to your vehicle and plate. The extra plate area is simply plate.",
+        "A common standard car-plate size is 520mm × 111mm; the builder shows the oversized rear sizes offered for your registration — currently 533mm × 152mm.",
       ],
     },
     replacement: {
-      heading: "Replacement oversized number plates",
+      heading: "Replacing an oversized rear plate",
       items: [
         {
-          title: "Damaged or worn oversized plates",
-          text: "If your oversized rear plate is cracked, faded or damaged, a new plate is the fix. Order the rear on its own, or with a standard front.",
+          title: "Cracked, faded or delaminated",
+          text: "Order a replacement in the same size. If it's one of ours and you think it's a manufacturing fault, contact us and we'll assess it.",
         },
         {
-          title: "Matching your existing rear",
-          text: "We'll make your replacement at 533 × 152mm in the style you choose. An exact match to another supplier's plate isn't guaranteed, as materials and finish vary between makers.",
+          title: "Rear only — and your front plate",
+          text: "You can order a single rear plate. If you're not sure what fits at the front, contact us before ordering.",
+        },
+        {
+          title: "Lost or stolen",
+          text: "If your plate was stolen, tell the police first, then order a replacement.",
         },
       ],
     },
@@ -617,17 +666,15 @@ export const PRODUCTS: Record<ProductContent["id"], ProductContent> = {
     },
     care: {
       heading: "Caring for your oversized plates",
-      text: `Wash with car shampoo and a soft cloth. ${WARRANTY_ALL} ${WARRANTY_TAIL}`,
+      text: "New orders carry a manufacturing-defect warranty that follows the finish you choose: 6 months for Standard, 3D Gel and 4D, and 12 months for 5D, Ghost and Bevel, from the delivery or collection date, in addition to your statutory rights. A warranty covers manufacturing defects; it is not a statement that a product is approved for road use.",
     },
     faqs: [
-      { id: "who", q: "Who needs an oversized plate?", a: "Vehicles with a rear plate recess bigger than a standard 520 × 111mm plate, such as some imported vehicles. Measure your recess before ordering." },
-      { id: "front", q: "Can I have an oversized front plate?", a: "No — 533 × 152mm is a rear-only size. Your front plate is made at the standard size (or a short size if your registration suits one)." },
+      { id: "characters", q: "Does oversized mean bigger characters?", a: "No. Characters keep the size the regulations require; the extra size is the plate." },
+      { id: "fit", q: "Will an oversized plate fit my vehicle?", a: "Measure your rear plate recess and compare with the builder. If you're not sure, contact us before ordering.", links: [{ label: "Contact us", href: "/contact" }] },
+      { id: "styles", q: "Can I get an oversized plate in 3D or 4D?", a: "The builder shows which finishes are available for this size and their prices for your registration." },
+      { id: "collect", q: "How do I collect my plate?", a: DELIVERY.collectionReady },
+      { id: "front", q: "Can I have an oversized front plate?", a: "The oversized size is for the rear. If you're not sure what fits at the front, contact us before ordering." },
       { id: "price", q: "How much more is an oversized plate?", a: `An oversized rear is £${ADD_ON_PRICES.oversizedRear} more than the same style at standard size. In Standard that's ${fSingle("oversized")} for the rear, or ${fPair("oversized")} with a standard front.` },
-      { id: "styles", q: "Can I have an oversized plate in 3D, 4D or another style?", a: ANY_STYLE },
-      { id: "legal", q: "Are oversized plates legal?", a: "Yes, when the characters keep the legal size and spacing — see the legal section above." },
-      COLLECT_FAQ,
-      { id: "tracked", q: "Is the Tracked 24 upgrade available?", a: "Yes. The same delivery options and charges apply across every plate we make." },
-      { id: "fault", q: "What if my plate has a fault?", a: "Contact us and we'll assess it." },
     ],
   },
 
@@ -798,9 +845,14 @@ export const PRODUCTS: Record<ProductContent["id"], ProductContent> = {
     short: "Bevel",
     h1: "Bevel Number Plates",
     lead: "Acrylic characters with an angled, diamond-cut edge — single plates or matching pairs.",
+    buy: {
+      title: `Buy Bevel Number Plates from ${single("bevel")} per plate`,
+      single: { title: "Single front or rear bevel plates", text: `${single("bevel")} per plate.` },
+      pair: { title: `Single bevel plates and pairs — ${pair("bevel")} per pair`, text: `${single("bevel")} per plate, or ${pair("bevel")} for a front-and-rear pair.` },
+    },
     intro: {
       eyebrow: "Diamond-cut",
-      heading: "The bevelled edge explained",
+      heading: "Diamond-cut number plates — the bevelled edge explained",
       paragraphs: [
         "Bevel — also called bevelled or diamond-cut — characters are acrylic, cut with an angled edge rather than a flat or domed one. The angled edge catches light differently depending on the viewing angle, giving a faceted look.",
         "It's one of our premium styles — only 5D is priced higher.",
@@ -810,11 +862,11 @@ export const PRODUCTS: Record<ProductContent["id"], ProductContent> = {
       heading: "Replacement bevel number plates",
       items: [
         {
-          title: "Chipped edges or damaged backing",
+          title: "Damaged character edges or backing",
           text: "If a character's edge has chipped or the backing plate is damaged, a new plate is the fix. If it's ours and you believe it's a manufacturing fault, contact us and we'll assess it.",
         },
         {
-          title: "Matching the edge profile",
+          title: "Matching the edge profile on a single replacement",
           text: "Order a single front or rear plate and we'll match it to our own bevel profile. An exact match to another maker's bevelled plate isn't guaranteed, as edge angle and depth vary between suppliers.",
         },
       ],
@@ -831,7 +883,7 @@ export const PRODUCTS: Record<ProductContent["id"], ProductContent> = {
       note: { text: "Bevel describes the angled edge of the characters. It is not a plate shape." },
     },
     sizes: {
-      heading: "Bevel sizes and profile options",
+      heading: "Bevel plate sizes and profile options",
       paragraphs: [
         COMMON_SIZE,
         "Measure your existing plate and the mounting area before ordering a replacement size.",
@@ -840,22 +892,23 @@ export const PRODUCTS: Record<ProductContent["id"], ProductContent> = {
     legal: {
       heading: "Are bevelled number plates legal?",
       paragraphs: [
-        `${LEGAL_CORE} This is separate from the DVSA MOT check, which looks at condition, legibility, security and fitting.`,
+        LEGAL_CORE,
+        "This is separate from the DVSA MOT check, which looks at condition, legibility, security and fitting.",
       ],
     },
     care: {
-      heading: "Bevel plate care",
-      text: `Wash with car shampoo and a soft cloth; avoid catching the angled edge with anything abrasive. New orders carry a 12-month manufacturing-defect warranty from the delivery or collection date, in addition to your statutory rights. ${WARRANTY_TAIL}`,
+      heading: "Bevel plate care and warranty support",
+      text: `Wash with car shampoo and a soft cloth; avoid catching the angled edge with anything abrasive. ${warranty(12)}`,
     },
     faqs: [
       { id: "diamond", q: "Is bevel the same as diamond-cut?", a: "Yes — different names for the same angled-edge finish." },
       { id: "per-plate", q: `Is ${single("bevel")} the price per plate or per pair?`, a: `Per plate. A pair is ${pair("bevel")}.` },
-      { id: "vs", q: "How is bevel different from 4D or 5D?", a: "4D has a flat-topped acrylic edge; 5D adds a gel top; bevel is cut with an angled, faceted edge instead." },
+      { id: "vs", q: "How is bevel different from 4D or 5D?", a: "4D has a flat-topped acrylic edge; 5D adds a gel top; bevel is cut with an angled, faceted edge instead.", links: [{ label: "4D plates", href: "/4d-number-plates" }, { label: "5D plates", href: "/5d-number-plates" }] },
       { id: "badge", q: "Can I add a UK, EV or other badge to a Bevel plate?", a: "If your vehicle is eligible, choose the badge option in the builder alongside your Bevel plates." },
       { id: "match", q: "Can you match another supplier's bevel plate?", a: "We'll match it to our own profile; an identical match to a different manufacturer isn't guaranteed." },
-      { id: "formats", q: "Do you offer bevel in short formats?", a: "The builder shows the sizes and options offered for your registration. Bevel describes the character edge, not the plate's shape." },
-      { id: "legal", q: "Are bevelled plates legal?", a: "Yes, when made to the current rules — see the legal section above." },
-      { id: "delivery", q: "Is the price inclusive of delivery?", a: "The plate price is separate from delivery. First Class is £3 on orders under £15 and free from £15, and Tracked 24 is an additional £2." },
+      { id: "formats", q: "Do you offer bevel in short or hex formats?", a: "The builder shows the sizes and options offered for your registration. Bevel describes the character edge, not the plate's shape." },
+      { id: "legal", q: "Are bevelled plates legal?", a: "Yes, when made to the current rules — see above." },
+      { id: "delivery", q: "Is the price inclusive of delivery?", a: "The plate price is separate from delivery. First Class is £3 on orders under £15 and free from £15, and Tracked 24 is an additional £2; see the delivery section above." },
       COLLECT_FAQ,
       { id: "tracked", q: "Is the Tracked 24 upgrade available on Bevel orders?", a: "Yes. The same delivery options and charges apply across every style." },
     ],

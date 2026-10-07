@@ -553,3 +553,15 @@
       linear-gradient(270deg, transparent 0%, #000 16%);
   }
 }
+
+/* internal links after an answer ("5D plates", "Contact us") */
+.answerLink {
+  color: #0a6eff;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.answerLink:hover {
+  color: #0757cc;
+}

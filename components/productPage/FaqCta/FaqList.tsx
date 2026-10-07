@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useState } from "react";
+import Link from "next/link";
 import { ChevronDown } from "lucide-react";
 import { m } from "framer-motion";
 import { cardRevealV, inViewOnce } from "@/lib/motion";
@@ -54,7 +55,17 @@ export default function FaqList({ items, label }: { items: Faq[]; label: string 
             </h3>
             <div id={panelId} role="region" aria-labelledby={btnId} className={s.panel} inert={!open}>
               <div className={s.panelInner}>
-                <p className={s.answer}>{faq.a}</p>
+                <p className={s.answer}>
+                  {faq.a}
+                  {faq.links?.map((l) => (
+                    <span key={l.href}>
+                      {" "}
+                      <Link href={l.href} className={s.answerLink}>
+                        {l.label}
+                      </Link>
+                    </span>
+                  ))}
+                </p>
               </div>
             </div>
           </m.li>

@@ -2,13 +2,16 @@ import { ArrowRight, CalendarDays, Package, Shield } from "lucide-react";
 import Reveal from "@/components/content/Reveal";
 import NeonEdge from "@/components/NeonEdge/NeonEdge";
 import h from "@/components/home/home.module.css";
-import { COMPANY, CONTACT, DELIVERY_FEES } from "@/lib/site";
+import { COMPANY, CONTACT, DELIVERY, DELIVERY_FEES } from "@/lib/site";
 import { MapStreets, PinGlyph, RoyalMailMark, WhatsAppIcon } from "./deliveryIcons";
 import type { ProductPageContent } from "./pageContent";
 import s from "./Delivery.module.css";
 import p from "./page.module.css";
 
 const { freeFrom, tracked } = DELIVERY_FEES;
+
+/** The delivery facts every product page states (lib/site.ts) */
+const DELIVERY_LEAD = `${DELIVERY.firstClass} ${DELIVERY.tracked} ${DELIVERY.aims} First Class aims for the next working day (including Saturday). Order before 2pm Monday to Friday for same-day dispatch once checks are complete.`;
 const [street, ...town] = COMPANY.collection.split(", ");
 const townLine = town.join(", ");
 
@@ -50,14 +53,17 @@ export default function Delivery({ page }: { page: ProductPageContent }) {
         <Reveal className={`${h.head} ${s.head}`}>
           <p className={h.eyebrow}>Delivery and collection</p>
           <h2 id="delivery-title" className={`${h.title} ${s.title}`}>
-            {page.name} Number Plate <span className={`${h.accent} ${s.line}`}>Delivery and Ilford Collection</span>
+{page.delivery?.heading ? (
+              <>
+                {page.delivery?.heading[0]} <span className={`${h.accent} ${s.line}`}>{page.delivery?.heading[1]}</span>
+              </>
+            ) : (
+              <>
+                {page.name} Number Plate <span className={`${h.accent} ${s.line}`}>Delivery and Ilford Collection</span>
+              </>
+            )}
           </h2>
-          <p className={`${h.lead} ${s.lead}`}>
-            Royal Mail First Class is standard, with Royal Mail&rsquo;s next-working-day aim
-            (including Saturday). Add Royal Mail Tracked 24 for &pound;{tracked} at checkout. Order
-            before 2pm Monday to Friday and, once your documents are checked, we aim to dispatch the
-            same day.
-          </p>
+          <p className={`${h.lead} ${s.lead}`}>{page.delivery?.lead ?? DELIVERY_LEAD}</p>
         </Reveal>
 
         <div className={s.grid}>

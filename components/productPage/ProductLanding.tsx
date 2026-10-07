@@ -15,13 +15,30 @@ import Replacement from "./Replacement";
 import SizesOptions from "./SizesOptions";
 import { PRODUCT_PAGES, type ProductPageId } from "./pageContent";
 
-/** Title, description and canonical URL for a plate-style page */
+/** Title, description, canonical URL and social cards for a product page */
 export function productMetadata(id: ProductPageId): Metadata {
-  const { product } = PRODUCT_PAGES[id];
+  const { product, hero } = PRODUCT_PAGES[id];
+  const image = { url: hero.src, width: hero.width, height: hero.height, alt: hero.alt };
   return {
     title: { absolute: product.metaTitle },
     description: product.metaDescription,
     alternates: { canonical: product.path },
+    robots: { index: true, follow: true },
+    openGraph: {
+      type: "website",
+      siteName: COMPANY.brand,
+      locale: "en_GB",
+      url: product.path,
+      title: product.metaTitle,
+      description: product.metaDescription,
+      images: [image],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: product.metaTitle,
+      description: product.metaDescription,
+      images: [hero.src],
+    },
   };
 }
 
@@ -32,6 +49,18 @@ export function productMetadata(id: ProductPageId): Metadata {
 export default function ProductLanding({ id }: { id: ProductPageId }) {
   const page = PRODUCT_PAGES[id];
   const { product } = page;
+  const prices = pagePrices(product);
+  const url = `${SITE_URL}${product.path}`;
+  const offer = (name: string, price: number) => ({
+    "@type": "Offer",
+    name,
+    price: price.toFixed(2),
+    priceCurrency: "GBP",
+    availability: "https://schema.org/InStock",
+    itemCondition: "https://schema.org/NewCondition",
+    url,
+    seller: { "@type": "Organization", name: COMPANY.legalName },
+  });
 
   return (
     <>
@@ -43,14 +72,11 @@ export default function ProductLanding({ id }: { id: ProductPageId }) {
               "@type": "Product",
               name: product.h1,
               description: product.metaDescription,
+              url,
+              image: `${SITE_URL}${page.hero.src}`,
               brand: { "@type": "Brand", name: COMPANY.brand },
-              offers: {
-                "@type": "Offer",
-                price: pagePrices(product).single.toFixed(2),
-                priceCurrency: "GBP",
-                availability: "https://schema.org/InStock",
-                url: `${SITE_URL}${product.path}`,
-              },
+              // one plate, and a front-and-rear pair (priced as a pair, not two singles)
+              offers: [offer("Single plate", prices.single), offer("Front and rear pair", prices.pair)],
             },
             {
               "@type": "FAQPage",
@@ -77,7 +103,7 @@ export default function ProductLanding({ id }: { id: ProductPageId }) {
       <SizesOptions page={page} />
       <LegalInfo page={page} />
       <HowToOrder page={page} />
-      <Documents />
+      <Documents page={page} />
       <Delivery page={page} />
       <CareWarranty page={page} />
       <GuidesReviews page={page} />

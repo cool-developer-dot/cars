@@ -143,7 +143,11 @@ function MeasureFigure() {
   );
 }
 
-const cardsFor = (moto: string, first?: { title: string; text: string; figure?: FigureLabels }) => [
+const cardsFor = (
+  moto: string,
+  first?: { title: string; text: string; figure?: FigureLabels },
+  measure: string = MEASURE,
+) => [
   {
     id: "standard",
     Icon: RulerIcon,
@@ -164,20 +168,28 @@ const cardsFor = (moto: string, first?: { title: string; text: string; figure?: 
     id: "measure",
     Icon: CarIcon,
     title: "Measuring for a Replacement",
-    text: MEASURE,
+    text: measure,
     Figure: MeasureFigure,
   },
 ] as const;
 
 export default function SizesOptions({ page }: { page: ProductPageContent }) {
-  const cards = cardsFor(page.sizes.moto, page.sizes.first);
+  const cards = cardsFor(page.sizes.moto, page.sizes.first, page.sizes.measure);
   return (
     <section className={`${h.section} ${h.light} ${s.section}`} aria-labelledby="sizes-title">
       <div className={p.wrap}>
         <Reveal className={`${h.head} ${s.head}`}>
           <p className={h.eyebrow}>Sizes and options</p>
           <h2 id="sizes-title" className={`${h.title} ${s.title}`}>
-            {page.name} Number Plate <span className={`${h.accent} ${s.line}`}>Sizes and Options</span>
+{page.sizes.heading ? (
+              <>
+                {page.sizes.heading[0]} <span className={`${h.accent} ${s.line}`}>{page.sizes.heading[1]}</span>
+              </>
+            ) : (
+              <>
+                {page.name} Number Plate <span className={`${h.accent} ${s.line}`}>Sizes and Options</span>
+              </>
+            )}
           </h2>
           <p className={`${h.lead} ${s.lead}`}>
             {page.sizes.lead ?? (
