@@ -1,16 +1,18 @@
 #!/usr/bin/env bash
-# Renders the plate art for the 4D, 5D, Bevel and Ghost product pages (and the shared
-# finish close-ups) with headless Blender, using the settings tuned for the 3D
-# page's look. PNGs land in $OUT; scripts/export-product-art.py turns them into
+# Renders the plate art for the product pages (4D, 5D, Bevel, Ghost, Standard and
+# the speciality plates: Short, Oversized, Show, EV), the shared finish close-ups and
+# the format comparison cards, with headless Blender, using the settings tuned for
+# the 3D page's look. PNGs land in $OUT; scripts/export-product-art.py turns them into
 # the WebPs under public/.
 #   bash scripts/render-product-art.sh <out-dir> [preview|final] [product ...]
-# products: 4d 5d bevel ghost finishes (default: all). ONLY="hero care" limits the shots.
+# products: 4d 5d bevel ghost standard short oversized show ev finishes formats
+# (default: all). ONLY="hero care" limits the shots.
 set -euo pipefail
 cd "$(dirname "$0")"
 OUT=$(cd "${1:?out dir}" && pwd)
 MODE=${2:-final}
 shift 2 || true
-WHAT=${*:-4d 5d bevel ghost finishes}
+WHAT=${*:-4d 5d bevel ghost standard short oversized show ev finishes formats}
 B=/Applications/Blender.app/Contents/MacOS/Blender
 
 want() { [ -z "${ONLY:-}" ] || [[ " $ONLY " == *" $1 "* ]]; }
@@ -28,18 +30,49 @@ finish_of() {
     5d) echo acrylicGel ;;
     bevel) echo bevel ;;
     ghost) echo ghost ;;
+    standard | short | oversized | show | ev) echo printed ;;
   esac
 }
 
-for p in $WHAT; do
+# A page's plate format, as the env plate_finish.py reads (see its header)
+page_env() {
+  case $1 in
+    short) export REG="A1 BCD" PLATE_W=409 ;;
+    oversized) export REAR_W=533 REAR_H=152 ;;
+    show) export REG="AB12CDE" GROUP_GAP=11 BORDER=1 ;;
+    ev) export FLASH=1 ;;
+  esac
+}
+
+# One plate on its own, framed the same for every card so sizes compare honestly
+card() { # out face(white|yellow) [env...]
+  local out=$1 face=$2
+  shift 2
+  (export ONE=$face RW=1160 RH=928 ROLL=0 CH=0.009 GLOW=0 RIMW=0.002 FR=0.3 FC=0.6 FCR=0.15 RIPS=0.35 \
+     SIDEG=0 STRIP=26 SHEEN=22 FILL=3 YG=0.55 KEY=16 EXP=-1.1 STR=12 FST=4 \
+     YAW=-38 CX=-0.42 CY=-0.42 CZ=0.2 TX=0.0 TZ=0.06 LENS=40 "$@"
+   run render-plates-stack.py "$OUT/card-$out.png" printed)
+}
+
+for p in $WHAT; do (
   if [ "$p" = finishes ]; then
-    for f in gel acrylic acrylicGel bevel ghost; do
+    for f in gel acrylic acrylicGel bevel ghost printed; do
       (export EXP=-2.2 LENS=68 FST=14 TX=0.022 TY=0.016 GSC=1.4
        run render-finish-char.py "$OUT/finish-$f.png" "$f")
     done
-    continue
+    exit 0
+  fi
+  if [ "$p" = formats ]; then
+    card standard-front white
+    card standard-rear yellow
+    card short white REG="A1 BCD" PLATE_W=409
+    card oversized yellow REAR_W=533 REAR_H=152
+    card show white REG="AB12CDE" GROUP_GAP=11 BORDER=1
+    card ev white FLASH=1
+    exit 0
   fi
   f=$(finish_of "$p")
+  page_env "$p"
 
   # hero: white + yellow pair on the glitter-navy floor, seen from above
   want hero && (export WT=0 KEY=20 GLIT=0.07 SPARK=120 VS=700 RZ=20 \
@@ -52,6 +85,8 @@ for p in $WHAT; do
   want intro && (export ROLL=-11 CH=0.009 TZ=0.11 GLOW=0 RIMW=0.002 FR=0.3 FC=0.6 FCR=0.15 RIPS=0.35 \
      YAW=-8 CX=-0.2 CY=-0.78 CZ=0.36 TX=0.05 SIDEG=0 STRIP=26 SHEEN=22 FILL=3 SX=-0.01 LENS=43 \
      YG=0.55 KEY=16 EXP=-1.1 STR=12 FST=2.8 RW=1522 RH=1010
+   # the taller oversized rear needs a little more room
+   [ "$p" = oversized ] && export LENS=38 TZ=0.14
    run render-plates-stack.py "$OUT/$p-intro.png" "$f")
 
   # care: wet macro of the whole registration, kept to the right of the frame
@@ -72,4 +107,4 @@ for p in $WHAT; do
      SLR=0.07 BB=800 TOP=12 LENS=36 SX=-0.05 SY=-0.07 RW=1100 RH=592
    run render-plates-pair.py "$OUT/$p-guides-mobile.png")
   :
-done
+) done

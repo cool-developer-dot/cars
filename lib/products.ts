@@ -1,8 +1,37 @@
 import type { Faq } from "./faqs";
-import { DELIVERY, PRICES, gbp, type StyleId } from "./site";
+import { builderUrl, type BuilderLinkOptions } from "./builderLink";
+import { ADD_ON_PRICES } from "./pricing";
+import {
+  DELIVERY,
+  PRICES,
+  SPECIALITY,
+  formatLinkOptions,
+  formatPrices,
+  gbp,
+  type PlateFormat,
+  type SpecialityId,
+  type StyleId,
+} from "./site";
+
+/** Every product page: a plate style (finish) or a speciality format */
+export type ProductPageId = StyleId | SpecialityId;
 
 export type ProductContent = {
-  id: Extract<StyleId, "3d" | "4d" | "5d" | "ghost" | "bevel">;
+  id: ProductPageId;
+  /** The style the page prices and preselects (defaults to the id, for style pages) */
+  style?: StyleId;
+  /** A speciality format's builder presets (size, badge, show plate) */
+  format?: PlateFormat;
+  /** The registration the hero's builder card starts with (a short one on the short page) */
+  sampleReg?: string;
+  /** Hero wording where the style-page defaults don't fit (speciality pages) */
+  hero?: {
+    eyebrow: string;
+    /** "Build my short plates" */
+    noun: string;
+    single: { title: string; text: string; label: string };
+    pair: { title: string; text: string; label: string };
+  };
   path: string;
   metaTitle: string;
   metaDescription: string;
@@ -26,6 +55,17 @@ export type ProductContent = {
   faqs: Faq[];
 };
 
+/** The style a page sells */
+export const styleOf = (p: ProductContent): StyleId => p.style ?? (p.id as StyleId);
+
+/** One plate and a pair, for the page's format in `style` (its own by default) */
+export const pagePrices = (p: ProductContent, style: StyleId = styleOf(p)) =>
+  p.format ? formatPrices(style, p.format) : { single: PRICES[style].single, pair: PRICES[style].pair };
+
+/** A "build" link from this page: its style and format, plus anything chosen */
+export const pageBuildUrl = (p: ProductContent, opts: BuilderLinkOptions = {}) =>
+  builderUrl({ style: styleOf(p), ...formatLinkOptions(p.format, opts.reg), ...opts });
+
 /** Headline single / pair prices, formatted — from lib/site.ts */
 const single = (id: StyleId) => gbp(PRICES[id].single);
 const pair = (id: StyleId) => gbp(PRICES[id].pair);
@@ -41,6 +81,14 @@ const WARRANTY_TAIL =
 /** The client hasn't confirmed Ghost's construction and compliance yet (see the homepage and /plate-styles) */
 const GHOST_STATUS =
   "Ghost's specific construction and compliance information is being finalised. Please contact us for its current status before ordering Ghost plates for road use.";
+/** A speciality format's prices in Standard, its cheapest style */
+const fmt = (id: SpecialityId) => formatPrices("standard", SPECIALITY[id].format);
+const fSingle = (id: SpecialityId) => gbp(fmt(id).single);
+const fPair = (id: SpecialityId) => gbp(fmt(id).pair);
+const WARRANTY_ALL =
+  "New orders carry a manufacturing-defect warranty from the delivery or collection date — 6 months for Standard, 3D Gel and 4D, and 12 months for 5D, Ghost and Bevel — in addition to your statutory rights.";
+const ANY_STYLE =
+  "Yes. Choose Standard, 3D Gel, 4D, 5D, Ghost or Bevel in the builder; the price updates as you choose.";
 const COLLECT_FAQ: Faq = {
   id: "collect",
   q: "Can I collect the same day?",
@@ -48,6 +96,75 @@ const COLLECT_FAQ: Faq = {
 };
 
 export const PRODUCTS: Record<ProductContent["id"], ProductContent> = {
+  standard: {
+    id: "standard",
+    path: "/standard-number-plates",
+    metaTitle: `Standard Number Plates from ${single("standard")} | Printed Plates`,
+    metaDescription:
+      `Standard printed number plates, made to order to the legal requirements. Single plates from ${single("standard")}, pairs from ${pair("standard")}. Royal Mail delivery or Ilford collection.`,
+    short: "Standard",
+    h1: "Standard Number Plates",
+    lead: "Classic flat printed characters — single plates or matching pairs, made to order.",
+    intro: {
+      eyebrow: "Printed plates",
+      heading: "What are standard number plates?",
+      paragraphs: [
+        "Standard number plates have solid black characters printed flat onto a reflective acrylic plate — the classic UK plate, with nothing raised above the face.",
+        "They're our most affordable style, made to the same legal character size, spacing and markings as every road plate we make.",
+      ],
+    },
+    replacement: {
+      heading: "Replacement standard number plates",
+      items: [
+        {
+          title: "Cracked, faded or damaged plates",
+          text: "A cracked, faded or peeling plate can make your registration hard to read. A new plate is the fix — order a single front or rear plate, or a matching pair.",
+        },
+        {
+          title: "Matching your existing plate",
+          text: "Order a single front or rear plate in the size of the one you're keeping. We'll make it in our standard printed finish; an exact match to another supplier's plate isn't guaranteed, as acrylic and print vary between makers.",
+        },
+      ],
+    },
+    compare: {
+      heading: "Standard vs 3D — printed or raised?",
+      columns: ["Standard", "3D gel"],
+      highlight: 0,
+      rows: [
+        { label: "Characters", values: ["Printed flat", "Domed resin over printed characters"] },
+        { label: "Look", values: ["Classic and clean", "Raised and glossy"] },
+        { label: "From", values: [single("standard"), single("3d")] },
+      ],
+    },
+    sizes: {
+      heading: "Standard plate sizes and options",
+      paragraphs: [
+        COMMON_SIZE,
+        "Printed finishes may be available on selected motorcycle plate formats — the builder will show what's currently offered for your registration.",
+        "Measuring for a replacement: measure your existing plate and the mounting area on the car — a size that matches on paper still needs to fit the actual recess and fixings.",
+      ],
+    },
+    legal: {
+      heading: "Are standard number plates legal?",
+      paragraphs: [LEGAL_CORE, MOT_SCOPE],
+    },
+    care: {
+      heading: "Caring for your standard plates",
+      text: `Wash with car shampoo and a soft cloth. New orders carry a 6-month manufacturing-defect warranty from the delivery or collection date, in addition to your statutory rights. ${WARRANTY_TAIL}`,
+    },
+    faqs: [
+      { id: "per-plate", q: `Is ${single("standard")} per plate or per pair?`, a: `Per plate. A pair (front and rear) is ${pair("standard")}.` },
+      { id: "legal", q: "Are standard number plates legal?", a: "Yes, when made to the current rules — see the legal section above." },
+      { id: "one", q: "Can I replace just one plate?", a: "Yes. Order a single front or rear plate in the size of the one you're keeping." },
+      { id: "vs3d", q: "What's the difference between standard and 3D plates?", a: "Standard plates have flat printed characters; 3D gel plates have raised, domed resin characters over them.", links: [{ label: "3D plates", href: "/3d-number-plates" }] },
+      { id: "short", q: "Can I get a short or oversized standard plate?", a: "Yes. Enter your registration in the builder to see the sizes offered.", links: [{ label: "Short plates", href: "/short-number-plates" }, { label: "Oversized plates", href: "/oversized-number-plates" }] },
+      { id: "badge", q: "Can I add a UK flag or EV green flash?", a: "If your vehicle is eligible, choose the badge in the builder. The green flash is only for zero-emission vehicles.", links: [{ label: "EV plates", href: "/ev-number-plates" }] },
+      COLLECT_FAQ,
+      { id: "tracked", q: "Is the Tracked 24 upgrade worth it?", a: "It adds tracking and Royal Mail's own next-working-day delivery aim, subject to their service terms." },
+      { id: "fault", q: "What if my plate has a fault?", a: "Contact us and we'll assess it." },
+    ],
+  },
+
   "3d": {
     id: "3d",
     path: "/3d-number-plates",
@@ -353,6 +470,322 @@ export const PRODUCTS: Record<ProductContent["id"], ProductContent> = {
       COLLECT_FAQ,
       { id: "tracked", q: "Is the Tracked 24 upgrade available on Ghost orders?", a: "Yes. The same delivery options and charges apply across every style." },
       { id: "fault", q: "What if my plate develops a fault?", a: "New orders carry a 12-month manufacturing-defect warranty. Contact us and we'll assess it." },
+    ],
+  },
+
+  short: {
+    id: "short",
+    style: "standard",
+    format: SPECIALITY.short.format,
+    sampleReg: "A1 BCD",
+    path: SPECIALITY.short.path,
+    metaTitle: `Short Number Plates from ${fSingle("short")} | Cut-to-Size Plates`,
+    metaDescription:
+      `Short number plates for shorter registrations, with legal character size and spacing, made to order in any style. Single plates from ${fSingle("short")}, pairs from ${fPair("short")}.`,
+    short: "Short",
+    h1: "Short Number Plates",
+    lead: "Narrower plates for shorter registrations — legal character size and spacing, made to order in any style.",
+    hero: {
+      eyebrow: "Short plates",
+      noun: "short",
+      single: { title: "Single short front or rear plates", text: `Order one short plate — front or rear — from ${fSingle("short")}.`, label: "Single short front or rear plate" },
+      pair: { title: `Matching pairs of short plates — ${fPair("short")} per pair`, text: `Order both short plates together from ${fPair("short")} for the pair.`, label: "Matching short front & rear plates" },
+    },
+    intro: {
+      eyebrow: "Short plates",
+      heading: "What are short number plates?",
+      paragraphs: [
+        "A short number plate is narrower than the standard 520mm, to suit a shorter registration such as a dateless private number. The characters stay at the legal size and spacing — the plate is shorter, not the characters.",
+        "Our short sizes run from 470mm (up to seven characters, including the space) down to 226mm (up to three), all 111mm tall. The builder picks the size that fits your registration, in any of our styles.",
+      ],
+    },
+    replacement: {
+      heading: "Replacement short number plates",
+      items: [
+        {
+          title: "Damaged or worn short plates",
+          text: "If a short plate is cracked, faded or damaged, a new plate is the fix. Order a single front or rear plate, or a matching pair, at the size your registration needs.",
+        },
+        {
+          title: "Matching the plate you're keeping",
+          text: "Order a single front or rear plate in the same short size and style as the one you're keeping. An exact match to another supplier's plate isn't guaranteed, as materials and finish vary between makers.",
+        },
+      ],
+    },
+    compare: {
+      heading: "Short vs standard size — which fits?",
+      columns: ["Short", "Standard"],
+      highlight: 0,
+      rows: [
+        { label: "Size", values: ["226–470mm × 111mm", "520mm × 111mm"] },
+        { label: "From", values: [fSingle("short"), single("standard")] },
+      ],
+    },
+    sizes: {
+      heading: "Short plate sizes and options",
+      paragraphs: [
+        "Short sizes: 470mm (up to 7 characters), 409mm (6), 348mm (5), 287mm (4) and 226mm (3), all 111mm tall — character counts include the space.",
+        "Short plates may also be available on selected motorcycle formats — the builder will show what's currently offered for your registration.",
+        "Measuring for a replacement: measure your existing plate and the mounting area on the car — a size that matches on paper still needs to fit the actual recess and fixings.",
+      ],
+    },
+    legal: {
+      heading: "Are short number plates legal?",
+      paragraphs: [
+        "Yes, when made correctly: solid black characters at the legal size and spacing, on the correct reflective background, with the required supplier and British Standard markings. A short plate fits a shorter registration by being narrower — never by squeezing the characters.",
+        MOT_SCOPE,
+      ],
+    },
+    care: {
+      heading: "Caring for your short plates",
+      text: `Wash with car shampoo and a soft cloth. ${WARRANTY_ALL} ${WARRANTY_TAIL}`,
+    },
+    faqs: [
+      { id: "sizes", q: "What sizes do short plates come in?", a: "470mm, 409mm, 348mm, 287mm and 226mm wide, all 111mm tall. The builder picks the size that fits your registration." },
+      { id: "price", q: "How much more is a short plate?", a: `A short plate is £${ADD_ON_PRICES.shortPlateSingle} more than the same style at standard size, and a short pair is £${ADD_ON_PRICES.shortPlateBoth} more. In Standard that's ${fSingle("short")} for one plate and ${fPair("short")} for a pair.` },
+      { id: "styles", q: "Can I have a short plate in 3D, 4D or another style?", a: ANY_STYLE },
+      { id: "legal", q: "Are short plates legal?", a: "Yes, when the characters keep the legal size and spacing — see the legal section above." },
+      { id: "mixed", q: "Can I have a short front and a standard rear?", a: "Yes. The builder lets you choose each plate's size separately." },
+      { id: "fit", q: "Will a short plate fit my car?", a: "Measure your plate's mounting area first; a short plate suits a shorter registration and a recess with room around it." },
+      COLLECT_FAQ,
+      { id: "tracked", q: "Is the Tracked 24 upgrade available?", a: "Yes. The same delivery options and charges apply across every plate we make." },
+      { id: "fault", q: "What if my plate has a fault?", a: "Contact us and we'll assess it." },
+    ],
+  },
+
+  oversized: {
+    id: "oversized",
+    style: "standard",
+    format: SPECIALITY.oversized.format,
+    path: SPECIALITY.oversized.path,
+    metaTitle: `Oversized Number Plates 533 × 152mm | Rear Plates from ${fSingle("oversized")}`,
+    metaDescription:
+      `Oversized 533 × 152mm rear number plates for larger plate recesses, made to order in any style. Rear plates from ${fSingle("oversized")}; standard front + oversized rear from ${fPair("oversized")}.`,
+    short: "Oversized",
+    h1: "Oversized Number Plates",
+    lead: "A taller 533 × 152mm rear plate for larger plate recesses — legal characters, made to order in any style.",
+    hero: {
+      eyebrow: "Oversized plates",
+      noun: "oversized",
+      single: { title: "Single oversized rear plates", text: `Order one 533 × 152mm rear plate from ${fSingle("oversized")}.`, label: "Oversized rear plate" },
+      pair: { title: `Standard front + oversized rear — ${fPair("oversized")} per pair`, text: "A standard 520mm front with an oversized rear, ordered together.", label: "Standard front & oversized rear" },
+    },
+    intro: {
+      eyebrow: "Oversized rear",
+      heading: "What are oversized number plates?",
+      paragraphs: [
+        "An oversized plate is a taller rear plate, 533mm × 152mm, for vehicles whose rear recess is bigger than a standard 520 × 111mm plate — such as some imported vehicles.",
+        "The characters stay at the legal size and spacing; only the plate around them is larger. It's a rear-only size: your front plate stays standard.",
+      ],
+    },
+    replacement: {
+      heading: "Replacement oversized number plates",
+      items: [
+        {
+          title: "Damaged or worn oversized plates",
+          text: "If your oversized rear plate is cracked, faded or damaged, a new plate is the fix. Order the rear on its own, or with a standard front.",
+        },
+        {
+          title: "Matching your existing rear",
+          text: "We'll make your replacement at 533 × 152mm in the style you choose. An exact match to another supplier's plate isn't guaranteed, as materials and finish vary between makers.",
+        },
+      ],
+    },
+    compare: {
+      heading: "Oversized vs standard rear — which fits?",
+      columns: ["Oversized", "Standard"],
+      highlight: 0,
+      rows: [
+        { label: "Size", values: ["533mm × 152mm", "520mm × 111mm"] },
+        { label: "From", values: [fSingle("oversized"), single("standard")] },
+      ],
+    },
+    sizes: {
+      heading: "Oversized plate sizes and options",
+      paragraphs: [
+        "Oversized rear: 533mm × 152mm. The front plate is made at the standard 520mm × 111mm, or a short size if your registration suits one.",
+        "Oversized plates are a car and van size; for motorcycles the builder shows the formats offered for your registration.",
+        "Measuring for a replacement: measure your existing plate and the mounting area on the car — a size that matches on paper still needs to fit the actual recess and fixings.",
+      ],
+    },
+    legal: {
+      heading: "Are oversized number plates legal?",
+      paragraphs: [
+        "Yes, when made correctly: solid black characters at the legal size and spacing, on the correct reflective background, with the required supplier and British Standard markings. A larger plate doesn't change the character rules — the characters aren't enlarged to fill it.",
+        MOT_SCOPE,
+      ],
+    },
+    care: {
+      heading: "Caring for your oversized plates",
+      text: `Wash with car shampoo and a soft cloth. ${WARRANTY_ALL} ${WARRANTY_TAIL}`,
+    },
+    faqs: [
+      { id: "who", q: "Who needs an oversized plate?", a: "Vehicles with a rear plate recess bigger than a standard 520 × 111mm plate, such as some imported vehicles. Measure your recess before ordering." },
+      { id: "front", q: "Can I have an oversized front plate?", a: "No — 533 × 152mm is a rear-only size. Your front plate is made at the standard size (or a short size if your registration suits one)." },
+      { id: "price", q: "How much more is an oversized plate?", a: `An oversized rear is £${ADD_ON_PRICES.oversizedRear} more than the same style at standard size. In Standard that's ${fSingle("oversized")} for the rear, or ${fPair("oversized")} with a standard front.` },
+      { id: "styles", q: "Can I have an oversized plate in 3D, 4D or another style?", a: ANY_STYLE },
+      { id: "legal", q: "Are oversized plates legal?", a: "Yes, when the characters keep the legal size and spacing — see the legal section above." },
+      COLLECT_FAQ,
+      { id: "tracked", q: "Is the Tracked 24 upgrade available?", a: "Yes. The same delivery options and charges apply across every plate we make." },
+      { id: "fault", q: "What if my plate has a fault?", a: "Contact us and we'll assess it." },
+    ],
+  },
+
+  show: {
+    id: "show",
+    style: "standard",
+    format: SPECIALITY.show.format,
+    path: SPECIALITY.show.path,
+    metaTitle: `Show Plates from ${fSingle("show")} | Custom Display Number Plates`,
+    metaDescription:
+      `Show plates with custom spacing, for car shows, events and display — not for road use. Made to order in any style, from ${fSingle("show")} per plate or ${fPair("show")} a pair.`,
+    short: "Show",
+    h1: "Show Number Plates",
+    lead: "Custom-spaced plates for shows, events and display — made to order, not for use on the road.",
+    hero: {
+      eyebrow: "Show plates · display only",
+      noun: "show",
+      single: { title: "Single show plates", text: `Order one show plate from ${fSingle("show")}.`, label: "Single show plate" },
+      pair: { title: `Matching pairs of show plates — ${fPair("show")} per pair`, text: `Order a front and rear show plate together from ${fPair("show")}.`, label: "Matching front & rear show plates" },
+    },
+    intro: {
+      eyebrow: "Display only",
+      heading: "What are show plates?",
+      paragraphs: [
+        "Show plates are made for display — at car shows and events, in a garage or showroom, or as a gift. Because they're not for the road, the characters can be spaced the way you like rather than in the legal layout.",
+        "Show plates must not be displayed on a vehicle used on public roads. For a plate you can drive with, choose a road-legal plate in the builder.",
+      ],
+    },
+    replacement: {
+      heading: "Replacement show plates",
+      items: [
+        {
+          title: "Replacing a damaged show plate",
+          text: "If a show plate is cracked, faded or damaged, order a new one in the style and spacing you want — single plates or a matching pair.",
+        },
+        {
+          title: "Matching a show plate you have",
+          text: "We'll make your plate in our own finish and preview your spacing before you order. An exact match to another supplier's plate isn't guaranteed, as materials and finish vary between makers.",
+        },
+      ],
+    },
+    compare: {
+      heading: "Show plate vs road-legal plate — display or drive?",
+      columns: ["Show", "Road legal"],
+      highlight: 0,
+      rows: [
+        { label: "Use", values: ["Display only, off the road", "On the road"] },
+        { label: "Spacing", values: ["Custom spacing", "Legal layout and spacing"] },
+        { label: "From", values: [fSingle("show"), single("standard")] },
+      ],
+    },
+    sizes: {
+      heading: "Show plate sizes and options",
+      paragraphs: [
+        COMMON_SIZE,
+        "Show plates may also be available in selected motorcycle formats — the builder will show what's currently offered.",
+        "Measuring for display: check the space where the plate will sit, whether that's a stand, a wall or a vehicle at a show.",
+      ],
+    },
+    legal: {
+      heading: "Are show plates legal?",
+      paragraphs: [
+        "Not on the road. Show plates are for display only. On a vehicle used on public roads, number plates must have solid black characters at the legal size and spacing, on the correct reflective background, with the required supplier and British Standard markings — and displaying a plate that doesn't can lead to a fine and an MOT failure.",
+      ],
+    },
+    care: {
+      heading: "Caring for your show plates",
+      text: `Wash with car shampoo and a soft cloth. ${WARRANTY_ALL} ${WARRANTY_TAIL}`,
+    },
+    faqs: [
+      { id: "road", q: "Can I drive with show plates on my car?", a: "No. Show plates are for display only — at shows, events, in a garage or as a gift. On the road you need a road-legal plate." },
+      { id: "what", q: "What can a show plate say?", a: "Up to seven letters and numbers, spaced the way you like. The builder previews your plate before you order." },
+      { id: "price", q: `Is ${fSingle("show")} per plate or per pair?`, a: `Per plate in Standard. A pair is ${fPair("show")}; other styles are priced as on the road-legal plates.` },
+      { id: "styles", q: "Can I have a show plate in 3D, 4D or another style?", a: ANY_STYLE },
+      { id: "legal-option", q: "How do I order a road-legal plate instead?", a: "Choose “Legal Plate” in the builder's first step; your plate is then made in the legal layout and spacing.", links: [{ label: "Plate styles", href: "/plate-styles" }] },
+      COLLECT_FAQ,
+      { id: "tracked", q: "Is the Tracked 24 upgrade available?", a: "Yes. The same delivery options and charges apply across every plate we make." },
+      { id: "fault", q: "What if my plate has a fault?", a: "Contact us and we'll assess it." },
+    ],
+  },
+
+  ev: {
+    id: "ev",
+    style: "standard",
+    format: SPECIALITY.ev.format,
+    path: SPECIALITY.ev.path,
+    metaTitle: `EV Green Flash Number Plates from ${fSingle("ev")} | Electric Vehicle Plates`,
+    metaDescription:
+      `Green flash number plates for zero-emission vehicles, made to order in any style. Single plates from ${fSingle("ev")}, pairs from ${fPair("ev")}. Royal Mail delivery or Ilford collection.`,
+    short: "EV",
+    h1: "EV Green Flash Number Plates",
+    lead: "The green flash for zero-emission vehicles — single plates or matching pairs, made to order in any style.",
+    hero: {
+      eyebrow: "EV plates",
+      noun: "EV",
+      single: { title: "Single front or rear EV plates", text: `Order one plate with the green flash from ${fSingle("ev")}.`, label: "Single EV front or rear plate" },
+      pair: { title: `Matching pairs of EV plates — ${fPair("ev")} per pair`, text: `Order both plates with the green flash from ${fPair("ev")} for the pair.`, label: "Matching EV front & rear plates" },
+    },
+    intro: {
+      eyebrow: "Green flash",
+      heading: "What are green flash EV number plates?",
+      paragraphs: [
+        "EV number plates carry a green flash — a green band at the left-hand side of the plate — showing the vehicle produces zero emissions at the tailpipe. Zero-emission vehicles in the UK have been able to display it since 8 December 2020.",
+        "Only zero-emission vehicles are eligible; hybrids and plug-in hybrids aren't. The flash is optional, and the rest of the plate follows the usual rules for characters, spacing, background and markings.",
+      ],
+    },
+    replacement: {
+      heading: "Replacement EV number plates",
+      items: [
+        {
+          title: "Damaged, faded or lost EV plates",
+          text: "If an EV plate is cracked, faded or lost, order a new one with the green flash — a single front or rear plate, or a matching pair.",
+        },
+        {
+          title: "Matching your existing EV plate",
+          text: "We'll make your replacement in the same size with our green flash, in the style you choose. An exact match to another supplier's plate isn't guaranteed, as materials and finish vary between makers.",
+        },
+      ],
+    },
+    compare: {
+      heading: "EV vs standard plates — green flash or none?",
+      columns: ["EV", "Standard"],
+      highlight: 0,
+      rows: [
+        { label: "Flash", values: ["Green band at the left", "None"] },
+        { label: "For", values: ["Zero-emission vehicles only", "Any vehicle"] },
+        { label: "From", values: [fSingle("ev"), single("standard")] },
+      ],
+    },
+    sizes: {
+      heading: "EV plate sizes and options",
+      paragraphs: [
+        COMMON_SIZE,
+        "The green flash may also be available on selected motorcycle formats — the builder will show what's currently offered for your registration.",
+        "Measuring for a replacement: measure your existing plate and the mounting area on the car — a size that matches on paper still needs to fit the actual recess and fixings.",
+      ],
+    },
+    legal: {
+      heading: "Are green flash EV plates legal?",
+      paragraphs: [
+        "Yes, on a zero-emission vehicle, when the plate is made correctly: solid black characters at the legal size and spacing, on the correct reflective background, with the required supplier and British Standard markings, and the green flash at the left. Only zero-emission vehicles may display the flash.",
+        MOT_SCOPE,
+      ],
+    },
+    care: {
+      heading: "Caring for your EV plates",
+      text: `Wash with car shampoo and a soft cloth. ${WARRANTY_ALL} ${WARRANTY_TAIL}`,
+    },
+    faqs: [
+      { id: "who", q: "Which vehicles can have a green flash?", a: "Only zero-emission vehicles. Hybrids and plug-in hybrids aren't eligible." },
+      { id: "required", q: "Do I have to have the green flash on my EV?", a: "No. It's optional for zero-emission vehicles." },
+      { id: "price", q: "How much is the green flash?", a: `It adds £${ADD_ON_PRICES.badgeSingle} to a single plate and £${ADD_ON_PRICES.badgeBoth} to a pair in most styles. In Standard that's ${fSingle("ev")} for one plate and ${fPair("ev")} for a pair.` },
+      { id: "styles", q: "Can I have an EV plate in 3D, 4D or another style?", a: ANY_STYLE },
+      { id: "legal", q: "Are green flash plates legal?", a: "Yes, on a zero-emission vehicle and when made to the current rules — see the legal section above." },
+      { id: "flag", q: "Can I have a flag and the green flash?", a: "The builder offers one badge per plate: a UK, England or Scotland flag, or the green flash." },
+      COLLECT_FAQ,
+      { id: "tracked", q: "Is the Tracked 24 upgrade available?", a: "Yes. The same delivery options and charges apply across every plate we make." },
+      { id: "fault", q: "What if my plate has a fault?", a: "Contact us and we'll assess it." },
     ],
   },
 

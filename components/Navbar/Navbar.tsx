@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import { useCart } from "@/contexts/cart/CartProvider";
 import { builderUrl } from "@/lib/builderLink";
-import { STYLE_PAGES } from "@/lib/site";
+import { PRODUCT_PAGE_LINKS, formatLinkOptions } from "@/lib/site";
 import styles from "./Navbar.module.css";
 import { StylesDrawerList, StylesPanel } from "./StylesMenu";
 
@@ -111,14 +111,16 @@ export default function Navbar() {
     };
   }, [open]);
 
-  // On a plate-style page (/4d-number-plates …) "Plate Styles" is the current
-  // section, and "Build my plates" starts the builder on that style
-  const pageStyle = STYLE_PAGES[pathname];
+  // On a product page (/4d-number-plates, /short-number-plates …) "Plate Styles"
+  // is the current section, and "Build my plates" starts the builder on that
+  // page's style or format
+  const pageLink = PRODUCT_PAGE_LINKS[pathname];
+  const pageStyle = !!pageLink;
   const isActive = (href: string) =>
     href === "/"
       ? pathname === "/"
       : pathname.startsWith(href) || (href === "/plate-styles" && !!pageStyle);
-  const buildHref = builderUrl({ style: pageStyle });
+  const buildHref = builderUrl({ style: pageLink?.style, ...formatLinkOptions(pageLink?.format) });
   // "page" for the page itself; "true" for its section (a style page under Plate Styles)
   const current = (href: string) =>
     !isActive(href) ? undefined : pageStyle && href === "/plate-styles" ? "true" : "page";

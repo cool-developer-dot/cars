@@ -205,7 +205,80 @@
   color: #4ea6ff;
 }
 
-/* Right: the six styles */
+/* Right: the six styles, then the speciality plates */
+.right {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.special {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 10px 10px 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(140, 190, 255, 0.12);
+  background: linear-gradient(160deg, rgba(20, 40, 72, 0.4) 0%, rgba(10, 22, 44, 0.4) 100%);
+}
+
+.specialLabel {
+  flex: none;
+  margin: 0;
+  font-size: var(--fs-eyebrow);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: var(--eyebrow-tracking);
+  text-transform: uppercase;
+  color: #3d8dff;
+}
+
+.specialList {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.specialLink {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  height: 100%;
+  padding: 9px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(140, 190, 255, 0.12);
+  background: rgba(10, 22, 44, 0.55);
+  color: #fff;
+  text-decoration: none;
+  transition: border-color 160ms ease, background-color 160ms ease;
+}
+
+.specialLink:hover {
+  border-color: rgba(78, 166, 255, 0.55);
+  background: rgba(16, 40, 80, 0.7);
+}
+
+.specialLink:focus-visible {
+  outline: 2px solid #4ecbff;
+  outline-offset: 2px;
+}
+
+.specialName {
+  font-size: var(--fs-label);
+  font-weight: 650;
+  line-height: 1.2;
+}
+
+.specialPrice {
+  font-size: var(--fs-small);
+  color: rgba(190, 208, 232, 0.72);
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -444,6 +517,21 @@
 .subThumb {
   display: block;
   width: 86%;
+}
+
+.subHead {
+  margin: 14px 2px 0;
+  font-size: var(--fs-eyebrow);
+  font-weight: 700;
+  letter-spacing: var(--eyebrow-tracking);
+  text-transform: uppercase;
+  color: #3d8dff;
+}
+
+/* speciality items have no plate drawing */
+.subPlain {
+  justify-content: center;
+  padding: 12px 8px;
 }
 
 .subName {

@@ -1,6 +1,6 @@
 import type { PlateFinish } from "@/components/home/PlateArt";
 import { PRODUCTS, type ProductContent } from "@/lib/products";
-import { PRICES } from "@/lib/site";
+import { PRICES, SPECIALITY, formatPrices, type SpecialityId } from "@/lib/site";
 
 /*
  * Everything that differs between the plate-style pages (3D, 4D, 5D, Bevel).
@@ -21,8 +21,39 @@ export type PageImage = {
   alt: string;
 };
 
-/** The finishes the comparison cards can show */
-export type CompareId = "3d" | "4d" | "5d" | "ghost" | "bevel";
+/** The finishes and formats the comparison cards can show */
+export type CompareId =
+  | "standard"
+  | "3d"
+  | "4d"
+  | "5d"
+  | "ghost"
+  | "bevel"
+  // speciality formats, and the plain plate each is compared with
+  | "short"
+  | "oversized"
+  | "show"
+  | "ev"
+  | "standardSize"
+  | "standardRear"
+  | "roadLegal"
+  | "plain";
+
+/** Icons for a format card's spec rows (finish cards use Characters / Edge / Look) */
+export type SpecIcon = "size" | "fits" | "chars" | "plate" | "use" | "spacing" | "markings" | "flash" | "for";
+
+export type CompareCard = {
+  name: string;
+  price: number;
+  img: string;
+  alt: string;
+  /** Finish cards */
+  characters?: string;
+  edge?: string;
+  look?: string;
+  /** Format cards: their own rows */
+  specs?: { label: string; value: string; icon: SpecIcon }[];
+};
 
 export type GuideLink = {
   id: string;
@@ -59,8 +90,20 @@ export type ProductPageContent = {
     /** "3D vs 4D Number Plates — Gel or Acrylic?" */
     compare: { pair: readonly [CompareId, CompareId]; tail: string; images?: Partial<Record<CompareId, string>> };
   };
-  sizes: { moto: string };
-  legal: { photo: PageImage };
+  sizes: {
+    moto: string;
+    /** First card (defaults to the 520 × 111mm standard size) */
+    first?: { title: string; text: string; figure?: { w: string; h: string; reg: string } };
+    /** Replaces the intro under the heading */
+    lead?: string;
+  };
+  legal: {
+    photo: PageImage;
+    /** The four badges under the copy (defaults: the legal requirements) */
+    badges?: { label: string; icon: "type" | "spacing" | "background" | "markings" | "display" | "events" | "custom" | "noRoad" }[];
+    /** Replaces the paragraph on what an MOT tester checks */
+    note?: string;
+  };
   care: { lead: string; scratch: { title: string; text: string }; photo: { src: string; srcMobile: string } };
   guides: readonly GuideLink[];
   guidesArt: { src: string; srcMobile: string };
@@ -93,13 +136,13 @@ const STYLES_GUIDE: GuideLink = {
 };
 
 /** Per-style artwork folder for the newer pages (rendered with scripts/render-product-art.sh) */
-const art = (dir: string, name: string, finishWords: string) => ({
+const art = (dir: string, name: string, finishWords: string, reg = "AB12 CDE") => ({
   hero: {
     src: `/${dir}/hero.webp`,
     srcMobile: `/${dir}/hero-mobile.webp`,
     width: 2000,
     height: 1000,
-    alt: `A white front and a yellow rear ${name} number plate reading AB12 CDE, with ${finishWords}`,
+    alt: `A white front and a yellow rear ${name} number plate reading ${reg}, with ${finishWords}`,
   },
   intro: {
     src: `/${dir}/intro.webp`,
@@ -124,7 +167,7 @@ const art = (dir: string, name: string, finishWords: string) => ({
     srcMobile: `/${dir}/faq-car-mobile.webp`,
     width: 700,
     height: 742,
-    alt: `A grey car fitted with a white ${name} number plate reading AB12 CDE`,
+    alt: `A grey car fitted with a white ${name} number plate reading ${reg}`,
   },
 });
 
@@ -138,8 +181,263 @@ const a4 = art("4d", "4D", "raised, laser-cut black acrylic characters");
 const a5 = art("5d", "5D", "laser-cut black acrylic characters under a glossy gel top");
 const ab = art("bevel", "bevel", "black acrylic characters cut with an angled, faceted edge");
 const ag = art("ghost", "Ghost", "glossy, dark smoked characters");
+const ps = PRODUCTS.standard;
+const pShort = PRODUCTS.short;
+const pOver = PRODUCTS.oversized;
+const pShow = PRODUCTS.show;
+const pEv = PRODUCTS.ev;
+const aStd = art("standard", "standard", "flat printed black characters");
+const aShort = art("short", "short", "printed black characters", "A1 BCD");
+const aOver = art("oversized", "oversized", "printed black characters");
+const aShow = art("show", "show", "custom-spaced characters and a black border", "AB12CDE");
+const aEv = art("ev", "EV", "a green flash at the left");
+
+/** Every format comes in every style: the raised-finish card on the speciality pages */
+const ANY_FINISH = {
+  title: "Printed, 3D, 4D or another finish",
+  text: "Every style we make comes in this format: printed, 3D gel, 4D acrylic, 5D, Ghost or Bevel. You can change the finish without telling the DVLA, as long as the registration itself isn't changing.",
+  tag: "3D Gel",
+  finish: "gel" as PlateFinish,
+};
+const SCRATCH = { title: "Avoid Scratching", text: "Do not scrape ice or dirt off the plate with anything hard." };
+const careAll = (name: string) => careLead(name, "avoid scraping ice or dirt off the plate with anything hard");
+/** A speciality page's replacement cards: its own copy, its own photos */
+const replacementCards = (p: ProductContent, a: ReturnType<typeof art>, name: string) => [
+  { id: "cracked" as const, title: `Replacing a damaged ${name} plate`, text: p.replacement.items[0].text, img: a.cracked },
+  { id: "lost" as const, title: "Replacing a lost front or rear plate", text: LOST_TEXT, img: a.lost },
+  { id: "match" as const, title: `Can we match your existing ${name} plate?`, text: p.replacement.items[1].text, img: a.match },
+];
 
 export const PRODUCT_PAGES: Record<ProductPageId, ProductPageContent> = {
+  standard: {
+    id: "standard",
+    product: ps,
+    name: "Standard",
+    nameInText: "standard",
+    hero: aStd.hero,
+    replacement: {
+      lead: replaceLead("standard", "printed finish"),
+      cards: [
+        { id: "cracked", title: "Replacing cracked, faded or damaged plates", text: ps.replacement.items[0].text, img: aStd.cracked },
+        { id: "lost", title: "Replacing a lost front or rear plate", text: LOST_TEXT, img: aStd.lost },
+        { id: "match", title: "Can we match your existing plate?", text: ps.replacement.items[1].text, img: aStd.match },
+      ],
+      upgrade: {
+        title: "Upgrading from printed to raised characters",
+        text: "Like the look of raised characters? Choose 3D gel, 4D acrylic or another finish in the builder. You can change the finish without telling the DVLA, as long as the registration itself isn't changing.",
+        tag: "3D Gel",
+        finish: "gel",
+      },
+    },
+    explained: {
+      title: "What Are Standard",
+      accent: "Number Plates?",
+      lead: ps.intro.paragraphs[0],
+      note: ps.intro.paragraphs[1],
+      art: aStd.intro,
+      compare: { pair: ["standard", "3d"], tail: "— Printed or Raised?" },
+    },
+    sizes: { moto: ps.sizes.paragraphs[1] },
+    legal: { photo: aStd.legal },
+    care: { lead: careAll("standard"), scratch: SCRATCH, photo: aStd.care },
+    guides: [
+      LEGAL_GUIDE("Standard"),
+      {
+        id: "std-3d",
+        lines: ["Standard vs 3D Gel", "Number Plates"],
+        lines2: ["Key differences", "and which to choose."],
+        href: "/3d-number-plates",
+      },
+      STYLES_GUIDE,
+    ],
+    guidesArt: aStd.guides,
+    faq: { car: aStd.faq },
+    cta: { plate: aStd.cta },
+  },
+
+  short: {
+    id: "short",
+    product: pShort,
+    name: "Short",
+    nameInText: "short",
+    hero: aShort.hero,
+    replacement: {
+      lead: replaceLead("short", "short-plate finish"),
+      cards: replacementCards(pShort, aShort, "short"),
+      upgrade: ANY_FINISH,
+    },
+    explained: {
+      title: "What Are Short",
+      accent: "Number Plates?",
+      lead: pShort.intro.paragraphs[0],
+      note: pShort.intro.paragraphs[1],
+      art: aShort.intro,
+      compare: { pair: ["short", "standardSize"], tail: "— Which Size Fits?" },
+    },
+    sizes: {
+      moto: pShort.sizes.paragraphs[1],
+      lead: "Short plates come in five widths, all 111mm tall. The builder picks the size that fits your registration, keeping the legal character size and spacing.",
+      first: {
+        title: "Short Sizes",
+        text: "470, 409, 348, 287 or 226mm wide, all 111mm tall — for registrations of up to 7, 6, 5, 4 or 3 characters, spaces included.",
+        figure: { w: "409mm", h: "111mm", reg: "A1 BCD" },
+      },
+    },
+    legal: { photo: aShort.legal },
+    care: { lead: careAll("short"), scratch: SCRATCH, photo: aShort.care },
+    guides: [
+      LEGAL_GUIDE("Short"),
+      {
+        id: "short-std",
+        lines: ["Short vs Standard", "Size Plates"],
+        lines2: ["Which size fits", "your registration."],
+        href: "/standard-number-plates",
+      },
+      STYLES_GUIDE,
+    ],
+    guidesArt: aShort.guides,
+    faq: { car: aShort.faq },
+    cta: { plate: aShort.cta },
+  },
+
+  oversized: {
+    id: "oversized",
+    product: pOver,
+    name: "Oversized",
+    nameInText: "oversized",
+    hero: aOver.hero,
+    replacement: {
+      lead: replaceLead("oversized", "oversized-plate finish"),
+      cards: replacementCards(pOver, aOver, "oversized"),
+      upgrade: ANY_FINISH,
+    },
+    explained: {
+      title: "What Are Oversized",
+      accent: "Number Plates?",
+      lead: pOver.intro.paragraphs[0],
+      note: pOver.intro.paragraphs[1],
+      art: aOver.intro,
+      compare: { pair: ["oversized", "standardRear"], tail: "— Which Fits?" },
+    },
+    sizes: {
+      moto: pOver.sizes.paragraphs[1],
+      lead: "The oversized rear is 533mm × 152mm, for larger rear recesses; the front stays at the standard 520mm × 111mm. The characters keep the legal size and spacing.",
+      first: {
+        title: "Oversized Rear",
+        text: "533mm × 152mm, rear only. Your front plate is made at the standard 520mm × 111mm, or a short size if your registration suits one.",
+        figure: { w: "533mm", h: "152mm", reg: "AB12 CDE" },
+      },
+    },
+    legal: { photo: aOver.legal },
+    care: { lead: careAll("oversized"), scratch: SCRATCH, photo: aOver.care },
+    guides: [
+      LEGAL_GUIDE("Oversized"),
+      {
+        id: "over-std",
+        lines: ["Oversized vs", "Standard Plates"],
+        lines2: ["Which size fits", "your rear recess."],
+        href: "/standard-number-plates",
+      },
+      STYLES_GUIDE,
+    ],
+    guidesArt: aOver.guides,
+    faq: { car: aOver.faq },
+    cta: { plate: aOver.cta },
+  },
+
+  show: {
+    id: "show",
+    product: pShow,
+    name: "Show",
+    nameInText: "show",
+    hero: aShow.hero,
+    replacement: {
+      lead: "Need to replace a damaged or worn show plate? We make show plates to order in any of our styles, with your choice of spacing — for display off the road.",
+      cards: replacementCards(pShow, aShow, "show"),
+      upgrade: {
+        title: "Choosing a finish for your show plate",
+        text: "Show plates come in every style we make — printed, 3D gel, 4D acrylic, 5D, Ghost or Bevel — so your display plate can have the look you want.",
+        tag: "4D",
+        finish: "acrylic",
+      },
+    },
+    explained: {
+      title: "What Are Show",
+      accent: "Number Plates?",
+      lead: pShow.intro.paragraphs[0],
+      note: pShow.intro.paragraphs[1],
+      art: aShow.intro,
+      compare: { pair: ["show", "roadLegal"], tail: "— Display or Drive?" },
+    },
+    sizes: { moto: pShow.sizes.paragraphs[1] },
+    legal: {
+      photo: { ...aShow.legal, alt: "A car at a show fitted with a white show plate" },
+      note: "For the road, choose “Legal Plate” in the builder: every road plate we make is made in the legal layout and spacing.",
+      badges: [
+        { label: "Display Only", icon: "display" },
+        { label: "Shows and Events", icon: "events" },
+        { label: "Custom Spacing", icon: "custom" },
+        { label: "Not for Road Use", icon: "noRoad" },
+      ],
+    },
+    care: { lead: careAll("show"), scratch: SCRATCH, photo: aShow.care },
+    guides: [
+      {
+        id: "legal",
+        lines: ["Are Show Plates", "Legal on the Road?"],
+        lines2: ["What display-only", "means for you."],
+        href: "/faqs#legal",
+      },
+      {
+        id: "show-std",
+        lines: ["Show vs Road-Legal", "Number Plates"],
+        lines2: ["Key differences", "and which to choose."],
+        href: "/standard-number-plates",
+      },
+      STYLES_GUIDE,
+    ],
+    guidesArt: aShow.guides,
+    faq: { car: aShow.faq },
+    cta: { plate: aShow.cta },
+  },
+
+  ev: {
+    id: "ev",
+    product: pEv,
+    name: "EV",
+    nameInText: "EV",
+    hero: aEv.hero,
+    replacement: {
+      lead: replaceLead("EV", "green flash"),
+      cards: replacementCards(pEv, aEv, "EV"),
+      upgrade: ANY_FINISH,
+    },
+    explained: {
+      title: "What Are Green Flash",
+      accent: "EV Number Plates?",
+      lead: pEv.intro.paragraphs[0],
+      note: pEv.intro.paragraphs[1],
+      art: aEv.intro,
+      compare: { pair: ["ev", "plain"], tail: "— Green Flash or None?" },
+    },
+    sizes: { moto: pEv.sizes.paragraphs[1] },
+    legal: { photo: aEv.legal },
+    care: { lead: careAll("EV"), scratch: SCRATCH, photo: aEv.care },
+    guides: [
+      LEGAL_GUIDE("EV"),
+      {
+        id: "ev-std",
+        lines: ["EV vs Standard", "Number Plates"],
+        lines2: ["Who can have", "the green flash."],
+        href: "/standard-number-plates",
+      },
+      STYLES_GUIDE,
+    ],
+    guidesArt: aEv.guides,
+    faq: { car: aEv.faq },
+    cta: { plate: aEv.cta },
+  },
+
   "3d": {
     id: "3d",
     product: p3,
@@ -465,11 +763,108 @@ export const PRODUCT_PAGES: Record<ProductPageId, ProductPageContent> = {
   },
 };
 
-/** The finish comparison cards: copy from lib/products.ts, one macro photo each */
-export const COMPARE_CARDS: Record<
-  CompareId,
-  { name: string; price: number; img: string; alt: string; characters: string; edge: string; look: string }
-> = {
+const fp = (id: SpecialityId) => formatPrices("standard", SPECIALITY[id].format).single;
+const LEGAL_CHARS = "Legal size and spacing";
+
+/** The comparison cards: one close-up (finishes) or plate shot (formats) each */
+export const COMPARE_CARDS: Record<CompareId, CompareCard> = {
+  standard: {
+    name: "Standard",
+    price: PRICES.standard.single,
+    img: "/finishes/printed.webp",
+    alt: "Close-up of a standard character printed flat on a white plate",
+    characters: "Printed flat onto the plate",
+    edge: "Flat, no relief",
+    look: "Classic and clean",
+  },
+  short: {
+    name: "Short",
+    price: fp("short"),
+    img: "/formats/short.webp",
+    alt: "A short white number plate reading A1 BCD",
+    specs: [
+      { label: "Size", value: "226–470mm × 111mm", icon: "size" },
+      { label: "Fits", value: "Shorter registrations and recesses", icon: "fits" },
+      { label: "Characters", value: LEGAL_CHARS, icon: "chars" },
+    ],
+  },
+  standardSize: {
+    name: "Standard",
+    price: PRICES.standard.single,
+    img: "/formats/standard-front.webp",
+    alt: "A standard 520mm white number plate reading AB12 CDE",
+    specs: [
+      { label: "Size", value: "520mm × 111mm", icon: "size" },
+      { label: "Fits", value: "Most registrations and cars", icon: "fits" },
+      { label: "Characters", value: LEGAL_CHARS, icon: "chars" },
+    ],
+  },
+  oversized: {
+    name: "Oversized",
+    price: fp("oversized"),
+    img: "/formats/oversized.webp",
+    alt: "A tall 533 × 152mm yellow rear number plate reading AB12 CDE",
+    specs: [
+      { label: "Size", value: "533mm × 152mm", icon: "size" },
+      { label: "Fits", value: "Larger rear recesses", icon: "fits" },
+      { label: "Plate", value: "Rear only", icon: "plate" },
+    ],
+  },
+  standardRear: {
+    name: "Standard",
+    price: PRICES.standard.single,
+    img: "/formats/standard-rear.webp",
+    alt: "A standard 520 × 111mm yellow rear number plate reading AB12 CDE",
+    specs: [
+      { label: "Size", value: "520mm × 111mm", icon: "size" },
+      { label: "Fits", value: "Most rear recesses", icon: "fits" },
+      { label: "Plate", value: "Front or rear", icon: "plate" },
+    ],
+  },
+  show: {
+    name: "Show",
+    price: fp("show"),
+    img: "/formats/show.webp",
+    alt: "A white show plate reading AB12CDE with custom spacing and a black border",
+    specs: [
+      { label: "Use", value: "Display only, off the road", icon: "use" },
+      { label: "Spacing", value: "Custom, the way you like", icon: "spacing" },
+      { label: "On the road", value: "Not permitted", icon: "markings" },
+    ],
+  },
+  roadLegal: {
+    name: "Road-Legal",
+    price: PRICES.standard.single,
+    img: "/formats/standard-front.webp",
+    alt: "A road-legal white number plate reading AB12 CDE",
+    specs: [
+      { label: "Use", value: "On the road", icon: "use" },
+      { label: "Spacing", value: "Legal layout and spacing", icon: "spacing" },
+      { label: "Markings", value: "Supplier and British Standard", icon: "markings" },
+    ],
+  },
+  ev: {
+    name: "EV",
+    price: fp("ev"),
+    img: "/formats/ev.webp",
+    alt: "A white number plate with a green flash at the left, reading AB12 CDE",
+    specs: [
+      { label: "Flash", value: "Green band at the left", icon: "flash" },
+      { label: "For", value: "Zero-emission vehicles only", icon: "for" },
+      { label: "Characters", value: LEGAL_CHARS, icon: "chars" },
+    ],
+  },
+  plain: {
+    name: "Standard",
+    price: PRICES.standard.single,
+    img: "/formats/standard-front.webp",
+    alt: "A standard white number plate reading AB12 CDE",
+    specs: [
+      { label: "Flash", value: "None", icon: "flash" },
+      { label: "For", value: "Any vehicle", icon: "for" },
+      { label: "Characters", value: LEGAL_CHARS, icon: "chars" },
+    ],
+  },
   "3d": {
     name: "3D Gel",
     price: PRICES["3d"].single,

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowRight, Check, ShieldCheck } from "lucide-react";
 import PlateArt from "@/components/home/PlateArt";
 import { STYLE_ART, STYLE_ORDER } from "@/components/home/homeConfig";
-import { COMPANY, FROM_PRICE, PRICES, gbp } from "@/lib/site";
+import { COMPANY, FROM_PRICE, PRICES, SPECIALITY, SPECIALITY_ORDER, formatPrices, gbp } from "@/lib/site";
 import s from "./StylesMenu.module.css";
 
 /** Every plate style, drawn and priced as the rest of the site shows it */
@@ -16,6 +16,15 @@ export const STYLE_LINKS = STYLE_ORDER.map((id) => ({
   href: PRICES[id].href,
   single: PRICES[id].single,
   pair: PRICES[id].pair,
+}));
+
+/** Speciality plates: formats built in any style, priced from Standard */
+export const SPECIALITY_LINKS = SPECIALITY_ORDER.map((id) => ({
+  id,
+  label: SPECIALITY[id].name,
+  blurb: SPECIALITY[id].blurb,
+  href: SPECIALITY[id].path,
+  single: formatPrices("standard", SPECIALITY[id].format).single,
 }));
 
 const POINTS = [
@@ -68,6 +77,7 @@ export function StylesPanel({
         </p>
       </div>
 
+      <div className={s.right}>
       <ul className={s.grid}>
         {STYLE_LINKS.map((st, i) => {
           const current = pathname === st.href;
@@ -99,6 +109,29 @@ export function StylesPanel({
           );
         })}
       </ul>
+
+      <div className={s.special} style={{ "--i": STYLE_LINKS.length } as CSSProperties}>
+        <p className={s.specialLabel}>Speciality plates</p>
+        <ul className={s.specialList}>
+          {SPECIALITY_LINKS.map((sp) => {
+            const current = pathname === sp.href;
+            return (
+              <li key={sp.id}>
+                <Link
+                  href={sp.href}
+                  className={`${s.specialLink} ${current ? s.current : ""}`}
+                  aria-current={current ? "page" : undefined}
+                  onClick={onNavigate}
+                >
+                  <span className={s.specialName}>{sp.label}</span>
+                  <span className={s.specialPrice}>From {gbp(sp.single)}</span>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+      </div>
     </div>
   );
 }
@@ -134,6 +167,25 @@ export function StylesDrawerList({
                   </span>
                   <span className={s.subName}>{st.label}</span>
                   <span className={s.subPrice}>From {gbp(st.single)}</span>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+        <p className={s.subHead}>Speciality plates</p>
+        <ul className={s.subList}>
+          {SPECIALITY_LINKS.map((sp) => {
+            const current = pathname === sp.href;
+            return (
+              <li key={sp.id}>
+                <Link
+                  href={sp.href}
+                  className={`${s.subItem} ${s.subPlain} ${current ? s.subCurrent : ""}`}
+                  aria-current={current ? "page" : undefined}
+                  onClick={onNavigate}
+                >
+                  <span className={s.subName}>{sp.label}</span>
+                  <span className={s.subPrice}>From {gbp(sp.single)}</span>
                 </Link>
               </li>
             );

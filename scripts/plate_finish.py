@@ -8,6 +8,17 @@
 #   bevel       Bevel: acrylic with an angled, diamond-cut (chamfered) edge
 #   ghost       Ghost: domed characters in a dark smoked tint (the builder's
 #               "dark smoked characters for a stealth look")
+#   printed     Standard: flat printed characters under the plate's clear face
+#
+# Plate formats (env, read by every scene script through the helpers below):
+#   REG="A12 BCD"      the registration (default AB12 CDE)
+#   GROUP_GAP=11       gap between the two groups in mm (11 = no extra gap: a
+#                      show plate's custom spacing; default 33, the legal gap)
+#   PLATE_W/PLATE_H    front (white) plate size in mm (default 520 x 111)
+#   REAR_W/REAR_H      rear (yellow) plate size in mm (default: the front's)
+#   BORDER=1           a thin black border round the plate face (a builder option)
+#   FLASH=1            a green flash at the left of both plates (EV plates);
+#                      the characters move right to make room, as the builder does
 #
 # Usage from a render script (Blender's own Python):
 #   sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -29,7 +40,7 @@ import os
 
 import bpy
 
-FINISHES = ("gel", "acrylic", "acrylicGel", "bevel", "ghost")
+FINISHES = ("gel", "acrylic", "acrylicGel", "bevel", "ghost", "printed")
 
 
 def _mat(name, base, rough, coat, coat_rough, ior=1.49, trans=0.0):
@@ -59,6 +70,8 @@ def materials():
         "bevel": _mat("FinishBevel", (0.0022, 0.0022, 0.003, 1), 0.07, 0.9, 0.02),
         # smoked resin: a dark grey tint the plate face glows faintly through
         # (GHOST_TONE / GHOST_TRANS deepen it where a scene brightens it, e.g. the car photos)
+        # print under the acrylic face: matte black with the face's gloss over it
+        "printed": _mat("FinishPrinted", (0.003, 0.003, 0.004, 1), 0.5, 0.25, 0.08),
         "ghost": _mat("FinishGhost", (*(float(os.environ.get("GHOST_TONE", "0.075")) * k for k in (1, 1.09, 1.33)), 1),
                       0.12, 1.0, 0.04, 1.45, trans=float(os.environ.get("GHOST_TRANS", "0.62"))),
     }
@@ -113,7 +126,53 @@ GLYPHS = {
          (50, 79), (0, 79)],
     ]),
 }
-CHAR_GAP, GROUP_GAP = 11.0, 33.0
+CHAR_GAP = 11.0
+GROUP_GAP = float(os.environ.get("GROUP_GAP", "33"))
+# the EV green flash: a band at the plate's left edge (as the builder draws it)
+FLASH_W, FLASH_INSET = 34.0, 4.0
+
+
+def env_on(name):
+    return os.environ.get(name, "0") not in ("", "0")
+
+
+def plate_size(rear=False, default=(0.520, 0.111)):
+    """(width, height) in metres of the front or rear plate for this run."""
+    w = float(os.environ.get("PLATE_W", default[0] * 1000)) / 1000
+    h = float(os.environ.get("PLATE_H", default[1] * 1000)) / 1000
+    if rear:
+        w = float(os.environ.get("REAR_W", w * 1000)) / 1000
+        h = float(os.environ.get("REAR_H", h * 1000)) / 1000
+    return w, h
+
+
+def char_shift():
+    """How far right the registration sits to clear the green flash, in metres."""
+    return (FLASH_W + FLASH_INSET) / 2000 if env_on("FLASH") else 0.0
+
+
+def add_flash(sc, name, parent, w, h, z=0.0003, corner=0.004):
+    """A green flash on a plate whose face is the parent's XY plane at height z."""
+    if not env_on("FLASH"):
+        return None
+    import bmesh
+    m = bpy.data.materials.get("Flash") or _mat("Flash", (0.02, 0.36, 0.08, 1), 0.35, 0.5, 0.06)
+    fw, ins = FLASH_W / 1000, FLASH_INSET / 1000
+    x0, x1 = -w / 2 + ins, -w / 2 + ins + fw
+    y0, y1 = -h / 2 + ins, h / 2 - ins
+    bm = bmesh.new()
+    vs = [bm.verts.new(v) for v in ((x0, y0, 0), (x1, y0, 0), (x1, y1, 0), (x0, y1, 0))]
+    bm.faces.new(vs)
+    bmesh.ops.bevel(bm, geom=vs, offset=corner, segments=6, profile=0.5, affect="VERTICES")
+    me = bpy.data.meshes.new(name)
+    bm.to_mesh(me)
+    bm.free()
+    me.materials.append(m)
+    o = bpy.data.objects.new(name, me)
+    sc.collection.objects.link(o)
+    o.parent = parent
+    o.location = (0, 0, z)
+    return o
 
 
 def _area(pts):
@@ -129,7 +188,7 @@ def _plate_curve(sc, name, body, scale=1.0):
     cu = bpy.data.curves.new(name, "CURVE")
     cu.dimensions = "2D"
     cu.fill_mode = "BOTH"
-    x = -total / 2
+    x = -total / 2 + char_shift() * 1000 / scale
     for ch, w in zip(body, widths):
         if ch != " ":
             for i, outline in enumerate(GLYPHS[ch][1]):
@@ -155,6 +214,9 @@ def build(sc, name, finish, *, font=None, size=0.11, height, spc=1.04, spw=0.9, 
     glyph_scale enlarges the plate characters (close-ups of a single one)."""
     if os.environ.get("PLATE_FONT", "plate") == "plate":
         font = None
+        if body == "AB12 CDE":
+            # (an underscore stands for the space, for shells that split on it)
+            body = os.environ.get("REG", body).replace("_", " ")
     if finish not in FINISHES:
         raise ValueError(f"unknown finish {finish!r}; expected one of {FINISHES}")
     if isinstance(font, str):
@@ -182,7 +244,10 @@ def build(sc, name, finish, *, font=None, size=0.11, height, spc=1.04, spw=0.9, 
     # a bevel wider than about a fifth of the stroke folds the outline in on itself
     # (plate characters have a 14mm stroke)
     cap = 0.0042 * glyph_scale if font is None else size * 0.024
-    if finish in ("gel", "ghost"):
+    if finish == "printed":
+        # ink, not relief: a hair of thickness so it renders, no edges to catch light
+        part("", 0.00004, 0.0, 0, 0.0, mats["printed"], 0.0)
+    elif finish in ("gel", "ghost"):
         # thin core, big round bevel: a dome whose edge rolls into the plate
         b = min(h * 0.55, cap)
         e = h - b
@@ -210,3 +275,42 @@ def build(sc, name, finish, *, font=None, size=0.11, height, spc=1.04, spw=0.9, 
         e = h - b
         part("", e, b, 0, -b, mats["bevel"], 0.0)
     return root
+
+
+def add_border(sc, name, parent, w, h, z=0.0003, inset=0.0045, width=0.003, corner=0.008):
+    """BORDER=1: a black rounded-rectangle ring on the plate face (parent's XY plane at z)."""
+    if not env_on("BORDER"):
+        return None
+    import bmesh
+    m = bpy.data.materials.get("BorderInk") or _mat("BorderInk", (0.004, 0.004, 0.005, 1), 0.45, 0.5, 0.06)
+
+    def outline(hw, hh, r):
+        bm = bmesh.new()
+        vs = [bm.verts.new(v) for v in ((-hw, -hh, 0), (hw, -hh, 0), (hw, hh, 0), (-hw, hh, 0))]
+        bm.faces.new(vs)
+        bmesh.ops.bevel(bm, geom=vs, offset=r, segments=6, profile=0.5, affect="VERTICES")
+        bm.faces.ensure_lookup_table()
+        pts = [v.co.copy() for v in bm.faces[0].verts]
+        bm.free()
+        return pts
+
+    ow, oh = w / 2 - inset, h / 2 - inset
+    outer = outline(ow, oh, corner)
+    inner = outline(ow - width, oh - width, max(corner - width, 0.001))
+    # a 2D curve with the inner outline as a hole fills exactly the ring
+    cu = bpy.data.curves.new(name, "CURVE")
+    cu.dimensions = "2D"
+    cu.fill_mode = "BOTH"
+    for i, pts in enumerate((outer, inner)):
+        sp = cu.splines.new("POLY")
+        sp.points.add(len(pts) - 1)
+        for p, co in zip(sp.points, pts if i == 0 else list(reversed(pts))):
+            p.co = (co.x, co.y, 0, 1)
+        sp.use_cyclic_u = True
+    cu.extrude = 0.00004
+    cu.materials.append(m)
+    o = bpy.data.objects.new(name, cu)
+    sc.collection.objects.link(o)
+    o.parent = parent
+    o.location = (0, 0, z)
+    return o

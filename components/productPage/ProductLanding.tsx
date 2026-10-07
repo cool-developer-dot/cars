@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import JsonLd from "@/components/content/JsonLd";
 import ProductHero from "@/components/ProductHero/ProductHero";
-import { COMPANY, PRICES, SITE_URL } from "@/lib/site";
+import { pagePrices } from "@/lib/products";
+import { COMPANY, SITE_URL } from "@/lib/site";
 import CareWarranty from "./CareWarranty";
 import Delivery from "./Delivery";
 import Documents from "./Documents";
@@ -45,7 +46,7 @@ export default function ProductLanding({ id }: { id: ProductPageId }) {
               brand: { "@type": "Brand", name: COMPANY.brand },
               offers: {
                 "@type": "Offer",
-                price: PRICES[id].single.toFixed(2),
+                price: pagePrices(product).single.toFixed(2),
                 priceCurrency: "GBP",
                 availability: "https://schema.org/InStock",
                 url: `${SITE_URL}${product.path}`,

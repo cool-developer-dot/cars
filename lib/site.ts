@@ -1,4 +1,4 @@
-import { headlinePrices, type PlateStyleKey } from "./pricing";
+import { headlinePrices, quote, type PlateSizeId, type PlateStyleKey } from "./pricing";
 
 /**
  * Confirmed business facts (owner-confirmed 27–28/09/2026).
@@ -47,7 +47,7 @@ export const STYLE_KEY: Record<StyleId, PlateStyleKey> = {
 };
 
 const STYLE_INFO: Record<StyleId, { name: string; what: string; href: string }> = {
-  standard: { name: "Standard", what: "Flat printed characters", href: "/plate-styles#standard" },
+  standard: { name: "Standard", what: "Flat printed characters", href: "/standard-number-plates" },
   "3d": { name: "3D gel", what: "Raised, domed resin characters", href: "/3d-number-plates" },
   "4d": { name: "4D", what: "Laser-cut acrylic characters", href: "/4d-number-plates" },
   "5d": { name: "5D", what: "Acrylic characters with a gel layer (4D gel)", href: "/5d-number-plates" },
@@ -69,12 +69,108 @@ export const PRICES: Record<
   ]),
 ) as Record<StyleId, { name: string; what: string; single: number; pair: number; href: string }>;
 
-/** The plate-style pages (3D, 4D, 5D, Bevel) and the style each one sells */
+/** The plate-style pages (Standard, 3D, 4D, 5D, Ghost, Bevel) and the style each one sells */
 export const STYLE_PAGES: Record<string, StyleId> = Object.fromEntries(
   (Object.keys(STYLE_INFO) as StyleId[])
     .filter((id) => !STYLE_INFO[id].href.includes("#"))
     .map((id) => [STYLE_INFO[id].href, id]),
 );
+
+/* ——— Speciality plates ———
+   Formats rather than finishes: each is built in any style, with the
+   builder's own size / badge / show-plate options preset. */
+
+export type SpecialityId = "short" | "oversized" | "show" | "ev";
+
+/** Builder presets for a plate format. "auto" sizes a short plate from the registration. */
+export type PlateFormat = {
+  frontSize?: PlateSizeId | "auto";
+  rearSize?: PlateSizeId | "auto";
+  badge?: "uk" | "eng" | "sco" | "ev";
+  legality?: "show";
+  /** The plate a single order is (oversized is a rear-only size) */
+  single?: "front" | "rear";
+  /** Which of Front / Rear / Pair the format can be ordered as */
+  sides?: ("front" | "rear" | "pair")[];
+};
+
+export const SPECIALITY: Record<
+  SpecialityId,
+  { name: string; path: string; blurb: string; format: PlateFormat }
+> = {
+  short: {
+    name: "Short",
+    path: "/short-number-plates",
+    blurb: "Cut to fit shorter registrations.",
+    format: { frontSize: "auto", rearSize: "auto" },
+  },
+  oversized: {
+    name: "Oversized",
+    path: "/oversized-number-plates",
+    blurb: "A 533 × 152mm rear plate for larger recesses.",
+    format: { rearSize: "oversized", single: "rear", sides: ["rear", "pair"] },
+  },
+  show: {
+    name: "Show",
+    path: "/show-number-plates",
+    blurb: "Custom spacing, for display off the road.",
+    format: { legality: "show" },
+  },
+  ev: {
+    name: "EV Green Flash",
+    path: "/ev-number-plates",
+    blurb: "The green flash for zero-emission vehicles.",
+    format: { badge: "ev" },
+  },
+};
+
+export const SPECIALITY_ORDER: SpecialityId[] = ["short", "oversized", "show", "ev"];
+
+/** Short plate sizes by the most characters they carry, spaces included */
+const SHORT_SIZES: PlateSizeId[] = ["3", "4", "5", "6", "7"];
+
+/** The plate size a registration needs on a short plate ("8" = standard) */
+export function shortSizeFor(reg: string): PlateSizeId {
+  const n = reg.trim().replace(/\s+/g, " ").length;
+  return SHORT_SIZES.find((s) => Number(s) >= n) ?? "8";
+}
+
+const sizeOf = (s: PlateFormat["frontSize"], reg = "") =>
+  s === "auto" ? (reg ? shortSizeFor(reg) : "6") : (s ?? "8");
+
+/** One plate and a pair of `style` in `format`, from the builder's pricing */
+export function formatPrices(style: StyleId, format: PlateFormat = {}) {
+  const common = {
+    style: STYLE_KEY[style],
+    frontSize: sizeOf(format.frontSize),
+    rearSize: sizeOf(format.rearSize),
+    hasBadge: !!format.badge,
+    hex: false,
+  };
+  return {
+    single: quote({ ...common, amount: format.single ?? "front" }).total,
+    pair: quote({ ...common, amount: "both" }).total,
+  };
+}
+
+/** Builder link settings for a format. A short size follows the registration,
+    so with no registration yet it's left for the builder to pick. */
+export function formatLinkOptions(format: PlateFormat = {}, reg = "") {
+  const size = (s: PlateFormat["frontSize"]) =>
+    !s || (s === "auto" && !reg.trim()) ? undefined : sizeOf(s, reg);
+  return {
+    frontSize: size(format.frontSize),
+    rearSize: size(format.rearSize),
+    badge: format.badge,
+    legality: format.legality,
+  };
+}
+
+/** Every product page's path and what its "Build my plates" link presets */
+export const PRODUCT_PAGE_LINKS: Record<string, { style?: StyleId; format?: PlateFormat }> = {
+  ...Object.fromEntries(Object.entries(STYLE_PAGES).map(([path, style]) => [path, { style }])),
+  ...Object.fromEntries(SPECIALITY_ORDER.map((id) => [SPECIALITY[id].path, { format: SPECIALITY[id].format }])),
+};
 
 export const gbp = (n: number) => `£${n.toFixed(2)}`;
 export const pairPrice = (id: StyleId) => PRICES[id].pair;

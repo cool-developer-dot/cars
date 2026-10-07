@@ -1,13 +1,28 @@
 # Turns the renders from render-product-art.sh and photo-plates.py into the
 # WebPs the style pages load, at the same sizes as the 3D page's files.
-#   python3 scripts/export-product-art.py <render-dir> <photo-dir-root>
-# <photo-dir-root>/<finish>/ holds photo-plates.py output for each finish.
+#   python3 scripts/export-product-art.py <render-dir> <photo-dir-root> [page ...]
+# <photo-dir-root>/<photos>/ holds photo-plates.py output (by finish for the style
+# pages, by page for Standard and the speciality pages). Files not rendered yet
+# are skipped, so a partial batch exports what it has.
 import os, sys
 from PIL import Image
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 PUBLIC = os.path.join(HERE, "..", "public")
-FINISH = {"4d": "acrylic", "5d": "acrylicGel", "bevel": "bevel", "ghost": "ghost"}
+# page -> its folder of car-photo composites
+FINISH = {
+    "4d": "acrylic",
+    "5d": "acrylicGel",
+    "bevel": "bevel",
+    "ghost": "ghost",
+    "standard": "standard",
+    "short": "short",
+    "oversized": "oversized",
+    "show": "show",
+    "ev": "ev",
+}
+# format comparison cards: render -> public/formats/<name>.webp
+CARDS = ("standard-front", "standard-rear", "short", "oversized", "show", "ev")
 
 # render name -> [(file, width, height)]
 RENDERS = {
@@ -28,6 +43,8 @@ PHOTOS = {
 
 
 def save(src, dst, w, h, q=82):
+    if not os.path.exists(src):
+        return
     im = Image.open(src).convert("RGB")
     if im.size != (w, h):
         im = im.resize((w, h), Image.LANCZOS)
@@ -38,7 +55,10 @@ def save(src, dst, w, h, q=82):
 
 def main():
     renders, photos = sys.argv[1], sys.argv[2]
+    pages = sys.argv[3:] or list(FINISH)
     for page, finish in FINISH.items():
+        if page not in pages:
+            continue
         for name, outs in RENDERS.items():
             for out, w, h in outs:
                 save(os.path.join(renders, f"{page}-{name}.png"), os.path.join(PUBLIC, page, out + ".webp"), w, h)
@@ -46,8 +66,11 @@ def main():
             for out, w, h in outs:
                 save(os.path.join(photos, finish, name + ".png"), os.path.join(PUBLIC, page, out + ".webp"), w, h)
     # the finish close-ups shared by every page's comparison cards
-    for finish, out in (("gel", "gel"), ("acrylic", "acrylic"), ("acrylicGel", "acrylic-gel"), ("bevel", "bevel"), ("ghost", "ghost")):
+    for finish, out in (("gel", "gel"), ("acrylic", "acrylic"), ("acrylicGel", "acrylic-gel"), ("bevel", "bevel"),
+                        ("ghost", "ghost"), ("printed", "printed")):
         save(os.path.join(renders, f"finish-{finish}.png"), os.path.join(PUBLIC, "finishes", out + ".webp"), 580, 464)
+    for card in CARDS:
+        save(os.path.join(renders, f"card-{card}.png"), os.path.join(PUBLIC, "formats", card + ".webp"), 580, 464)
 
 
 if __name__ == "__main__":

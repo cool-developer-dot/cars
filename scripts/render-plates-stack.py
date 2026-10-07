@@ -90,7 +90,7 @@ PW, PH, PT = 0.520, 0.111, float(E("PT", "0.007"))
 CH = float(E("CH", "0.006"))
 
 
-def make_plate(name, face):
+def make_plate(name, face, PW=PW, PH=PH):
     bm = bmesh.new()
     hw, hh = PW / 2, PH / 2
     vs = [bm.verts.new(v) for v in ((-hw, -hh, 0), (hw, -hh, 0), (hw, hh, 0), (-hw, hh, 0))]
@@ -118,7 +118,7 @@ def make_plate(name, face):
     return o
 
 
-def bezel(name):
+def bezel(name, PW=PW, PH=PH):
     """A slightly larger silver tray behind the face: the bright edge round the plate."""
     bm = bmesh.new()
     B = float(E("BEZ", "0.0045"))
@@ -145,14 +145,16 @@ def bezel(name):
     return o
 
 
-def standing_plate(name, face, loc):
+def standing_plate(name, face, loc, w=PW, h=PH):
     """A plate (face toward -Y) with its characters, standing at `loc` (its centre)."""
     rig = bpy.data.objects.new(name + "Rig", None)
     sc.collection.objects.link(rig)
-    bz = bezel(name + "Bezel")
+    bz = bezel(name + "Bezel", w, h)
     bz.location = (0, 0, -0.0012)
     bz.parent = rig
-    p = make_plate(name, face)
+    p = make_plate(name, face, w, h)
+    plate_finish.add_flash(sc, name + "Flash", rig, w, h)
+    plate_finish.add_border(sc, name + "Border", rig, w, h)
     c = plate_finish.build(sc, name + "Chars", FINISH, height=CH)
     c.location = (0, 0, 0.0002)
     p.parent = rig
@@ -164,8 +166,17 @@ def standing_plate(name, face, loc):
 
 
 GAP = float(E("GAP", "0.016"))
-yellow = standing_plate("Yellow", yellow_face, (float(E("YX", "0.07")), 0.0, PH / 2 + 0.002))
-white = standing_plate("White", white_face, (0.0, float(E("WY", "0.05")), PH * 1.5 + GAP + 0.002))
+FW, FH = plate_finish.plate_size()
+RW_, RH_ = plate_finish.plate_size(rear=True)
+ONE = E("ONE", "")
+if ONE == "white":
+    # one plate on its own (the comparison cards)
+    white = standing_plate("White", white_face, (0.0, 0.0, FH / 2 + 0.002), FW, FH)
+elif ONE == "yellow":
+    yellow = standing_plate("Yellow", yellow_face, (0.0, 0.0, RH_ / 2 + 0.002), RW_, RH_)
+else:
+    yellow = standing_plate("Yellow", yellow_face, (float(E("YX", "0.07")), 0.0, RH_ / 2 + 0.002), RW_, RH_)
+    white = standing_plate("White", white_face, (0.0, float(E("WY", "0.05")), RH_ + GAP + FH / 2 + 0.002), FW, FH)
 
 # ------------------------------------------------------------------ floor: wet navy, mirrors the yellow plate
 floor_mat = mat("Floor", (0.002, 0.006, 0.016, 1), rough=float(E("FR", "0.06")), coat=float(E("FC", "1.0")),

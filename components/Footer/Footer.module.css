@@ -763,7 +763,7 @@
   }
 
   .grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 48px 36px;
     padding-bottom: 48px;
   }
@@ -784,6 +784,13 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+  }
+}
+
+/* Four link columns side by side once there's room */
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
@@ -814,20 +821,14 @@
     padding: 80px 48px 32px;
   }
 
+  /* brand and the four link columns; the newsletter takes its own row */
   .grid {
-    grid-template-columns:
-      minmax(0, 1.35fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr)
-      minmax(0, 1.5fr);
-    gap: 48px;
+    grid-template-columns: minmax(0, 1.35fr) repeat(4, minmax(0, 1fr));
+    gap: 48px 40px;
   }
 
-  .brand,
-  .newsletter {
+  .brand {
     grid-column: auto;
-  }
-
-  .newsletter {
-    max-width: none;
   }
 
   .logo {
@@ -846,8 +847,15 @@
     padding-right: 64px;
   }
 
+  /* everything on one row */
   .grid {
-    gap: 56px;
+    grid-template-columns: minmax(0, 1.3fr) repeat(4, minmax(0, 1fr)) minmax(0, 1.45fr);
+    gap: 48px;
+  }
+
+  .newsletter {
+    grid-column: auto;
+    max-width: none;
   }
 }
 

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowRight, CreditCard, ShieldCheck, Truck } from "lucide-react";
 import NeonEdge from "@/components/NeonEdge/NeonEdge";
 import h from "@/components/home/home.module.css";
-import { builderUrl } from "@/lib/builderLink";
+import { pageBuildUrl } from "@/lib/products";
 import { COMPANY } from "@/lib/site";
 import Rise from "../GuidesReviews/Rise";
 import type { ProductPageContent } from "../pageContent";
@@ -90,7 +90,7 @@ export default function FaqCta({ page: content }: { page: ProductPageContent }) 
           </Rise>
 
           <Rise index={1} className={s.actions}>
-            <Link href={builderUrl({ style: product.id })} className={`${h.btn} ${s.btn}`}>
+            <Link href={pageBuildUrl(product)} className={`${h.btn} ${s.btn}`}>
               Build My {name} Plates
               <ArrowRight strokeWidth={2.2} aria-hidden="true" />
             </Link>

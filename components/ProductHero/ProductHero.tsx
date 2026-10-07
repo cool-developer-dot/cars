@@ -15,9 +15,8 @@ import {
   Truck,
 } from "lucide-react";
 import NeonEdge from "@/components/NeonEdge/NeonEdge";
-import { builderUrl } from "@/lib/builderLink";
 import { plateFont } from "@/lib/fonts";
-import type { ProductContent } from "@/lib/products";
+import { pageBuildUrl, pagePrices, styleOf, type ProductContent } from "@/lib/products";
 import { COMPANY, PRICES, gbp, type StyleId } from "@/lib/site";
 import { useHydrationSafeReducedMotion } from "@/lib/useHydrationSafeReducedMotion";
 import styles from "./ProductHero.module.css";
@@ -169,12 +168,18 @@ export default function ProductHero({
   const router = useRouter();
   const reduced = useHydrationSafeReducedMotion();
   const cardRef = useRef<HTMLFormElement>(null);
-  const [reg, setReg] = useState("AB12 CDE");
-  const [side, setSide] = useState<Side>("front");
-  const [styleId, setStyleId] = useState<StyleId>(product.id);
+  const ownStyle = styleOf(product);
+  const copy = product.hero;
+  // Speciality formats limit the sides (oversized is a rear-only size)
+  const sides = SIDES.filter((sd) => !product.format?.sides || product.format.sides.includes(sd.id));
+  const singleSide: Side = product.format?.single ?? "front";
+  const [reg, setReg] = useState(product.sampleReg ?? "AB12 CDE");
+  const [side, setSide] = useState<Side>(singleSide);
+  const [styleId, setStyleId] = useState<StyleId>(ownStyle);
 
-  const own = PRICES[product.id];
-  const picked = PRICES[styleId];
+  const own = { name: copy ? product.short : PRICES[ownStyle].name, ...pagePrices(product) };
+  const picked = { name: PRICES[styleId].name, ...pagePrices(product, styleId) };
+  const noun = copy?.noun ?? SHORT[styleId];
 
   // Wait for the opening intro to hand the page over (as the homepage does)
   const revealed = useSyncExternalStore(onReveal, isRevealed, () => false);
@@ -202,7 +207,7 @@ export default function ProductHero({
       <div className={styles.inner}>
         <div className={styles.copy}>
           <p className={`${styles.eyebrow} ${styles.anim}`} style={delay(0)}>
-            {own.name} plates
+            {copy?.eyebrow ?? `${own.name} plates`}
           </p>
           <h1 id="product-hero-title" className={`${styles.title} ${styles.anim}`} style={delay(1)}>
             <span className={styles.titleLine}>{noOrphan(product.h1)}</span>{" "}
@@ -238,19 +243,23 @@ export default function ProductHero({
               type="button"
               className={`${styles.option} ${styles.anim}`}
               style={delay(4)}
-              aria-pressed={side !== "pair" && styleId === product.id}
+              aria-pressed={side !== "pair" && styleId === ownStyle}
               onClick={() => {
-                setStyleId(product.id);
-                pickSide("front");
+                setStyleId(ownStyle);
+                pickSide(singleSide);
               }}
             >
               <span className={styles.optionIcon}>
                 <PlateIcon />
               </span>
               <span className={styles.optionText}>
-                <strong>Single front or rear {SHORT[product.id]} plates</strong>
+                <strong>{copy?.single.title ?? `Single front or rear ${SHORT[ownStyle]} plates`}</strong>
                 <span>
-                  Order one plate — front or rear&nbsp;— at&nbsp;{gbp(own.single)}.
+                  {copy ? (
+                    copy.single.text
+                  ) : (
+                    <>Order one plate — front or rear&nbsp;— at&nbsp;{gbp(own.single)}.</>
+                  )}
                 </span>
               </span>
             </button>
@@ -258,9 +267,9 @@ export default function ProductHero({
               type="button"
               className={`${styles.option} ${styles.anim}`}
               style={delay(5)}
-              aria-pressed={side === "pair" && styleId === product.id}
+              aria-pressed={side === "pair" && styleId === ownStyle}
               onClick={() => {
-                setStyleId(product.id);
+                setStyleId(ownStyle);
                 pickSide("pair");
               }}
             >
@@ -268,10 +277,19 @@ export default function ProductHero({
                 <PlateIcon pair />
               </span>
               <span className={styles.optionText}>
-                <strong>
-                  Matching pairs of {own.name} plates — {gbp(own.pair)} per&nbsp;pair
-                </strong>
-                <span>Order both plates together at&nbsp;{gbp(own.pair)} for the&nbsp;pair.</span>
+                {copy ? (
+                  <>
+                    <strong>{copy.pair.title}</strong>
+                    <span>{copy.pair.text}</span>
+                  </>
+                ) : (
+                  <>
+                    <strong>
+                      Matching pairs of {own.name} plates — {gbp(own.pair)} per&nbsp;pair
+                    </strong>
+                    <span>Order both plates together at&nbsp;{gbp(own.pair)} for the&nbsp;pair.</span>
+                  </>
+                )}
               </span>
             </button>
           </div>
@@ -284,7 +302,7 @@ export default function ProductHero({
           onSubmit={(e) => {
             e.preventDefault();
             router.push(
-              builderUrl({
+              pageBuildUrl(product, {
                 reg,
                 style: styleId,
                 amount: side === "pair" ? "both" : side,
@@ -298,7 +316,7 @@ export default function ProductHero({
             </span>
             <div className={styles.cardHeadText}>
               <div className={styles.cardTitleRow}>
-                <h2 className={styles.cardTitle}>Build your {picked.name} plates</h2>
+                <h2 className={styles.cardTitle}>Build your {copy ? copy.noun : picked.name} plates</h2>
                 <span className={styles.selected}>{picked.name} selected</span>
               </div>
               <p className={styles.cardSub}>
@@ -335,8 +353,13 @@ export default function ProductHero({
             <span className={styles.label} id="product-hero-side">
               Plate type
             </span>
-            <div className={styles.segment} role="group" aria-labelledby="product-hero-side">
-              {SIDES.map(({ id, label, Icon }) => (
+            <div
+              className={styles.segment}
+              role="group"
+              aria-labelledby="product-hero-side"
+              style={sides.length < 3 ? { gridTemplateColumns: `repeat(${sides.length}, minmax(0, 1fr))` } : undefined}
+            >
+              {sides.map(({ id, label, Icon }) => (
                 <button
                   key={id}
                   type="button"
@@ -356,7 +379,7 @@ export default function ProductHero({
               Plate style
             </span>
             <div className={styles.tiles} role="group" aria-labelledby="product-hero-style">
-              {tilesFor(product.id).map((t) => (
+              {tilesFor(ownStyle).map((t) => (
                 <button
                   key={t.id}
                   type="button"
@@ -379,7 +402,7 @@ export default function ProductHero({
           </div>
 
           <button type="submit" className={styles.cta}>
-            Build my {SHORT[styleId]} plates
+            Build my {noun} plates
             <ArrowRight size={18} strokeWidth={2.4} aria-hidden="true" />
           </button>
 
@@ -390,7 +413,7 @@ export default function ProductHero({
                 <dt>
                   <strong>{gbp(picked.single)}</strong> single
                 </dt>
-                <dd>Single front or rear plate</dd>
+                <dd>{copy?.single.label ?? "Single front or rear plate"}</dd>
               </div>
             </div>
             <div className={styles.priceItem}>
@@ -399,7 +422,7 @@ export default function ProductHero({
                 <dt>
                   <strong>{gbp(picked.pair)}</strong> pair
                 </dt>
-                <dd>Matching front &amp; rear plates</dd>
+                <dd>{copy?.pair.label ?? "Matching front & rear plates"}</dd>
               </div>
             </div>
           </dl>

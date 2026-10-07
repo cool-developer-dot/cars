@@ -1,10 +1,25 @@
 import type { ReactNode, SVGProps } from "react";
-import { Info, Layers, Slash, Sparkles } from "lucide-react";
+import {
+  CarFront,
+  CaseSensitive,
+  Eye,
+  Info,
+  Layers,
+  Leaf,
+  Minus,
+  MoveHorizontal,
+  RectangleHorizontal,
+  Ruler,
+  ShieldCheck,
+  Slash,
+  Sparkles,
+  Zap,
+} from "lucide-react";
 import Reveal from "@/components/content/Reveal";
 import NeonEdge from "@/components/NeonEdge/NeonEdge";
 import h from "@/components/home/home.module.css";
 import { gbp } from "@/lib/site";
-import { COMPARE_CARDS, type CompareId, type ProductPageContent } from "./pageContent";
+import { COMPARE_CARDS, type CompareId, type ProductPageContent, type SpecIcon } from "./pageContent";
 import s from "./FinishExplained.module.css";
 import page from "./page.module.css";
 
@@ -38,12 +53,27 @@ function Chamfer(props: IconProps) {
   );
 }
 
-const EDGE_ICON: Record<CompareId, (p: IconProps) => ReactNode> = {
+type Icon = (p: IconProps) => ReactNode;
+
+const EDGE_ICON: Partial<Record<CompareId, Icon>> = {
+  standard: (p) => <Minus {...p} />,
   "3d": RoundEdge,
   "4d": (p) => <Slash {...p} />,
   "5d": DomeOverWall,
   ghost: RoundEdge,
   bevel: Chamfer,
+};
+
+const SPEC_ICON: Record<SpecIcon, Icon> = {
+  size: (p) => <Ruler {...p} />,
+  fits: (p) => <CarFront {...p} />,
+  chars: (p) => <CaseSensitive {...p} />,
+  plate: (p) => <RectangleHorizontal {...p} />,
+  use: (p) => <Eye {...p} />,
+  spacing: (p) => <MoveHorizontal {...p} />,
+  markings: (p) => <ShieldCheck {...p} />,
+  flash: (p) => <Zap {...p} />,
+  for: (p) => <Leaf {...p} />,
 };
 
 export default function FinishExplained({ page: content }: { page: ProductPageContent }) {
@@ -57,11 +87,13 @@ export default function FinishExplained({ page: content }: { page: ProductPageCo
       price: c.price,
       img: explained.compare.images?.[id] ?? c.img,
       alt: c.alt,
-      specs: [
-        { label: "Characters", value: c.characters, Icon: Layers },
-        { label: "Edge", value: c.edge, Icon: EDGE_ICON[id] },
-        { label: "Look", value: c.look, Icon: Sparkles },
-      ],
+      specs: c.specs
+        ? c.specs.map(({ label, value, icon }) => ({ label, value, Icon: SPEC_ICON[icon] }))
+        : [
+            { label: "Characters", value: c.characters ?? "", Icon: Layers as Icon },
+            { label: "Edge", value: c.edge ?? "", Icon: EDGE_ICON[id] ?? RoundEdge },
+            { label: "Look", value: c.look ?? "", Icon: Sparkles as Icon },
+          ],
     };
   });
 

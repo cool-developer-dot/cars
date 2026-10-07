@@ -131,7 +131,7 @@ PW, PH, PT = 0.520, 0.111, 0.0045
 EXT = float(E("EXT", "0.0036"))
 
 
-def make_plate(name, face_mat):
+def make_plate(name, face_mat, PW=PW, PH=PH):
     bm = bmesh.new()
     hw, hh = PW / 2, PH / 2
     vs = [bm.verts.new(v) for v in ((-hw, -hh, 0), (hw, -hh, 0), (hw, hh, 0), (-hw, hh, 0))]
@@ -188,16 +188,24 @@ def make_chars(name):
 
 
 # white plate (front) at the origin, lying on the slab; yellow behind and higher on screen
-white = make_plate("White", white_face)
+_fw, _fh = plate_finish.plate_size() if FINISH != "gel" else (PW, PH)
+_rw, _rh = plate_finish.plate_size(rear=True) if FINISH != "gel" else (PW, PH)
+white = make_plate("White", white_face, _fw, _fh)
 wchars = make_chars("WChars")
-NUDGE = float(E("NUDGE", "0.014"))
+_glyphs = FINISH != "gel" and os.environ.get("PLATE_FONT", "plate") == "plate"
+NUDGE = float(E("NUDGE", "0" if _glyphs else "0.014"))
 wchars.location = (NUDGE, -0.0004, CHAR_Z)
-yellow = make_plate("Yellow", yellow_face)
+yellow = make_plate("Yellow", yellow_face, _rw, _rh)
 ychars = make_chars("YChars")
 yellow.location = (float(E("YX", "0.085")), float(E("YY", "0.185")), 0.0)
 ychars.location = (yellow.location.x + NUDGE, yellow.location.y - 0.0004, CHAR_Z)
 yellow.rotation_euler = (0, 0, math.radians(float(E("YRZ", "2.0"))))
 ychars.rotation_euler = yellow.rotation_euler
+if FINISH != "gel":
+    plate_finish.add_flash(sc, "WFlash", white, _fw, _fh)
+    plate_finish.add_border(sc, "WBorder", white, _fw, _fh)
+    plate_finish.add_flash(sc, "YFlash", yellow, _rw, _rh)
+    plate_finish.add_border(sc, "YBorder", yellow, _rw, _rh)
 
 bpy.ops.object.empty_add(location=(0, 0, 0))
 rig = bpy.context.object

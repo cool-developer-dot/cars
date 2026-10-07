@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { cardRevealV, inViewOnce } from "@/lib/motion";
 import HeroPhoto from "@/components/HeroPhoto";
-import { COMPANY, CONTACT, STYLE_PAGES } from "@/lib/site";
+import { COMPANY, CONTACT, PRODUCT_PAGE_LINKS } from "@/lib/site";
 import { FOOTER_COLUMNS, LEGAL_LINKS, SOCIALS } from "./footerConfig";
 import {
   ApplePayMark,
@@ -50,8 +50,8 @@ const PAYMENTS = [
 
 const colV = cardRevealV(0.05);
 
-// The plate-style pages (3D, 4D, 5D, Bevel) all share one layout
-const STYLE_ROUTES = Object.keys(STYLE_PAGES);
+// The product pages (plate styles and speciality plates) all share one layout
+const STYLE_ROUTES = Object.keys(PRODUCT_PAGE_LINKS);
 
 // Pages whose closing call to action already shows the feature points, so the
 // footer skips its night-scene band of the same badges

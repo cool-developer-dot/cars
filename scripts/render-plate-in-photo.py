@@ -62,61 +62,83 @@ edge = mat("Edge", (0.85, 0.86, 0.88, 1), 0.3)
 PW, PH = spec["pw"], spec["ph"]
 # a hair larger than the measured face, so none of the old plate shows round it
 GROW = 1.012
-bm = bmesh.new()
-hw, hh = PW * GROW / 2, PH * GROW / 2
-vs = [bm.verts.new(v) for v in ((-hw, -hh, 0), (hw, -hh, 0), (hw, hh, 0), (-hw, hh, 0))]
-bm.faces.new(vs)
-bmesh.ops.bevel(bm, geom=vs, offset=min(PW, PH) * 0.07, segments=6, profile=0.5, affect="VERTICES")
-me = bpy.data.meshes.new("Plate")
-bm.to_mesh(me)
-bm.free()
-plate = bpy.data.objects.new("Plate", me)
-sc.collection.objects.link(plate)
-sol = plate.modifiers.new("Solid", "SOLIDIFY")
-sol.thickness = 0.004
-sol.offset = -1
-me.materials.append(face)
-me.materials.append(edge)
-bpy.context.view_layer.objects.active = plate
-bpy.ops.object.modifier_apply(modifier="Solid")
-for p in me.polygons:
-    p.material_index = 0 if p.normal.z > 0.7 else 1
+# The photo's plate is a standard 520 x 111mm one; this run's plate may be a
+# short or oversized format (plate_finish.plate_size), drawn at the same scale.
+rear = spec["face"] == "yellow"
+real_w, real_h = plate_finish.plate_size(rear)
+sx, sy = PW / 0.520, PH / 0.111
+pw, ph = real_w * sx, real_h * sy
+grow = GROW if real_w >= 0.52 else 1.0
+
+
+def rounded(name, w, h, r, thick, mats, z=0.0):
+    bm = bmesh.new()
+    vs = [bm.verts.new(v) for v in ((-w / 2, -h / 2, 0), (w / 2, -h / 2, 0), (w / 2, h / 2, 0), (-w / 2, h / 2, 0))]
+    bm.faces.new(vs)
+    bmesh.ops.bevel(bm, geom=vs, offset=r, segments=6, profile=0.5, affect="VERTICES")
+    me = bpy.data.meshes.new(name)
+    bm.to_mesh(me)
+    bm.free()
+    o = bpy.data.objects.new(name, me)
+    sc.collection.objects.link(o)
+    o.location.z = z
+    if thick:
+        sol = o.modifiers.new("Solid", "SOLIDIFY")
+        sol.thickness = thick
+        sol.offset = -1
+        bpy.context.view_layer.objects.active = o
+        bpy.ops.object.modifier_apply(modifier="Solid")
+    for m in mats:
+        me.materials.append(m)
+    if len(mats) > 1:
+        for p in me.polygons:
+            p.material_index = 0 if p.normal.z > 0.7 else 1
+    return o
+
+
+plate = rounded("Plate", pw * grow, ph * grow, min(pw, ph) * 0.07, 0.004, [face, edge])
+
+if real_w < 0.52:
+    # a short plate leaves part of the recess bare: a dark mounting panel the
+    # size of the old plate covers it, as the car's own plate surround would
+    panel = mat("Recess", (0.012, 0.013, 0.016, 1), 0.55)
+    rounded("Recess", PW * GROW, PH * GROW, min(PW, PH) * 0.07, 0.0, [panel], z=-0.0045)
 
 if spec.get("border"):
     # the black edge band some plates (rear, in the photos) have round the face
-    b = spec["border"] * PH
-    bm = bmesh.new()
-    hw, hh = PW * GROW / 2 + b, PH * GROW / 2 + b
-    vs = [bm.verts.new(v) for v in ((-hw, -hh, 0), (hw, -hh, 0), (hw, hh, 0), (-hw, hh, 0))]
-    bm.faces.new(vs)
-    bmesh.ops.bevel(bm, geom=vs, offset=min(PW, PH) * 0.09, segments=6, profile=0.5, affect="VERTICES")
-    bme = bpy.data.meshes.new("Border")
-    bm.to_mesh(bme)
-    bm.free()
-    border = bpy.data.objects.new("Border", bme)
-    sc.collection.objects.link(border)
-    border.location.z = -0.0006
-    bme.materials.append(mat("BorderBlack", (0.01, 0.01, 0.012, 1), 0.4))
+    b = spec["border"] * ph
+    rounded("Border", pw * grow + 2 * b, ph * grow + 2 * b, min(pw, ph) * 0.09, 0.0,
+            [mat("BorderBlack", (0.01, 0.01, 0.012, 1), 0.4)], z=-0.0006)
 
 chars = plate_finish.build(
     sc, "Chars", spec["finish"],
     font="/System/Library/Fonts/Supplemental/DIN Alternate Bold.ttf",
     size=0.11, height=spec.get("ch", 0.0065), spc=1.05, spw=1.1,
 )
-# fit the registration to the plate as the photo's own characters sit
-bpy.context.view_layer.update()
-lo = Vector((1e9, 1e9))
-hi = Vector((-1e9, -1e9))
-for o in chars.children:
-    for c in o.bound_box:
-        wc = o.matrix_world @ Vector(c)
-        lo.x, lo.y = min(lo.x, wc.x), min(lo.y, wc.y)
-        hi.x, hi.y = max(hi.x, wc.x), max(hi.y, wc.y)
-cw, chh = hi.x - lo.x, hi.y - lo.y
-# plate characters keep their legal proportions (412 x 79 of 520 x 111mm)
 legal = os.environ.get("PLATE_FONT", "plate") == "plate"
-chars.scale = (PW * (0.79 if legal else 0.84) / cw, PH * spec.get("char_h", 0.71 if legal else 0.66) / chh, 1)
-chars.location = (-(lo.x + hi.x) / 2 * chars.scale.x, -(lo.y + hi.y) / 2 * chars.scale.y, 0.0002)
+if legal:
+    # plate characters, flash and border are laid out in real millimetres on a
+    # face scaled to the photo's plate
+    face_rig = bpy.data.objects.new("Face", None)
+    sc.collection.objects.link(face_rig)
+    face_rig.scale = (sx, sy, 1)
+    chars.parent = face_rig
+    chars.location = (0, 0, 0.0002)
+    plate_finish.add_flash(sc, "Flash", face_rig, real_w, real_h)
+    plate_finish.add_border(sc, "BorderInk", face_rig, real_w, real_h)
+else:
+    # fit the registration to the plate as the photo's own characters sit
+    bpy.context.view_layer.update()
+    lo = Vector((1e9, 1e9))
+    hi = Vector((-1e9, -1e9))
+    for o in chars.children:
+        for c in o.bound_box:
+            wc = o.matrix_world @ Vector(c)
+            lo.x, lo.y = min(lo.x, wc.x), min(lo.y, wc.y)
+            hi.x, hi.y = max(hi.x, wc.x), max(hi.y, wc.y)
+    cw, chh = hi.x - lo.x, hi.y - lo.y
+    chars.scale = (PW * 0.84 / cw, PH * spec.get("char_h", 0.66) / chh, 1)
+    chars.location = (-(lo.x + hi.x) / 2 * chars.scale.x, -(lo.y + hi.y) / 2 * chars.scale.y, 0.0002)
 
 cam_d = bpy.data.cameras.new("Cam")
 cam_d.sensor_fit = "HORIZONTAL"

@@ -74,6 +74,11 @@ def mat(name, base, rough=0.5, metal=0.0, spec=0.5, coat=0.0, coat_rough=0.03, t
 
 # ------------------------------------------------------------------ plate (520 x 111 x 3 mm), face + rolled edge
 PW, PH, PT = 0.520, 0.111, 0.003
+_FINISH = __import__("os").environ.get("FINISH", "gel")
+if _FINISH != "gel":
+    sys.path.insert(0, __import__("os").path.dirname(__import__("os").path.abspath(__file__)))
+    import plate_finish as _pf
+    PW, PH = _pf.plate_size()
 plate_face = mat("PlateFace", (0.40, 0.41, 0.43, 1), rough=0.38, coat=0.35, coat_rough=0.1)
 # faint orange-peel / micro-scratch so the white isn't CG-flat
 nt = plate_face.node_tree
@@ -137,6 +142,8 @@ if FINISH != "gel":
         height=float(__import__("os").environ.get("CH", "0.0034")),
     )
     chars.location = (0, -0.0004, PT / 2)
+    plate_finish.add_flash(sc, "Flash", plate, PW, PH, z=PT / 2 + 0.0003)
+    plate_finish.add_border(sc, "Border", plate, PW, PH, z=PT / 2 + 0.0003)
 
 # ------------------------------------------------------------------ the car behind: gloss-black body with a drain of water beads
 body_mat = mat("Body", (0.01, 0.014, 0.025, 1), rough=0.12, coat=1.0, coat_rough=0.02)

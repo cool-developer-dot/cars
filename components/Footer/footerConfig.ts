@@ -15,12 +15,23 @@ export const FOOTER_COLUMNS: { title: string; links: FooterLink[] }[] = [
   {
     title: "Our Plates",
     links: [
-      { label: "Standard Plates", href: "/plate-styles#standard" },
+      { label: "Standard Plates", href: "/standard-number-plates" },
       { label: "3D Gel Plates", href: "/3d-number-plates" },
       { label: "4D Plates", href: "/4d-number-plates" },
       { label: "5D (4D Gel) Plates", href: "/5d-number-plates" },
       { label: "Ghost Plates", href: "/ghost-number-plates" },
       { label: "Bevel Plates", href: "/bevel-number-plates" },
+    ],
+  },
+  {
+    title: "Speciality Plates",
+    links: [
+      { label: "Short Plates", href: "/short-number-plates" },
+      { label: "Oversized Plates", href: "/oversized-number-plates" },
+      { label: "Show Plates", href: "/show-number-plates" },
+      { label: "EV Green Flash Plates", href: "/ev-number-plates" },
+      { label: "Compare All Styles", href: "/plate-styles" },
+      { label: "Build Your Plates", href: "/#builder" },
     ],
   },
   {

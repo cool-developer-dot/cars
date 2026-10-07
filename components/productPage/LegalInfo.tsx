@@ -1,4 +1,4 @@
-import { CaseSensitive, Layers, MoveHorizontal, ShieldCheck } from "lucide-react";
+import { Ban, CaseSensitive, Eye, Layers, MoveHorizontal, ShieldCheck, Trophy, type LucideIcon } from "lucide-react";
 import Reveal from "@/components/content/Reveal";
 import NeonEdge from "@/components/NeonEdge/NeonEdge";
 import h from "@/components/home/home.module.css";
@@ -15,10 +15,23 @@ const BADGES = [
   { Icon: ShieldCheck, label: "Supplier Markings (British Standard)" },
 ];
 
+type BadgeIcon = NonNullable<ProductPageContent["legal"]["badges"]>[number]["icon"];
+const BADGE_ICON: Record<BadgeIcon, LucideIcon> = {
+  type: CaseSensitive,
+  spacing: MoveHorizontal,
+  background: Layers,
+  markings: ShieldCheck,
+  display: Eye,
+  events: Trophy,
+  custom: MoveHorizontal,
+  noRoad: Ban,
+};
+
 export default function LegalInfo({ page }: { page: ProductPageContent }) {
   const legal = page.product.legal.paragraphs[0];
   const [before, after] = legal.includes(HL) ? legal.split(HL) : [legal, ""];
   const photo = page.legal.photo;
+  const badges = page.legal.badges?.map(({ label, icon }) => ({ label, Icon: BADGE_ICON[icon] })) ?? BADGES;
   return (
     <section className={`${h.section} ${h.dark} ${s.section}`} aria-labelledby="legal-info-title">
       <div className={p.wrap}>
@@ -38,9 +51,13 @@ export default function LegalInfo({ page }: { page: ProductPageContent }) {
               )}
             </p>
             <p className={`${h.lead} ${s.lead}`}>
-              This covers how the plate must be made and displayed. It&rsquo;s a
-              separate question from what a DVSA MOT tester checks — whether the
-              characters are correctly formed, evenly spaced, secure and not obscured.
+              {page.legal.note ?? (
+                <>
+                  This covers how the plate must be made and displayed. It&rsquo;s a
+                  separate question from what a DVSA MOT tester checks — whether the
+                  characters are correctly formed, evenly spaced, secure and not obscured.
+                </>
+              )}
             </p>
           </Reveal>
 
@@ -57,7 +74,7 @@ export default function LegalInfo({ page }: { page: ProductPageContent }) {
           </div>
 
           <ul className={s.badges}>
-            {BADGES.map(({ Icon, label }, i) => (
+            {badges.map(({ Icon, label }, i) => (
               <Reveal as="li" key={label} index={i} className={`${h.liquid} ${s.badge}`}>
                 <span className={s.badgeIcon} aria-hidden="true">
                   <Icon strokeWidth={2} />

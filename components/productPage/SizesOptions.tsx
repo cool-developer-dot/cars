@@ -63,20 +63,23 @@ function CarIcon() {
 /* ——— Figures (decorative; the copy above each carries the meaning) ——— */
 
 /** 520 × 111 plate with its dimension lines */
-function StandardFigure() {
+type FigureLabels = { w: string; h: string; reg: string };
+const STD_FIGURE: FigureLabels = { w: "520mm", h: "111mm", reg: "AB12 CDE" };
+
+function StandardFigure({ w, h, reg }: FigureLabels = STD_FIGURE) {
   return (
     <div className={s.figStd} aria-hidden="true">
       <span className={s.stdTop}>
         <span className={`${s.dimH} ${s.tickLeft}`} />
-        <span className={s.dimLabel}>520mm</span>
+        <span className={s.dimLabel}>{w}</span>
         <span className={`${s.dimH} ${s.tickRight}`} />
       </span>
       <span className={`${s.flat} ${s.stdPlate}`}>
-        <span className={`${s.stdChars} ${plateFont.className}`}>AB12 CDE</span>
+        <span className={`${s.stdChars} ${plateFont.className}`}>{reg}</span>
       </span>
       <span className={s.stdSide}>
         <span className={`${s.dimV} ${s.tickBoth}`} />
-        <span className={s.dimLabel}>111mm</span>
+        <span className={s.dimLabel}>{h}</span>
       </span>
     </div>
   );
@@ -140,13 +143,15 @@ function MeasureFigure() {
   );
 }
 
-const cardsFor = (moto: string) => [
+const cardsFor = (moto: string, first?: { title: string; text: string; figure?: FigureLabels }) => [
   {
     id: "standard",
     Icon: RulerIcon,
-    title: "Standard Size",
-    text: "520mm × 111mm. Shorter sizes may also be available for this style — the builder will show what's offered once you enter your registration.",
-    Figure: StandardFigure,
+    title: first?.title ?? "Standard Size",
+    text:
+      first?.text ??
+      "520mm × 111mm. Shorter sizes may also be available for this style — the builder will show what's offered once you enter your registration.",
+    Figure: () => <StandardFigure {...(first?.figure ?? STD_FIGURE)} />,
   },
   {
     id: "moto",
@@ -165,7 +170,7 @@ const cardsFor = (moto: string) => [
 ] as const;
 
 export default function SizesOptions({ page }: { page: ProductPageContent }) {
-  const cards = cardsFor(page.sizes.moto);
+  const cards = cardsFor(page.sizes.moto, page.sizes.first);
   return (
     <section className={`${h.section} ${h.light} ${s.section}`} aria-labelledby="sizes-title">
       <div className={p.wrap}>
@@ -175,9 +180,13 @@ export default function SizesOptions({ page }: { page: ProductPageContent }) {
             {page.name} Number Plate <span className={`${h.accent} ${s.line}`}>Sizes and Options</span>
           </h2>
           <p className={`${h.lead} ${s.lead}`}>
-            Standard size is 520mm × 111mm. Depending on your registration, shorter sizes
-            <br className={s.brWide} /> may also be available for this style — the builder will show what&rsquo;s offered once
-            <br className={s.brWide} /> you enter your registration.
+            {page.sizes.lead ?? (
+              <>
+                Standard size is 520mm × 111mm. Depending on your registration, shorter sizes
+                <br className={s.brWide} /> may also be available for this style — the builder will show what&rsquo;s offered once
+                <br className={s.brWide} /> you enter your registration.
+              </>
+            )}
           </p>
         </Reveal>
 

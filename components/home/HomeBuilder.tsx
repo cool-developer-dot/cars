@@ -11,7 +11,9 @@ import {
   type ReactNode,
 } from "react";
 import {
+  BADGES,
   INITIAL_BUILD,
+  SIZES,
   applyPatch,
   parseStyle,
   type BuildState,
@@ -119,8 +121,22 @@ function seedFromUrl(params: URLSearchParams): HomeBuilderSeed {
   const amount = params.get("amount");
   if (amount === "front" || amount === "rear" || amount === "both") seed.amount = amount;
   if (amount === "pair") seed.amount = "both";
+  // Speciality pages preset a size, a badge or show-plate mode
+  const isSize = (v: string | null): v is BuildState["frontSize"] => !!v && SIZES.some((sz) => sz.id === v);
+  const front = params.get("front");
+  const rear = params.get("rear");
+  if (isSize(front)) seed.frontSize = front;
+  if (isSize(rear)) seed.rearSize = rear;
+  const badge = params.get("badge");
+  if (badge && BADGES.some((b) => b.id === badge)) seed.badge = badge as BuildState["badge"];
+  const legality = params.get("legality");
+  if (legality === "legal" || legality === "show") seed.legality = legality;
   return seed;
 }
+
+/** Seeds that change a size or badge open the builder's extra options, so they're seen */
+const touchesOptions = (seed: HomeBuilderSeed) =>
+  seed.frontSize !== undefined || seed.rearSize !== undefined || seed.badge !== undefined;
 
 export function HomeBuilderProvider({ children }: { children: ReactNode }) {
   const { basket, hydrated } = useCart();
@@ -158,6 +174,7 @@ export function HomeBuilderProvider({ children }: { children: ReactNode }) {
     // Applied on the next frame, after hydration has settled
     if (Object.keys(seed).length) {
       window.requestAnimationFrame(() => setState((s) => applyPatch(s, seed)));
+      if (touchesOptions(seed)) setOptionsOpen(true);
     }
     if (editing) pendingEdit.current = true;
     if (params.toString()) {

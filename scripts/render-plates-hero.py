@@ -125,7 +125,7 @@ floor.data.materials.append(floor_mat)
 PW, PH, PT = 0.520, 0.111, 0.004
 
 
-def make_plate(name, face):
+def make_plate(name, face, PW=PW, PH=PH):
     bm = bmesh.new()
     hw, hh = PW / 2, PH / 2
     vs = [bm.verts.new(v) for v in ((-hw, -hh, 0), (hw, -hh, 0), (hw, hh, 0), (-hw, hh, 0))]
@@ -157,12 +157,17 @@ FONT = "/System/Library/Fonts/Supplemental/" + E("FONT", "DIN Alternate Bold.ttf
 CH = float(E("CH", "0.009"))
 
 
-def plate_with_chars(name, face, loc, rz, tilt=0.0):
+def plate_with_chars(name, face, loc, rz, tilt=0.0, rear=False):
     root = bpy.data.objects.new(name + "Rig", None)
     sc.collection.objects.link(root)
-    p = make_plate(name, face)
+    w, h = plate_finish.plate_size(rear)
+    p = make_plate(name, face, w, h)
+    plate_finish.add_flash(sc, name + "Flash", root, w, h)
+    plate_finish.add_border(sc, name + "Border", root, w, h)
     c = plate_finish.build(sc, name + "Chars", FINISH, font=FONT, size=float(E("FS", "0.104")), height=CH)
-    c.location = (float(E("NUDGE", "0.012")), -0.0004, 0.0002)
+    # (NUDGE centred the old font; the plate characters are centred already)
+    glyphs = os.environ.get("PLATE_FONT", "plate") == "plate"
+    c.location = (float(E("NUDGE", "0" if glyphs else "0.012")), -0.0004, 0.0002)
     p.parent = root
     c.parent = root
     root.location = loc
@@ -172,7 +177,7 @@ def plate_with_chars(name, face, loc, rz, tilt=0.0):
 
 # yellow lies flat; the white one rests across its left end, tipped a hair
 YX, YY = float(E("YX", "0.27")), float(E("YY", "-0.03"))
-yellow = plate_with_chars("Yellow", yellow_face, (YX, YY, PT), 0)
+yellow = plate_with_chars("Yellow", yellow_face, (YX, YY, PT), 0, rear=True)
 white = plate_with_chars("White", white_face, (0, 0, PT + float(E("WZ", "0.0045"))), 0, math.radians(float(E("WT", "0.6"))))
 white.location.y = float(E("WY", "0.075"))
 
