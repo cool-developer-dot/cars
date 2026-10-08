@@ -12,6 +12,7 @@ export const metadata = infoMetadata({
   description:
     "How ReplacementPlates uses cookies and similar technologies, and how to accept, reject or change your choices.",
   path: "/cookies",
+  image: "/og/default.jpg",
 });
 
 const ext = { target: "_blank", rel: "noopener noreferrer" } as const;

@@ -22,10 +22,11 @@ import h from "@/components/home/home.module.css";
 import s from "@/components/infoPage/info.module.css";
 
 export const metadata = infoMetadata({
-  title: "Documents You Need to Order Number Plates | ReplacementPlates",
+  title: "Documents You Need for Number Plates | ReplacementPlates",
   description:
     "Which documents show your name, address and right to use a registration, as the DVLA requires before a registered supplier can supply road-use number plates.",
   path: "/documents-you-need",
+  image: "/og/bevel-intro.jpg",
 });
 
 const INF104 = "https://www.gov.uk/government/publications/vehicle-registration-numbers-and-number-plates";

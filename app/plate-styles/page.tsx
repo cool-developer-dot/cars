@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { infoMetadata } from "@/components/infoPage/meta";
 import Link from "next/link";
 import { ArrowRight, Info } from "lucide-react";
 import PageHero from "@/components/content/PageHero";
@@ -13,12 +14,12 @@ import {
 import { FROM_PRICE, PRICES, WARRANTY_MONTHS, gbp, pairPrice, type StyleId } from "@/lib/site";
 import c from "@/components/content/content.module.css";
 
-export const metadata: Metadata = {
-  title: { absolute: "Number Plate Styles and Prices | ReplacementPlates" },
-  description:
-    `Standard, 3D gel, 4D, 5D, Ghost and Bevel number plates, priced per plate from ${gbp(FROM_PRICE)}. Compare finishes and prices, then build your plates online.`,
-  alternates: { canonical: "/plate-styles" },
-};
+export const metadata: Metadata = infoMetadata({
+  title: "Number Plate Styles and Prices | ReplacementPlates",
+  description: `Standard, 3D gel, 4D, 5D, Ghost and Bevel number plates, priced per plate from ${gbp(FROM_PRICE)}. Compare finishes and prices, then build your plates online.`,
+  path: "/plate-styles",
+  image: "/og/gel-plates.jpg",
+});
 
 const ORDER: StyleId[] = ["standard", "3d", "4d", "5d", "ghost", "bevel"];
 

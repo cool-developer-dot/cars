@@ -8,10 +8,11 @@ import { InfoJsonLd, infoMetadata } from "@/components/infoPage/meta";
 import { COMPANY, CONTACT } from "@/lib/site";
 
 export const metadata = infoMetadata({
-  title: "Cancellations and Returns: Full Refund Before Production Starts | ReplacementPlates",
+  title: "Returns and Cancellations | ReplacementPlates",
   description:
-    "Cancel for a full refund at any time before production starts, with no fee. Personalised plates have no change-of-mind right once production has started. Your rights for faulty goods are unaffected.",
+    "Cancel for a full refund any time before production starts, with no fee. Made-to-order plates can't be returned for a change of mind; faulty plates can.",
   path: "/returns",
+  image: "/og/default.jpg",
 });
 
 const ext = { target: "_blank", rel: "noopener noreferrer" } as const;

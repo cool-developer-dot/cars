@@ -17,6 +17,7 @@ export const metadata = infoMetadata({
   description:
     "Customer reviews of Private Number Plate Maker Ltd and of ReplacementPlates, shown separately with their sources.",
   path: "/reviews",
+  image: "/og/4d-hero.jpg",
   index: false,
 });
 

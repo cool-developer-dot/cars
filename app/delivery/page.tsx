@@ -24,6 +24,7 @@ export const metadata = infoMetadata({
   description:
     "Royal Mail First Class is £3 on orders under £15 and free from £15. Tracked 24 is an additional £2. How dispatch, delivery and collection timings work.",
   path: "/delivery",
+  image: "/og/plates.jpg",
 });
 
 const { firstClass, freeFrom, tracked } = DELIVERY_FEES;

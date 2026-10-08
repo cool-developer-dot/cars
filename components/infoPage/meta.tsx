@@ -7,12 +7,15 @@ export function infoMetadata({
   title,
   description,
   path,
+  image = "/og/default.jpg",
   index = true,
 }: {
   /** The full <title>, e.g. "Delivery and Dispatch | ReplacementPlates" */
   title: string;
   description: string;
   path: string;
+  /** 1200 × 630 social card in /public/og */
+  image?: string;
   /** false keeps the page out of search results (and the sitemap) */
   index?: boolean;
 }): Metadata {
@@ -28,8 +31,9 @@ export function infoMetadata({
       url: path,
       title,
       description,
+      images: [{ url: image, width: 1200, height: 630, alt: title }],
     },
-    twitter: { card: "summary", title, description },
+    twitter: { card: "summary_large_image", title, description, images: [image] },
   };
 }
 

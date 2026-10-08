@@ -16,6 +16,7 @@ export const metadata = infoMetadata({
   description:
     "Where ReplacementPlates delivers and where you can collect. One collection location in Ilford, East London; Royal Mail delivery.",
   path: "/areas-we-cover",
+  image: "/og/5d-hero.jpg",
 });
 
 const NEARBY = ["Ilford", "London", "Barking", "Dagenham", "Romford", "Seven Kings", "Goodmayes", "Redbridge", "East Ham", "Stratford"];

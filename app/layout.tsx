@@ -23,7 +23,16 @@ export const metadata: Metadata = {
   },
   description:
     "Replacement number plates made to order by a DVLA-registered supplier (RNPS 75449). Royal Mail delivery or Ilford collection.",
-  openGraph: { siteName: "ReplacementPlates", locale: "en_GB", type: "website" },
+  applicationName: "ReplacementPlates",
+  robots: { index: true, follow: true },
+  // Defaults for any page that doesn't set its own social card
+  openGraph: {
+    siteName: "ReplacementPlates",
+    locale: "en_GB",
+    type: "website",
+    images: [{ url: "/og/default.jpg", width: 1200, height: 630, alt: "ReplacementPlates" }],
+  },
+  twitter: { card: "summary_large_image", images: ["/og/default.jpg"] },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
