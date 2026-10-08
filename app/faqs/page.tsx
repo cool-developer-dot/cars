@@ -1,93 +1,102 @@
-import type { Metadata } from "next";
-import PageHero from "@/components/content/PageHero";
-import FaqAccordion from "@/components/Faqs/FaqAccordion";
-import JsonLd from "@/components/content/JsonLd";
-import { CtaBand, SectionHead } from "@/components/content/blocks";
+import HelpSection from "@/components/infoPage/HelpSection";
+import InfoHero from "@/components/infoPage/InfoHero";
+import Section from "@/components/infoPage/Section";
+import { Chips } from "@/components/infoPage/blocks";
+import { InfoJsonLd, infoMetadata } from "@/components/infoPage/meta";
+import Rise from "@/components/productPage/GuidesReviews/Rise";
+import FaqList from "@/components/productPage/FaqCta/FaqList";
 import { FAQ_GROUPS } from "@/lib/faqs";
-import { CONTACT } from "@/lib/site";
-import c from "@/components/content/content.module.css";
+import s from "@/components/infoPage/info.module.css";
 
-export const metadata: Metadata = {
-  title: { absolute: "Number Plate FAQs | ReplacementPlates" },
+export const metadata = infoMetadata({
+  title: "Number Plate FAQs | ReplacementPlates",
   description:
     "Answers to common questions about ordering, documents, delivery charges, collection, legal requirements, cancellation, warranty and faulty plates at ReplacementPlates.",
-  alternates: { canonical: "/faqs" },
+  path: "/faqs",
+});
+
+/** Group headings in Title Case */
+const HEADINGS: Record<string, string> = {
+  ordering: "Ordering",
+  documents: "Documents",
+  delivery: "Delivery and Collection",
+  legal: "Legal",
+  warranty: "Cancellation, Warranty and Problems",
 };
+
+const COUNT = FAQ_GROUPS.reduce((n, g) => n + g.items.length, 0);
 
 export default function FaqsPage() {
   return (
-    <div className={`${c.theme} ${c.page}`}>
-      <JsonLd
-        data={{
-          "@context": "https://schema.org",
-          "@type": "FAQPage",
-          mainEntity: FAQ_GROUPS.flatMap((g) =>
-            g.items.map((f) => ({
-              "@type": "Question",
-              name: f.q,
-              acceptedAnswer: { "@type": "Answer", text: f.a },
-            })),
-          ),
-        }}
+    <>
+      <InfoJsonLd
+        name="Number Plate FAQs"
+        path="/faqs"
+        extra={[
+          {
+            "@type": "FAQPage",
+            mainEntity: FAQ_GROUPS.flatMap((g) =>
+              g.items.map((f) => ({
+                "@type": "Question",
+                name: f.q,
+                acceptedAnswer: { "@type": "Answer", text: f.a },
+              })),
+            ),
+          },
+        ]}
       />
-      <PageHero
-        crumbs={[{ label: "Home", href: "/" }, { label: "FAQs" }]}
+
+      <InfoHero
+        crumb="FAQs"
         eyebrow="Help centre"
-        title={
-          <>
-            Number plate <span className={c.accent}>FAQs</span>
-          </>
-        }
+        title={["Number Plate", "FAQs"]}
         lead={
-          <>
-            Ordering, documents, delivery, the legal rules, cancellations and
-            warranty. Can&rsquo;t find it? Email{" "}
-            <a href={`mailto:${CONTACT.email}`} className={c.textLink}>
-              {CONTACT.email}
-            </a>{" "}
-            or call {CONTACT.phone}.
-          </>
+          <p>
+            {COUNT} answers on ordering, documents, delivery, the legal rules, cancellation and warranty. Pick a topic to
+            jump straight to it.
+          </p>
         }
-      >
-        <nav aria-label="FAQ topics">
-          <ul className={c.chips}>
-            {FAQ_GROUPS.map((g) => (
-              <li key={g.id}>
-                <a href={`#${g.id}`} className={`${c.chip} ${c.chipLink}`}>
-                  {g.title}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </PageHero>
+        art={{
+          src: "/standard/legal-car.webp",
+          width: 1492,
+          height: 868,
+          alt: "The front of a car with a white number plate",
+        }}
+        actions={
+          <nav aria-label="FAQ topics" className={s.dark}>
+            <Chips items={FAQ_GROUPS.map((g) => ({ label: HEADINGS[g.id] ?? g.title, href: `#${g.id}` }))} />
+          </nav>
+        }
+      />
 
-      {FAQ_GROUPS.map((g, i) => (
-        <section
-          key={g.id}
-          id={g.id}
-          className={`${c.section} ${c.anchor} ${i % 2 ? c.sectionAlt : ""}`}
-          aria-labelledby={`${g.id}-title`}
-        >
-          <div className={c.container}>
-            <div className={c.grid2}>
-              <SectionHead
-                id={`${g.id}-title`}
-                sticky
-                eyebrow={`${String(i + 1).padStart(2, "0")} / ${String(FAQ_GROUPS.length).padStart(2, "0")}`}
-                title={g.title}
-              />
-              <FaqAccordion items={g.items} />
+      <Section id="questions" tone="light" next="dark">
+        <div className={s.faqGroups}>
+          {FAQ_GROUPS.map((g, i) => (
+            <div key={g.id} id={g.id} className={s.faqGroup}>
+              <Rise className={s.faqHead}>
+                <p className={s.kicker}>
+                  {String(i + 1).padStart(2, "0")} / {String(FAQ_GROUPS.length).padStart(2, "0")}
+                </p>
+                <h2 className={s.subhead}>{HEADINGS[g.id] ?? g.title}</h2>
+                <p className={s.faqCount}>
+                  {g.items.length} {g.items.length === 1 ? "question" : "questions"}
+                </p>
+              </Rise>
+              <FaqList items={g.items} label={`${g.title} questions`} />
             </div>
-          </div>
-        </section>
-      ))}
-
-      <section className={c.section}>
-        <div className={c.container}>
-          <CtaBand />
+          ))}
         </div>
-      </section>
-    </div>
+      </Section>
+
+      <HelpSection
+        title={["Still Have", "a Question?"]}
+        lead="Message us on WhatsApp, call or email, and we'll help."
+        related={[
+          { label: "Documents you need", href: "/documents-you-need" },
+          { label: "Delivery", href: "/delivery" },
+          { label: "Prices", href: "/prices" },
+        ]}
+      />
+    </>
   );
 }

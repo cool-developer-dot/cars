@@ -6,7 +6,8 @@ export const FOOTER_COLUMNS: { title: string; links: FooterLink[] }[] = [
     links: [
       { label: "Home", href: "/" },
       { label: "Plate Styles", href: "/plate-styles" },
-      { label: "Delivery & Collection", href: "/delivery-collection" },
+      { label: "Prices", href: "/prices" },
+      { label: "How It Works", href: "/how-it-works" },
       { label: "FAQs", href: "/faqs" },
       { label: "About Us", href: "/about" },
       { label: "Contact Us", href: "/contact" },
@@ -37,12 +38,12 @@ export const FOOTER_COLUMNS: { title: string; links: FooterLink[] }[] = [
   {
     title: "Help & Support",
     links: [
-      { label: "Documents You Need", href: "/#documents" },
-      { label: "Delivery Information", href: "/delivery-collection" },
-      { label: "Ilford Collection", href: "/delivery-collection#collection" },
+      { label: "Documents You Need", href: "/documents-you-need" },
+      { label: "Legal Number Plates", href: "/legal-number-plates" },
+      { label: "Delivery Information", href: "/delivery" },
+      { label: "Areas We Cover", href: "/areas-we-cover" },
       { label: "Returns & Cancellations", href: "/returns" },
-      { label: "Warranty", href: "/faqs#warranty" },
-      { label: "Terms & Conditions", href: "/terms" },
+      { label: "Warranty", href: "/warranty" },
     ],
   },
 ];
@@ -51,6 +52,7 @@ export const LEGAL_LINKS: FooterLink[] = [
   { label: "Terms & Conditions", href: "/terms" },
   { label: "Privacy Policy", href: "/privacy" },
   { label: "Cookies", href: "/cookies" },
+  { label: "Accessibility", href: "/accessibility" },
   { label: "Sitemap", href: "/sitemap.xml" },
 ];
 

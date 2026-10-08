@@ -1,0 +1,138 @@
+/* Numbered chapters beside pictures (How it works). Light section. */
+
+.story {
+  display: grid;
+  gap: 36px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chapter {
+  display: grid;
+  gap: 18px;
+}
+
+.copy {
+  min-width: 0;
+}
+
+.num {
+  display: inline-grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  margin-bottom: 14px;
+  border-radius: 14px;
+  font-size: var(--fs-label);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: #fff;
+  background: linear-gradient(160deg, #2f8bff 0%, #0a5cff 100%);
+  box-shadow:
+    0 10px 22px -10px rgba(10, 92, 255, 0.75),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.title {
+  margin: 0 0 10px;
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  text-transform: none;
+  text-wrap: balance;
+}
+
+.body {
+  max-width: 54ch;
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  color: var(--text);
+  text-wrap: pretty;
+}
+
+.body p {
+  margin: 0;
+}
+
+.body p + p,
+.body p + ul,
+.body ul + p {
+  margin-top: 10px;
+}
+
+.body ul {
+  margin: 0;
+  padding-left: 1.2em;
+}
+
+.body li + li {
+  margin-top: 6px;
+}
+
+.body li::marker {
+  color: var(--accent);
+}
+
+.body strong {
+  color: var(--ink);
+  font-weight: 650;
+}
+
+.body a {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.body a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.visual {
+  order: -1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 220px;
+}
+
+@media (min-width: 900px) {
+  .story {
+    gap: 0;
+  }
+
+  .chapter {
+    position: relative;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(32px, 5vw, 96px);
+    padding: 34px 0;
+  }
+
+  .chapter + .chapter {
+    border-top: 1px solid var(--line);
+  }
+
+  .chapter:first-child {
+    padding-top: 0;
+  }
+
+  .chapter:last-child {
+    padding-bottom: 0;
+  }
+
+  .visual {
+    order: 0;
+    min-height: 320px;
+  }
+
+  .flip .visual {
+    order: -1;
+  }
+}

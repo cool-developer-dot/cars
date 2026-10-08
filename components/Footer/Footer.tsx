@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { cardRevealV, inViewOnce } from "@/lib/motion";
 import HeroPhoto from "@/components/HeroPhoto";
-import { COMPANY, CONTACT, PRODUCT_PAGE_LINKS } from "@/lib/site";
+import { COMPANY, CONTACT, INFO_PAGE_PATHS, PRODUCT_PAGE_LINKS } from "@/lib/site";
 import { FOOTER_COLUMNS, LEGAL_LINKS, SOCIALS } from "./footerConfig";
 import {
   ApplePayMark,
@@ -55,11 +55,11 @@ const STYLE_ROUTES = Object.keys(PRODUCT_PAGE_LINKS);
 
 // Pages whose closing call to action already shows the feature points, so the
 // footer skips its night-scene band of the same badges
-const NO_SCENE_ROUTES = ["/", ...STYLE_ROUTES];
+const NO_SCENE_ROUTES = ["/", ...STYLE_ROUTES, ...INFO_PAGE_PATHS];
 
 // Pages laid out on the shared page container (--page-max / --page-pad in
 // app/globals.css): their footer columns sit on the same two edges
-const PAGE_CONTAINER_ROUTES = STYLE_ROUTES;
+const PAGE_CONTAINER_ROUTES = [...STYLE_ROUTES, ...INFO_PAGE_PATHS];
 
 function Subscribe() {
   const [email, setEmail] = useState("");

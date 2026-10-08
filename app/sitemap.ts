@@ -15,14 +15,21 @@ const ROUTES = [
   "/oversized-number-plates",
   "/show-number-plates",
   "/ev-number-plates",
+  "/prices",
+  "/how-it-works",
+  "/documents-you-need",
+  "/legal-number-plates",
+  "/delivery",
+  "/areas-we-cover",
   "/faqs",
-  "/delivery-collection",
   "/about",
   "/contact",
   "/returns",
+  "/warranty",
   "/terms",
   "/privacy",
   "/cookies",
+  "/accessibility",
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {

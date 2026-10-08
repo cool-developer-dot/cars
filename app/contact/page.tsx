@@ -1,93 +1,177 @@
-import type { Metadata } from "next";
-import { Mail, MapPin, MessageCircle, Phone } from "lucide-react";
-import PageHero from "@/components/content/PageHero";
-import Reveal from "@/components/content/Reveal";
-import { MoreLink, SectionHead } from "@/components/content/blocks";
-import { COMPANY, CONTACT } from "@/lib/site";
-import c from "@/components/content/content.module.css";
+import { Accessibility, Ban, LockKeyhole, MessageSquareWarning } from "lucide-react";
+import ClosingCta from "@/components/infoPage/ClosingCta";
+import InfoHero from "@/components/infoPage/InfoHero";
+import Section from "@/components/infoPage/Section";
+import { WhatsAppIcon } from "@/components/productPage/deliveryIcons";
+import { Button, Cards, Channels, Details, Media, MoreLink, Note, Panel, type CardItem } from "@/components/infoPage/blocks";
+import { InfoJsonLd, infoMetadata } from "@/components/infoPage/meta";
+import { COMPANY, CONTACT, DELIVERY } from "@/lib/site";
+import h from "@/components/home/home.module.css";
+import s from "@/components/infoPage/info.module.css";
 
-export const metadata: Metadata = {
-  title: { absolute: "Contact Us | ReplacementPlates" },
+export const metadata = infoMetadata({
+  title: "Contact ReplacementPlates | ReplacementPlates",
   description:
-    "Contact ReplacementPlates by email, telephone or WhatsApp. Collection from Ilford, IG1 3QF — confirm by WhatsApp before travelling.",
-  alternates: { canonical: "/contact" },
-};
+    "Email, call or WhatsApp ReplacementPlates about your order, documents or collection, or write to us. Complaints and data protection requests too.",
+  path: "/contact",
+});
 
-const CHANNELS = [
-  { Icon: Mail, title: "Email", value: CONTACT.email, href: `mailto:${CONTACT.email}` },
-  { Icon: Phone, title: "Telephone", value: CONTACT.phone, href: CONTACT.phoneHref },
-  { Icon: MessageCircle, title: "WhatsApp", value: CONTACT.whatsapp, href: CONTACT.whatsappHref, external: true },
+const HELP: CardItem[] = [
+  {
+    Icon: Ban,
+    title: "Cancelling an Order",
+    text: (
+      <>
+        <p>
+          You can cancel for a full refund at any time before production starts. No cancellation or
+          administration fee applies.
+        </p>
+        <p>
+          Once production has started, personalised plates cannot normally be cancelled for a
+          change of mind. Your statutory rights are unaffected. Contact us as soon as possible.
+        </p>
+      </>
+    ),
+    href: "/returns",
+    link: "Returns and cancellations",
+  },
+  {
+    Icon: MessageSquareWarning,
+    title: "Making a Complaint",
+    text: (
+      <p>
+        If something has gone wrong, tell us by email, WhatsApp, telephone or post. We&rsquo;ll
+        acknowledge your complaint, look into it and tell you what we can do. See the Complaints
+        section of our terms.
+      </p>
+    ),
+    href: "/terms#complaints",
+    link: "Complaints in our terms",
+  },
+  {
+    Icon: LockKeyhole,
+    title: "Data Protection Requests",
+    text: (
+      <p>
+        To ask about or exercise your rights over your personal data, contact us as above.
+        Complaints about how we handle your personal data are covered in the Complaints section of
+        our privacy policy.
+      </p>
+    ),
+    href: "/privacy",
+    link: "Privacy policy",
+  },
+  {
+    Icon: Accessibility,
+    title: "Help Ordering",
+    text: (
+      <p>
+        If you need help placing an order, contact us and we&rsquo;ll talk you through it, or read
+        how we can help you order another way.
+      </p>
+    ),
+    href: "/accessibility",
+    link: "Accessibility",
+  },
 ];
 
 export default function ContactPage() {
   return (
-    <div className={`${c.theme} ${c.page}`}>
-      <PageHero
-        crumbs={[{ label: "Home", href: "/" }, { label: "Contact" }]}
+    <>
+      <InfoJsonLd name="Contact ReplacementPlates" path="/contact" />
+
+      <InfoHero
+        crumb="Contact"
         eyebrow="Contact"
-        title={
+        title={["Contact", "ReplacementPlates"]}
+        lead={
           <>
-            Get in <span className={c.accent}>touch</span>
+            <p>The quickest way to reach us is by WhatsApp or telephone. You can also email us.</p>
+            <p>
+              When you contact us, please give your <strong>order number</strong> if you have one
+              and, for a question about a plate, your registration and what the problem is. A photo
+              helps if a plate is damaged or wrong, but isn&rsquo;t required.
+            </p>
           </>
         }
-        lead="Questions about an order, documents, a change or a faulty plate? Include your order number if you have one."
+        aside={<Channels tone="dark" stack />}
       />
 
-      <section className={c.section} aria-labelledby="channels-title">
-        <div className={c.container}>
-          <SectionHead id="channels-title" eyebrow="Ways to reach us" title="Email, phone or WhatsApp" />
-          <ul className={c.grid3}>
-            {CHANNELS.map(({ Icon, title, value, href, external }, i) => (
-              <Reveal as="li" key={title} index={i}>
-                <a
-                  href={href}
-                  className={`${c.card} ${c.cardLink}`}
-                  {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                >
-                  <span className={c.cardIcon} aria-hidden="true">
-                    <Icon />
-                  </span>
-                  <h3 className={c.cardTitle}>{title}</h3>
-                  <p className={c.cardText}>{value}</p>
-                </a>
-              </Reveal>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      <section className={`${c.section} ${c.sectionAlt}`} aria-labelledby="where-title">
-        <div className={c.container}>
-          <div className={c.grid2}>
-            <Reveal>
-              <div className={`${c.card} ${c.cardGlow}`}>
-                <span className={c.cardIcon} aria-hidden="true">
-                  <MapPin />
-                </span>
-                <h2 id="where-title" className={c.cardTitle}>Collection point</h2>
-                <p className={c.cardText}>
-                  {COMPANY.collection}. Ready within 3 hours — exact
-                  instructions are given by WhatsApp. Please confirm before
-                  travelling.
-                </p>
-              </div>
-            </Reveal>
-            <Reveal index={1}>
-              <div className={c.card}>
-                <h2 className={c.cardTitle}>Registered office (post only)</h2>
-                <p className={c.cardText}>{COMPANY.registeredOffice}</p>
-                <p className={c.cardText}>
-                  The registered office is our official address for post.
-                  Collections are not made from it.
-                </p>
-                <p style={{ marginTop: 16 }}>
-                  <MoreLink href="/faqs">Browse the FAQs</MoreLink>
-                </p>
-              </div>
-            </Reveal>
+      <Section id="collection" tone="light" next="dark">
+        <Media
+          img={{
+            src: "/delivery/ilford-collection.webp",
+            width: 446,
+            height: 660,
+            alt: "The ReplacementPlates collection point in Ilford",
+          }}
+        >
+          <p className={h.eyebrow}>Collection</p>
+          <h2 className={`${h.title} ${s.title} ${s.mediaHead}`}>
+            Collecting <span className={h.accent}>Your Plates</span>
+          </h2>
+          <p className={`${h.lead} ${s.mediaLead}`}>
+            Our collection location is <strong>{COMPANY.collection}</strong>. {DELIVERY.collectionReady}{" "}
+            We give exact arrival instructions by WhatsApp when we confirm your collection.
+          </p>
+          <p className={`${h.lead} ${s.mediaLead}`}>We don&rsquo;t have shops or branches elsewhere.</p>
+          <div className={`${s.btnRow} ${s.mediaActions}`}>
+            <Button href={CONTACT.whatsappHref} Icon={WhatsAppIcon}>
+              Message Us on WhatsApp
+            </Button>
+            <Button href="/delivery#collection" ghost>
+              Collection Details
+            </Button>
           </div>
-        </div>
-      </section>
-    </div>
+        </Media>
+      </Section>
+
+      <Section
+        id="help"
+        tone="dark"
+        next="light"
+        eyebrow="How we can help"
+        title={["Orders, Complaints", "and Your Data"]}
+        lead="Whatever you need, the same three ways to reach us apply: WhatsApp, telephone or email."
+      >
+        <Cards tone="dark" items={HELP} cols={4} />
+      </Section>
+
+      <Section
+        id="post"
+        tone="light"
+        next="dark"
+        side
+        eyebrow="Post and company details"
+        title={["Writing", "to Us"]}
+        lead={
+          <p>
+            ReplacementPlates is a trading name of {COMPANY.legalName} (company number{" "}
+            {COMPANY.companyNumber}). Our registered office is our address for post.
+          </p>
+        }
+      >
+        <Panel tone="light" className={s.flow}>
+          <Details
+            items={[
+              ["Post", `${COMPANY.legalName}, ${COMPANY.registeredOffice}`],
+              ["Company number", `${COMPANY.companyNumber} (${COMPANY.jurisdiction})`],
+              ["Supplier ID (RNPS)", COMPANY.rnps],
+            ]}
+          />
+          <Note tone="light" title="Please note">
+            <p>
+              Collections are not made from the registered office, and please don&rsquo;t send
+              plates back unless we ask you to.
+            </p>
+          </Note>
+          <p>
+            <MoreLink href="/about">About us</MoreLink>
+          </p>
+        </Panel>
+      </Section>
+
+      <ClosingCta secondary={{ href: "/faqs", label: "Read the FAQs" }} />
+    </>
   );
 }

@@ -411,7 +411,7 @@ export default function Basket() {
               <p>
                 <strong>Road-legal plates need a quick document check.</strong> By law we must see proof
                 of your name and address and your right to use this registration before we make them.{" "}
-                <Link href="/#documents">What you&apos;ll need</Link>
+                <Link href="/documents-you-need">What you&apos;ll need</Link>
               </p>
             </div>
           )}

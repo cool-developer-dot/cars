@@ -1,210 +1,222 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-import {
-  Ban,
-  BadgeCheck,
-  FileCheck2,
-  MapPin,
-  ShieldCheck,
-  Stamp,
-} from "lucide-react";
-import PageHero from "@/components/content/PageHero";
-import Reveal from "@/components/content/Reveal";
-import { CtaBand, MoreLink, SectionHead, TrustChips } from "@/components/content/blocks";
-import { COMPANY, CONTACT, PRICES, gbp } from "@/lib/site";
-import c from "@/components/content/content.module.css";
+import { Ban, FileCheck2, MapPin, ShieldCheck, Stamp } from "lucide-react";
+import ClosingCta from "@/components/infoPage/ClosingCta";
+import InfoHero from "@/components/infoPage/InfoHero";
+import Section from "@/components/infoPage/Section";
+import { Cards, Chips, Details, Note, Panel, Rows, type CardItem } from "@/components/infoPage/blocks";
+import { InfoJsonLd, infoMetadata } from "@/components/infoPage/meta";
+import { COMPANY, CONTACT, PRICES, SPECIALITY, SPECIALITY_ORDER, gbp, type StyleId } from "@/lib/site";
+import s from "@/components/infoPage/info.module.css";
 
-export const metadata: Metadata = {
-  title: { absolute: "About ReplacementPlates | ReplacementPlates" },
+export const metadata = infoMetadata({
+  title: "About ReplacementPlates | ReplacementPlates",
   description:
     "ReplacementPlates is a trading name of Private Number Plate Maker Ltd, a DVLA-registered number plate supplier. Company details and how to contact us.",
-  alternates: { canonical: "/about" },
+  path: "/about",
+});
+
+/** Each finish, shown with its own render */
+const FINISH_ART: Record<StyleId, string> = {
+  standard: "/standard/intro.webp",
+  "3d": "/3d/gel-plates.webp",
+  "4d": "/4d/intro.webp",
+  "5d": "/5d/intro.webp",
+  ghost: "/ghost/intro.webp",
+  bevel: "/bevel/intro.webp",
 };
 
-const PRINCIPLES = [
+const STYLES: StyleId[] = ["standard", "3d", "4d", "5d", "ghost", "bevel"];
+
+const FINISHES: CardItem[] = STYLES.map((id) => {
+  const p = PRICES[id];
+  return {
+    title: id === "5d" ? "5D (4D Gel)" : p.name.replace("gel", "Gel"),
+    text: p.what,
+    img: { src: FINISH_ART[id], position: "50% 55%" },
+    badge: `From ${gbp(p.single)}`,
+    href: p.href,
+    link: `${id === "standard" ? "Standard" : p.name.replace("gel", "Gel")} plates`,
+  };
+});
+
+const PRINCIPLES: CardItem[] = [
   {
     Icon: FileCheck2,
-    title: "Documents first",
+    title: "Documents First",
     text: "The law requires a registered supplier to check your identity and your right to use the registration before supplying road-use plates.",
-    link: { href: "/#documents", label: "Documents you need" },
+    href: "/documents-you-need",
+    link: "Documents you need",
   },
   {
     Icon: Stamp,
-    title: "Marked plates",
+    title: "Marked Plates",
     text: "Road-use plates carry the supplier's name and postcode and the British Standard number.",
+    href: "/legal-number-plates",
+    link: "Legal number plates",
   },
   {
     Icon: Ban,
-    title: "Cancel before production",
+    title: "Cancel Before Production",
     text: "You can cancel for a full refund at any time before production starts, with no fee.",
-    link: { href: "/returns", label: "Returns and cancellations" },
+    href: "/returns",
+    link: "Returns and cancellations",
   },
   {
     Icon: ShieldCheck,
     title: "Warranty",
     text: "New orders carry a manufacturing-defect warranty of 6 months for Standard, 3D Gel and 4D, and 12 months for 5D, Ghost and Bevel, from the delivery or collection date, in addition to your statutory rights.",
-    link: { href: "/faqs#warranty", label: "Warranty details" },
+    href: "/warranty",
+    link: "Warranty",
   },
   {
     Icon: MapPin,
-    title: "Clear about locations",
+    title: "Clear About Locations",
     text: "We have one collection location, in Ilford, and deliver by Royal Mail. We don't have shops or branches elsewhere.",
-    link: { href: "/delivery-collection", label: "Delivery and collection" },
+    href: "/delivery",
+    link: "Delivery and collection",
   },
 ];
 
-const PRODUCT_LINKS = (["standard", "3d", "4d", "5d", "ghost", "bevel"] as const).map(
-  (id) => PRICES[id],
-);
-
 export default function AboutPage() {
   return (
-    <div className={`${c.theme} ${c.page}`}>
-      <PageHero
-        crumbs={[{ label: "Home", href: "/" }, { label: "About" }]}
-        eyebrow="About us"
-        title={
-          <>
-            About <span className={c.accent}>ReplacementPlates</span>
-          </>
-        }
-        lead="We make number plates to order for drivers who need a replacement: a cracked, faded, lost or stolen plate, a single plate to go with one you're keeping, or a change of finish."
-        chips={<TrustChips />}
+    <>
+      <InfoJsonLd
+        name="About ReplacementPlates"
+        path="/about"
+        extra={[
+          {
+            "@type": "Organization",
+            name: COMPANY.legalName,
+            alternateName: COMPANY.brand,
+            url: "https://replacementplates.uk",
+            email: CONTACT.email,
+            telephone: "+44 20 3576 6603",
+            address: {
+              "@type": "PostalAddress",
+              streetAddress: "Stand 53, New Spitalfields Market, 1 Sherrin Road",
+              addressLocality: "London",
+              postalCode: "E10 5SQ",
+              addressCountry: "GB",
+            },
+          },
+        ]}
       />
 
-      {/* Who we are */}
-      <section className={c.section} aria-labelledby="who-title">
-        <div className={c.container}>
-          <div className={c.grid2}>
-            <div>
-              <SectionHead id="who-title" eyebrow="Who we are" title="A DVLA-registered number plate supplier" />
-              <Reveal className={c.prose}>
-                <p>
-                  ReplacementPlates is a trading name of{" "}
-                  <strong>{COMPANY.legalName}</strong>, a company registered in{" "}
-                  {COMPANY.jurisdiction} (company number {COMPANY.companyNumber}).
-                  We are a DVLA-registered number plate supplier, supplier ID
-                  (RNPS) {COMPANY.rnps}.
-                </p>
-                <p>
-                  The RNPS number identifies us as a registered supplier. It does
-                  not mean the DVLA has approved any particular plate design; each
-                  plate still has to meet the legal requirements.
-                </p>
-              </Reveal>
-            </div>
-            <Reveal index={1}>
-              <div className={`${c.card} ${c.cardGlow}`}>
-                <span className={c.cardIcon} aria-hidden="true">
-                  <BadgeCheck />
-                </span>
-                <span className={c.stat}>{COMPANY.platesSold}</span>
-                <span className={c.statLabel}>
-                  plates sold by the company since {COMPANY.platesSoldSince}
-                </span>
-                <dl className={c.details} style={{ marginTop: 20 }}>
-                  <div>
-                    <dt>Supplier ID (RNPS)</dt>
-                    <dd>{COMPANY.rnps}</dd>
-                  </div>
-                  <div>
-                    <dt>Company number</dt>
-                    <dd>{COMPANY.companyNumber}</dd>
-                  </div>
-                </dl>
-              </div>
-            </Reveal>
-          </div>
-        </div>
-      </section>
+      <InfoHero
+        crumb="About"
+        eyebrow="About us"
+        title={["About", "ReplacementPlates"]}
+        lead="ReplacementPlates makes number plates to order for drivers who need a replacement: a cracked, faded, lost or stolen plate, a single plate to go with one you're keeping, or a change of finish."
+        art={{
+          src: "/3d/gel-plates.webp",
+          width: 1522,
+          height: 1010,
+          alt: "A white front and a yellow rear number plate with raised black characters",
+          position: "50% 50%",
+        }}
+      />
 
-      {/* What we make */}
-      <section className={`${c.section} ${c.sectionAlt}`} aria-labelledby="make-title">
-        <div className={c.container}>
-          <SectionHead
-            id="make-title"
-            eyebrow="What we make"
-            title="Six finishes, priced per plate"
-            sub="Plus motorcycle and oversized formats. Order a single front or rear plate, or a pair."
-          />
-          <ul className={c.grid3}>
-            {PRODUCT_LINKS.map((p, i) => (
-              <Reveal as="li" key={p.name} index={i % 3}>
-                <Link href={p.href} className={`${c.card} ${c.cardLink}`}>
-                  <h3 className={c.cardTitle}>{p.name}</h3>
-                  <p className={c.cardText}>{p.what}</p>
-                  <span className={c.cardPrice}>
-                    From <strong>{gbp(p.single)}</strong> per plate
-                  </span>
-                </Link>
-              </Reveal>
-            ))}
-          </ul>
-          <p style={{ marginTop: 24 }}>
-            <MoreLink href="/plate-styles">See all prices</MoreLink>
+      <Section
+        id="who-we-are"
+        tone="light"
+        next="dark"
+        side
+        eyebrow="Who we are"
+        title={["A DVLA-Registered", "Number Plate Supplier"]}
+        lead={
+          <p>
+            ReplacementPlates is a trading name of <strong>{COMPANY.legalName}</strong>, a company
+            registered in {COMPANY.jurisdiction} (company number {COMPANY.companyNumber}). We are a
+            DVLA-registered number plate supplier, supplier ID (RNPS) {COMPANY.rnps}.
           </p>
-        </div>
-      </section>
+        }
+      >
+        <Panel tone="light" className={s.flow}>
+          <div className={s.statBlock}>
+            <span className={s.stat}>{COMPANY.platesSold}</span>
+            <span className={s.statLabel}>plates sold by the company since {COMPANY.platesSoldSince}</span>
+          </div>
+          <Details
+            items={[
+              ["Supplier ID (RNPS)", COMPANY.rnps],
+              ["Legal entity", COMPANY.legalName],
+              ["Company number", `${COMPANY.companyNumber} (${COMPANY.jurisdiction})`],
+            ]}
+          />
+          <Note tone="light" title="What the RNPS number means">
+            <p>
+              It identifies us as a registered supplier. It does not mean the DVLA has approved any
+              particular plate design; each plate still has to meet the legal requirements.
+            </p>
+          </Note>
+        </Panel>
+      </Section>
 
-      {/* How we work */}
-      <section className={c.section} aria-labelledby="how-title">
-        <div className={c.container}>
-          <SectionHead id="how-title" eyebrow="How we work" title="Straightforward, by design" />
-          <ul className={c.grid3}>
-            {PRINCIPLES.map(({ Icon, title, text, link }, i) => (
-              <Reveal as="li" key={title} index={i % 3}>
-                <div className={c.card}>
-                  <span className={c.cardIcon} aria-hidden="true">
-                    <Icon />
-                  </span>
-                  <h3 className={c.cardTitle}>{title}</h3>
-                  <p className={c.cardText}>{text}</p>
-                  {link && (
-                    <p style={{ marginTop: 14 }}>
-                      <MoreLink href={link.href}>{link.label}</MoreLink>
-                    </p>
-                  )}
-                </div>
-              </Reveal>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      {/* Company details */}
-      <section className={`${c.section} ${c.sectionAlt}`} aria-labelledby="details-title">
-        <div className={c.container}>
-          <div className={c.grid2}>
-            <SectionHead
-              id="details-title"
-              eyebrow="Company details"
-              title="Who you're buying from"
-              sub="The registered office is our official address for post. Collections are not made from it."
+      <Section
+        id="what-we-make"
+        tone="dark"
+        next="light"
+        eyebrow="What we make"
+        title={["Six Finishes,", "Priced Per Plate"]}
+        lead="Prices are per plate, and you can order a single front or rear plate or a pair."
+      >
+        <div className={s.flow}>
+          <Cards tone="dark" items={FINISHES} cols={3} compact />
+          <div className={s.chipRow}>
+            <p className={s.kicker}>Speciality formats</p>
+            <Chips
+              items={[
+                ...SPECIALITY_ORDER.map((id) => ({ label: `${SPECIALITY[id].name} plates`, href: SPECIALITY[id].path })),
+                { label: "All prices", href: "/prices" },
+              ]}
             />
-            <Reveal index={1}>
-              <div className={c.card}>
-                <dl className={c.details}>
-                  <div><dt>Trading name</dt><dd>{COMPANY.brand}</dd></div>
-                  <div><dt>Legal entity</dt><dd>{COMPANY.legalName}</dd></div>
-                  <div><dt>Company number</dt><dd>{COMPANY.companyNumber} ({COMPANY.jurisdiction})</dd></div>
-                  <div><dt>Registered office</dt><dd>{COMPANY.registeredOffice}</dd></div>
-                  <div><dt>Supplier ID (RNPS)</dt><dd>{COMPANY.rnps}</dd></div>
-                  <div><dt>Collection location</dt><dd>{COMPANY.collection} (exact instructions given by WhatsApp)</dd></div>
-                  <div><dt>Email</dt><dd><a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a></dd></div>
-                  <div><dt>Telephone</dt><dd><a href={CONTACT.phoneHref}>{CONTACT.phone}</a></dd></div>
-                  <div><dt>WhatsApp</dt><dd><a href={CONTACT.whatsappHref} target="_blank" rel="noopener noreferrer">{CONTACT.whatsapp}</a></dd></div>
-                </dl>
-              </div>
-            </Reveal>
           </div>
         </div>
-      </section>
+      </Section>
 
-      <section className={c.section} style={{ paddingTop: 0 }}>
-        <div className={c.container}>
-          <CtaBand />
-        </div>
-      </section>
-    </div>
+      <Section
+        id="how-we-work"
+        tone="light"
+        next="dark"
+        side
+        eyebrow="How we work"
+        title={["Straightforward", "by Design"]}
+        lead="Five things we hold to on every order, from the documents we check to where you can collect."
+      >
+        <Rows tone="light" items={PRINCIPLES} />
+      </Section>
+
+      <Section
+        id="company-details"
+        tone="dark"
+        next="dark"
+        side
+        eyebrow="Company details"
+        title={["Who You're", "Buying From"]}
+        lead="The registered office is our official address for post. Collections are not made from it."
+      >
+        <Panel tone="dark">
+          <Details
+            items={[
+              ["Trading name", COMPANY.brand],
+              ["Legal entity", COMPANY.legalName],
+              ["Company number", `${COMPANY.companyNumber} (${COMPANY.jurisdiction})`],
+              ["Registered office", COMPANY.registeredOffice],
+              ["Supplier ID (RNPS)", COMPANY.rnps],
+              ["Collection location", `${COMPANY.collection} (exact instructions given by WhatsApp)`],
+              ["Email", <a key="e" href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>],
+              ["Telephone", <a key="t" href={CONTACT.phoneHref}>{CONTACT.phone}</a>],
+              [
+                "WhatsApp",
+                <a key="w" href={CONTACT.whatsappHref} target="_blank" rel="noopener noreferrer">
+                  {CONTACT.whatsapp}
+                </a>,
+              ],
+            ]}
+          />
+        </Panel>
+      </Section>
+
+      <ClosingCta secondary={{ href: "/contact", label: "Contact Us" }} />
+    </>
   );
 }

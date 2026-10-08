@@ -1,0 +1,304 @@
+/* Decorative pictures for the essential pages (light sections). */
+
+.stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  max-width: 520px;
+  margin-inline: auto;
+  padding: 22px 6px;
+}
+
+/* ——— A photo feathered on every edge ——— */
+
+.photo {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: 340px;
+  margin-inline: auto;
+  -webkit-mask-image:
+    linear-gradient(90deg, transparent 0%, #000 14%, #000 86%, transparent 100%),
+    linear-gradient(180deg, transparent 0%, #000 12%, #000 82%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(90deg, transparent 0%, #000 14%, #000 86%, transparent 100%),
+    linear-gradient(180deg, transparent 0%, #000 12%, #000 82%, transparent 100%);
+  mask-composite: intersect;
+}
+
+/* ——— Builder preview ——— */
+
+.builder {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: 12px;
+  width: min(100%, 400px);
+  padding: 18px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #ffffff 0%, #f6f9ff 55%, #edf3fd 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.9),
+    0 0 0 1px rgba(16, 42, 84, 0.06),
+    0 24px 48px -26px rgba(18, 60, 140, 0.5);
+}
+
+.label {
+  font-size: var(--fs-small);
+  font-weight: 600;
+  color: #6b7a90;
+}
+
+.segment {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  padding: 4px;
+  border-radius: 12px;
+  background: #eef3fa;
+}
+
+.segment span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 34px;
+  border-radius: 9px;
+  font-size: var(--fs-small);
+  font-weight: 600;
+  color: #46566c;
+}
+
+.segment svg {
+  width: 15px;
+  height: 15px;
+}
+
+.segOn {
+  color: #fff !important;
+  background: linear-gradient(105deg, #0060f0 0%, #0a7aff 50%, #2b9bff 100%);
+  box-shadow: 0 6px 14px -8px rgba(0, 90, 255, 0.8);
+}
+
+.builderFoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(16, 42, 84, 0.08);
+}
+
+.price {
+  font-size: var(--fs-label);
+  font-weight: 700;
+  color: #0a5cff;
+}
+
+/* the rear plate peeking out behind the card */
+.rear {
+  position: absolute;
+  z-index: 1;
+  right: -2%;
+  bottom: -2px;
+  width: 62%;
+  transform: rotate(-6deg);
+  filter: drop-shadow(0 14px 18px rgba(18, 52, 110, 0.22));
+}
+
+/* ——— Documents ——— */
+
+.docStage {
+  min-height: 330px;
+}
+
+.doc {
+  display: grid;
+  gap: 10px;
+  width: min(84%, 330px);
+  padding: 18px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #ffffff 0%, #f5f8fe 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.9),
+    0 0 0 1px rgba(16, 42, 84, 0.07),
+    0 22px 44px -24px rgba(18, 60, 140, 0.45);
+}
+
+.docBack {
+  grid-area: 1 / 1;
+  transform: translate(-14%, -34%) rotate(-7deg);
+  background: linear-gradient(135deg, #f2fbf6 0%, #e4f3ea 100%);
+}
+
+.docFront {
+  grid-area: 1 / 1;
+  transform: translate(10%, 26%) rotate(4deg);
+}
+
+.docHead {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.docHead > span:last-child {
+  display: grid;
+  gap: 1px;
+}
+
+.docHead strong {
+  font-size: var(--fs-label);
+  font-weight: 700;
+  color: #0a1424;
+}
+
+.docHead em {
+  font-size: var(--fs-small);
+  font-style: normal;
+  color: #6b7a90;
+}
+
+.docIcon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  color: #0a5cff;
+  background: linear-gradient(160deg, #e8f1ff 0%, #d6e6ff 100%);
+}
+
+.docBack .docIcon {
+  color: #127a45;
+  background: linear-gradient(160deg, #e2f6ea 0%, #cdeedb 100%);
+}
+
+.docIcon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.line {
+  display: block;
+  height: 7px;
+  border-radius: 4px;
+  background: rgba(16, 42, 84, 0.09);
+}
+
+.docReg {
+  justify-self: start;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: var(--fs-small);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #0a1424;
+  background: #ffd21f;
+}
+
+.licence {
+  display: flex;
+  gap: 14px;
+}
+
+.face {
+  flex-shrink: 0;
+  width: 54px;
+  height: 64px;
+  border-radius: 10px;
+  background:
+    radial-gradient(circle at 50% 38%, #b9c7da 0 15px, transparent 16px),
+    radial-gradient(ellipse 26px 18px at 50% 100%, #b9c7da 0 99%, transparent 100%),
+    #e7eef8;
+}
+
+.lines {
+  display: grid;
+  flex: 1;
+  align-content: center;
+  gap: 10px;
+}
+
+.stamp {
+  position: absolute;
+  z-index: 3;
+  right: 0;
+  top: 2%;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: var(--fs-small);
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(105deg, #0060f0 0%, #0a7aff 50%, #2b9bff 100%);
+  box-shadow: 0 12px 24px -12px rgba(0, 90, 255, 0.9);
+}
+
+.stamp svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* ——— Delivery: the collection point and the Royal Mail alternative ——— */
+
+.chip {
+  position: absolute;
+  left: 4%;
+  bottom: 12%;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px 10px 10px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #ffffff 0%, #f6f9ff 100%);
+  box-shadow:
+    0 0 0 1px rgba(16, 42, 84, 0.07),
+    0 18px 36px -18px rgba(18, 60, 140, 0.55);
+}
+
+.chipMark {
+  width: 40px;
+  height: 40px;
+}
+
+.chip > span {
+  display: grid;
+  gap: 1px;
+}
+
+.chip strong {
+  font-size: var(--fs-label);
+  color: #0a1424;
+}
+
+.chip em {
+  font-size: var(--fs-small);
+  font-style: normal;
+  color: #6b7a90;
+}
+
+@media (max-width: 559px) {
+  .stage {
+    padding: 18px 0;
+  }
+
+  .doc {
+    padding: 14px;
+  }
+
+  .docBack {
+    transform: translate(-7%, -30%) rotate(-6deg);
+  }
+
+  .docFront {
+    transform: translate(7%, 24%) rotate(4deg);
+  }
+}

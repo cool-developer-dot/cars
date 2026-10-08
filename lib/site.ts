@@ -172,6 +172,27 @@ export const PRODUCT_PAGE_LINKS: Record<string, { style?: StyleId; format?: Plat
   ...Object.fromEntries(SPECIALITY_ORDER.map((id) => [SPECIALITY[id].path, { format: SPECIALITY[id].format }])),
 };
 
+/** The essential pages (About, Delivery, Terms…), built on components/infoPage.
+    The footer lays these out on the page container, under their own closing call to action. */
+export const INFO_PAGE_PATHS = [
+  "/about",
+  "/contact",
+  "/delivery",
+  "/documents-you-need",
+  "/returns",
+  "/warranty",
+  "/terms",
+  "/privacy",
+  "/cookies",
+  "/accessibility",
+  "/prices",
+  "/faqs",
+  "/reviews",
+  "/how-it-works",
+  "/areas-we-cover",
+  "/legal-number-plates",
+];
+
 export const gbp = (n: number) => `£${n.toFixed(2)}`;
 export const pairPrice = (id: StyleId) => PRICES[id].pair;
 /** Cheapest single plate on the site — for "from £x" copy */

@@ -14,7 +14,11 @@ const nextConfig: NextConfig = {
     "*.local",
   ],
   async redirects() {
-    return [{ source: "/help", destination: "/faqs", permanent: true }];
+    return [
+      { source: "/help", destination: "/faqs", permanent: true },
+      // the delivery page moved to /delivery (the URL in the client's content plan)
+      { source: "/delivery-collection", destination: "/delivery", permanent: true },
+    ];
   },
   images: {
     // Every image in /public is already a right-sized WebP, so skip the

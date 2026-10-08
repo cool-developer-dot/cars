@@ -22,13 +22,13 @@ export const HOME_FAQS: Faq[] = [
     id: "other-towns",
     q: "Do you have shops in other towns?",
     a: "No — one collection point, in Ilford. Everywhere else, we deliver by Royal Mail.",
-    links: [{ label: "Delivery areas", href: "/delivery-collection" }],
+    links: [{ label: "Areas we cover", href: "/areas-we-cover" }],
   },
   {
     id: "documents",
     q: "Do I need documents?",
     a: "Yes. UK law requires proof of your name and address, and proof you're entitled to use the registration.",
-    links: [{ label: "Documents you'll need", href: "/#documents" }],
+    links: [{ label: "Documents you need", href: "/documents-you-need" }],
   },
   {
     id: "one-plate",
@@ -55,7 +55,7 @@ export const HOME_FAQS: Faq[] = [
     id: "fault",
     q: "What if my plate has a manufacturing fault?",
     a: "Contact us and we'll assess it.",
-    links: [{ label: "Warranty and faulty plates", href: "/faqs#warranty" }],
+    links: [{ label: "Warranty and faulty plates", href: "/warranty" }],
   },
 ];
 
@@ -69,7 +69,7 @@ export const FAQ_GROUPS: FaqGroup[] = [
         id: "cost",
         q: "How much do number plates cost?",
         a: `From ${gbp(FROM_PRICE)} for one standard plate. A pair is a front and a rear plate.`,
-        links: [{ label: "Price list", href: "/plate-styles" }],
+        links: [{ label: "Price list", href: "/prices" }],
       },
       {
         id: "just-one",
@@ -92,7 +92,7 @@ export const FAQ_GROUPS: FaqGroup[] = [
         id: "what-docs",
         q: "What documents do I need?",
         a: "Proof of your name and address, and proof you can use the registration.",
-        links: [{ label: "Documents you'll need", href: "/#documents" }],
+        links: [{ label: "Documents you need", href: "/documents-you-need" }],
       },
       {
         id: "passport",
@@ -103,6 +103,7 @@ export const FAQ_GROUPS: FaqGroup[] = [
         id: "why-check",
         q: "Why do you need to check my documents?",
         a: "The DVLA requires a registered supplier to check identity and entitlement before supplying road-use plates.",
+        links: [{ label: "Legal number plates", href: "/legal-number-plates" }],
       },
     ],
   },
@@ -114,7 +115,7 @@ export const FAQ_GROUPS: FaqGroup[] = [
         id: "delivery-cost",
         q: "How much is delivery?",
         a: `${DELIVERY.firstClass} ${DELIVERY.tracked} ${DELIVERY.aims} For example, ${DELIVERY_EXAMPLE.charAt(0).toLowerCase()}${DELIVERY_EXAMPLE.slice(1)}`,
-        links: [{ label: "Delivery and dispatch", href: "/delivery-collection" }],
+        links: [{ label: "Delivery and dispatch", href: "/delivery" }],
       },
       {
         id: "dispatch",
@@ -130,12 +131,13 @@ export const FAQ_GROUPS: FaqGroup[] = [
         id: "collect",
         q: "Can I collect my plates?",
         a: `Yes, from Castleview Gardens, Ilford, IG1 3QF. ${DELIVERY.collectionReady}`,
-        links: [{ label: "Collection in Ilford", href: "/delivery-collection#collection" }],
+        links: [{ label: "Collection in Ilford", href: "/delivery#collection" }],
       },
       {
         id: "shop-near",
         q: "Do you have a shop near me?",
         a: "We have one collection location, in Ilford. We don't have shops or branches elsewhere.",
+        links: [{ label: "Areas we cover", href: "/areas-we-cover" }],
       },
     ],
   },
@@ -146,7 +148,11 @@ export const FAQ_GROUPS: FaqGroup[] = [
       {
         id: "road-legal",
         q: "Are your plates road legal?",
-        a: "Each product page explains the finish and any legal information. Road-use plates are intended to meet the legal requirements, and where a style or format needs additional checks, its page says so. Ghost's compliance information is being finalised.",
+        a: "Each product page explains the finish and any legal information. Road-use plates are intended to meet the legal requirements, and where a style or format needs additional checks, its page says so. Ghost's compliance information is being finalised: see the Ghost page.",
+        links: [
+          { label: "Ghost plates", href: "/ghost-number-plates" },
+          { label: "Legal number plates", href: "/legal-number-plates" },
+        ],
       },
       {
         id: "mot",
@@ -169,11 +175,13 @@ export const FAQ_GROUPS: FaqGroup[] = [
         id: "warranty",
         q: "Is there a warranty?",
         a: "New orders carry a manufacturing-defect warranty: 6 months for Standard, 3D Gel and 4D, and 12 months for 5D, Ghost and Bevel, starting on the delivery or collection date. It is in addition to your statutory rights. If you were sold a longer guarantee on an earlier order, that guarantee continues to apply. A warranty is not a statement that a product is approved for road use.",
+        links: [{ label: "Warranty and faulty plates", href: "/warranty" }],
       },
       {
         id: "faulty",
         q: "What if my plate is faulty?",
         a: `${CONTACT_LINE} with your order number. Photos help if you can take them, but you don't need them to make a claim; if you can't, we'll arrange another way to assess the plate. There is no 24-hour reporting deadline that removes your statutory rights.`,
+        links: [{ label: "Faulty plates and warranty", href: "/warranty" }],
       },
       {
         id: "stolen",

@@ -1,0 +1,76 @@
+/* The measured plate drawing on /legal-number-plates (dark section). */
+
+.figure {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.plate {
+  stroke: rgba(10, 20, 36, 0.18);
+  stroke-width: 1.2;
+  filter: drop-shadow(0 18px 22px rgba(0, 8, 30, 0.45));
+}
+
+/* the 50 × 79mm cell behind each character, faintly outlined */
+.cell {
+  fill: rgba(10, 92, 255, 0.05);
+  stroke: rgba(10, 92, 255, 0.35);
+  stroke-width: 0.8;
+  stroke-dasharray: 3 3;
+}
+
+.char {
+  font-size: 114px;
+  font-weight: 700;
+  fill: #0b0f16;
+}
+
+.marking {
+  font-family: var(--font-ui);
+  font-size: 6.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  fill: #5d6b80;
+}
+
+.dim line {
+  stroke: #4ea6ff;
+  stroke-width: 1.4;
+  vector-effect: non-scaling-stroke;
+}
+
+.label {
+  font-family: var(--font-ui);
+  font-size: 19px;
+  font-weight: 700;
+  fill: #e9f2ff;
+}
+
+.caption {
+  margin: 14px 0 0;
+  font-size: var(--fs-small);
+  line-height: 1.5;
+  text-align: center;
+  color: var(--muted);
+}
+
+/* phones: the drawing is narrow, so its labels grow to stay readable */
+@media (max-width: 559px) {
+  .label {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 899px) {
+  .plate {
+    filter: none;
+  }
+}

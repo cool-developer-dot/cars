@@ -39,7 +39,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Plate Styles", href: "/plate-styles", hasMenu: true, styles: true, Icon: CarFront },
   {
     label: "Delivery & Collection",
-    href: "/delivery-collection",
+    href: "/delivery",
     Icon: Truck,
   },
   { label: "Help", href: "/faqs", hasMenu: true, Icon: CircleHelp },
