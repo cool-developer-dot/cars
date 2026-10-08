@@ -115,7 +115,7 @@ export const PRODUCTS: Record<ProductContent["id"], ProductContent> = {
     path: "/standard-number-plates",
     metaTitle: `Standard Number Plates from ${single("standard")} | 2D Printed`,
     metaDescription:
-      `Standard printed number plates made to order, from ${single("standard")} per plate. The simplest, lowest-priced way to replace a plate. Royal Mail delivery or Ilford collection.`,
+      `Standard printed number plates made to order, from ${single("standard")} per plate. The simplest, lowest-priced way to replace a plate. Royal Mail or Ilford collection.`,
     short: "Standard",
     h1: "Standard Replacement Number Plates",
     lead: "Flat, printed characters on a reflective acrylic plate — our lowest-priced style, single or in a pair.",
@@ -197,7 +197,7 @@ export const PRODUCTS: Record<ProductContent["id"], ProductContent> = {
     path: "/3d-number-plates",
     metaTitle: `3D Number Plates from ${single("3d")} | 3D Gel Plates`,
     metaDescription:
-      `3D gel number plates with raised, domed resin characters, made to order. Single plates from ${single("3d")}, pairs from ${pair("3d")}. Royal Mail delivery or Ilford collection.`,
+      `3D gel number plates with raised, domed resin characters, made to order. Single plates from ${single("3d")}, pairs from ${pair("3d")}. Royal Mail or Ilford collection.`,
     short: "3D",
     h1: "3D Number Plates",
     lead: "Raised, domed resin characters — single plates or matching pairs, made to order.",
@@ -285,7 +285,7 @@ export const PRODUCTS: Record<ProductContent["id"], ProductContent> = {
     path: "/4d-number-plates",
     metaTitle: `4D Number Plates from ${single("4d")} | Laser-Cut Acrylic`,
     metaDescription:
-      `4D number plates with laser-cut acrylic characters, made to order. Single plates from ${single("4d")}, pairs from ${pair("4d")}. Royal Mail delivery or Ilford collection.`,
+      `4D number plates with laser-cut acrylic characters, made to order. Single plates from ${single("4d")}, pairs from ${pair("4d")}. Royal Mail or Ilford collection.`,
     short: "4D",
     h1: "4D Number Plates",
     lead: "Laser-cut acrylic characters, bonded to the plate — single plates or matching pairs, made to order.",
@@ -369,7 +369,7 @@ export const PRODUCTS: Record<ProductContent["id"], ProductContent> = {
     path: "/5d-number-plates",
     metaTitle: `5D Number Plates from ${single("5d")} | 4D Gel Plates`,
     metaDescription:
-      `5D number plates — acrylic characters with a gel top layer, made to order. Single plates from ${single("5d")}, pairs from ${pair("5d")}. Royal Mail delivery or Ilford collection.`,
+      `5D number plates — acrylic characters with a gel top layer, made to order. Single plates from ${single("5d")}, pairs from ${pair("5d")}. Royal Mail or Ilford collection.`,
     short: "5D",
     h1: "5D Number Plates",
     lead: "Laser-cut acrylic characters with a gel top layer — also known as 4D gel — single plates or matching pairs.",
@@ -446,7 +446,7 @@ export const PRODUCTS: Record<ProductContent["id"], ProductContent> = {
     path: "/ghost-number-plates",
     metaTitle: `Ghost Number Plates from ${single("ghost")} | Royal Mail Delivery`,
     metaDescription:
-      `Ghost number plates, made to order from ${single("ghost")} per plate. A distinctive character finish. Royal Mail delivery or Ilford collection.`,
+      `Ghost number plates, made to order from ${single("ghost")} per plate. A distinctive character finish. Royal Mail or Ilford collection.`,
     short: "Ghost",
     h1: "Ghost Number Plates",
     lead: "A distinctive styled character finish, made to order — single plates or matching pairs.",
@@ -761,9 +761,9 @@ export const PRODUCTS: Record<ProductContent["id"], ProductContent> = {
     style: "standard",
     format: SPECIALITY.ev.format,
     path: SPECIALITY.ev.path,
-    metaTitle: `EV Green Flash Number Plates from ${fSingle("ev")} | Electric Vehicle Plates`,
+    metaTitle: `EV Green Flash Number Plates from ${fSingle("ev")} | Zero-Emission`,
     metaDescription:
-      `Green flash number plates for zero-emission vehicles, made to order in any style. Single plates from ${fSingle("ev")}, pairs from ${fPair("ev")}. Royal Mail delivery or Ilford collection.`,
+      `Green flash number plates for zero-emission vehicles, in any style. Single plates from ${fSingle("ev")}, pairs from ${fPair("ev")}. Royal Mail or Ilford collection.`,
     short: "EV",
     h1: "EV Green Flash Number Plates",
     lead: "The green flash for zero-emission vehicles — single plates or matching pairs, made to order in any style.",
@@ -841,7 +841,7 @@ export const PRODUCTS: Record<ProductContent["id"], ProductContent> = {
     path: "/bevel-number-plates",
     metaTitle: `Bevel Number Plates from ${single("bevel")} | Diamond-Cut`,
     metaDescription:
-      `Bevel number plates with angled, diamond-cut character edges, made to order. Single plates from ${single("bevel")}, pairs from ${pair("bevel")}. Royal Mail delivery or Ilford collection.`,
+      `Bevel number plates with angled, diamond-cut character edges, made to order. Single plates from ${single("bevel")}, pairs from ${pair("bevel")}. Royal Mail or Ilford collection.`,
     short: "Bevel",
     h1: "Bevel Number Plates",
     lead: "Acrylic characters with an angled, diamond-cut edge — single plates or matching pairs.",

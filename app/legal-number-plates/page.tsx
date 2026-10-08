@@ -25,10 +25,11 @@ import h from "@/components/home/home.module.css";
 import s from "@/components/infoPage/info.module.css";
 
 export const metadata = infoMetadata({
-  title: "Legal Number Plates and Registered Suppliers | ReplacementPlates",
+  title: "Legal Number Plates: UK Rules | ReplacementPlates",
   description:
-    "What makes a UK number plate legal: reflective material, correct characters and spacing, supplier and British Standard markings, and why you must use a registered supplier.",
+    "What makes a UK number plate legal: reflective material, character size and spacing, supplier and BS AU 145e markings, and why you need a registered supplier.",
   path: "/legal-number-plates",
+  image: "/og/legal-car.jpg",
 });
 
 const STYLES: StyleId[] = ["standard", "3d", "4d", "5d", "ghost", "bevel"];

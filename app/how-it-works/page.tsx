@@ -16,6 +16,7 @@ export const metadata = infoMetadata({
   description:
     "How ordering number plates from ReplacementPlates works: build your plate, provide documents, we check, then delivery or collection.",
   path: "/how-it-works",
+  image: "/og/4d-intro.jpg",
 });
 
 export default function HowItWorksPage() {

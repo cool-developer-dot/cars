@@ -11,8 +11,9 @@ import { COMPANY, CONTACT } from "@/lib/site";
 export const metadata = infoMetadata({
   title: "Privacy Policy | ReplacementPlates",
   description:
-    "How Private Number Plate Maker Ltd, trading as ReplacementPlates, uses your personal information, including the documents we check before supplying number plates, and how to exercise your rights or complain.",
+    "How ReplacementPlates (Private Number Plate Maker Ltd) uses your personal information, including the documents we check, and how to use your rights or complain.",
   path: "/privacy",
+  image: "/og/default.jpg",
 });
 
 const ext = { target: "_blank", rel: "noopener noreferrer" } as const;

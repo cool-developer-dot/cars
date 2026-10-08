@@ -12,6 +12,7 @@ export const metadata = infoMetadata({
   description:
     "Six- and twelve-month manufacturing-defect warranty on new orders, what it covers, how to claim, and how it sits alongside your statutory rights.",
   path: "/warranty",
+  image: "/og/care.jpg",
 });
 
 /** Each finish's warranty, shown with a close-up of its characters */

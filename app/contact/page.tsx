@@ -14,6 +14,7 @@ export const metadata = infoMetadata({
   description:
     "Email, call or WhatsApp ReplacementPlates about your order, documents or collection, or write to us. Complaints and data protection requests too.",
   path: "/contact",
+  image: "/og/default.jpg",
 });
 
 const HELP: CardItem[] = [

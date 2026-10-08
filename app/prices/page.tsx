@@ -22,8 +22,9 @@ import s from "@/components/infoPage/info.module.css";
 
 export const metadata = infoMetadata({
   title: "Number Plate Prices | ReplacementPlates",
-  description: `ReplacementPlates prices for one plate and for a front and rear pair, for Standard, 3D, 4D, 5D, Ghost and Bevel number plates, from ${gbp(FROM_PRICE)}, with delivery charges shown.`,
+  description: `Number plate prices for one plate or a front and rear pair in Standard, 3D, 4D, 5D, Ghost and Bevel, from ${gbp(FROM_PRICE)}, with delivery charges shown.`,
   path: "/prices",
+  image: "/og/intro.jpg",
 });
 
 const { firstClass, freeFrom, tracked } = DELIVERY_FEES;

@@ -10,6 +10,7 @@ export const metadata = infoMetadata({
   description:
     "How to get help ordering number plates from ReplacementPlates if you find the website difficult to use, and what we are doing about accessibility.",
   path: "/accessibility",
+  image: "/og/default.jpg",
 });
 
 export default function AccessibilityPage() {

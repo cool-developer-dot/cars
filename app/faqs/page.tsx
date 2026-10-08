@@ -11,8 +11,9 @@ import s from "@/components/infoPage/info.module.css";
 export const metadata = infoMetadata({
   title: "Number Plate FAQs | ReplacementPlates",
   description:
-    "Answers to common questions about ordering, documents, delivery charges, collection, legal requirements, cancellation, warranty and faulty plates at ReplacementPlates.",
+    "Answers on ordering, documents, delivery charges, collection, the legal rules, cancellation, warranty and faulty plates at ReplacementPlates.",
   path: "/faqs",
+  image: "/og/front-car.jpg",
 });
 
 /** Group headings in Title Case */

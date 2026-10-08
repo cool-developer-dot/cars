@@ -11,8 +11,9 @@ import { COMPANY, CONTACT, DELIVERY, GOV_UK_DOCS_URL, WARRANTY_MONTHS, type Styl
 export const metadata = infoMetadata({
   title: "Terms and Conditions | ReplacementPlates",
   description:
-    "Terms of sale for ReplacementPlates, a trading name of Private Number Plate Maker Ltd: orders, document checks, delivery charges, cancellation, warranty, faulty goods and your legal rights.",
+    "Terms of sale for ReplacementPlates (Private Number Plate Maker Ltd): orders, document checks, delivery, cancellation, warranty and your legal rights.",
   path: "/terms",
+  image: "/og/default.jpg",
 });
 
 const ext = { target: "_blank", rel: "noopener noreferrer" } as const;

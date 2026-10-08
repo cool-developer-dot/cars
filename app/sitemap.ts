@@ -33,5 +33,11 @@ const ROUTES = [
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return ROUTES.map((route) => ({ url: `${BASE}${route}` }));
+  const lastModified = new Date();
+  return ROUTES.map((route) => ({
+    url: `${BASE}${route}`,
+    lastModified,
+    changeFrequency: "monthly",
+    priority: route === "" ? 1 : route.endsWith("-number-plates") || route === "/prices" ? 0.8 : 0.6,
+  }));
 }

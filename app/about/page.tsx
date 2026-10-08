@@ -12,6 +12,7 @@ export const metadata = infoMetadata({
   description:
     "ReplacementPlates is a trading name of Private Number Plate Maker Ltd, a DVLA-registered number plate supplier. Company details and how to contact us.",
   path: "/about",
+  image: "/og/gel-plates.jpg",
 });
 
 /** Each finish, shown with its own render */

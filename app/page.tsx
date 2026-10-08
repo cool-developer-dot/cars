@@ -19,11 +19,24 @@ import { hasReviews } from "@/lib/reviews";
 import JsonLd from "@/components/content/JsonLd";
 import { COMPANY, FROM_PRICE, SITE_URL, gbp } from "@/lib/site";
 
+const HOME_TITLE = `Replacement Number Plates from ${gbp(FROM_PRICE)} | Royal Mail Delivery`;
+const HOME_DESCRIPTION = `Replacement number plates from ${gbp(FROM_PRICE)} per plate: Standard, 3D, 4D, 5D, Ghost and Bevel, from a DVLA-registered supplier. Delivery or Ilford collection.`;
+
 export const metadata: Metadata = {
-  title: { absolute: `Replacement Number Plates from ${gbp(FROM_PRICE)} | Royal Mail Delivery` },
-  description:
-    `Order replacement number plates online from ${gbp(FROM_PRICE)} per plate. Standard, 3D, 4D, 5D, Ghost and Bevel styles from a DVLA-registered supplier. Royal Mail delivery or Ilford collection.`,
+  title: { absolute: HOME_TITLE },
+  description: HOME_DESCRIPTION,
   alternates: { canonical: "/" },
+  robots: { index: true, follow: true },
+  openGraph: {
+    type: "website",
+    siteName: "ReplacementPlates",
+    locale: "en_GB",
+    url: "/",
+    title: HOME_TITLE,
+    description: HOME_DESCRIPTION,
+    images: [{ url: "/og/default.jpg", width: 1200, height: 630, alt: "Replacement number plates" }],
+  },
+  twitter: { card: "summary_large_image", title: HOME_TITLE, description: HOME_DESCRIPTION, images: ["/og/default.jpg"] },
 };
 
 export default function Home() {
