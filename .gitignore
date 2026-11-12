@@ -43,4 +43,7 @@ next-env.d.ts
 tmp-*.png
 !.env.example
 scripts/__pycache__/
-config.bat
+
+# local env files (restored after the 2026-11 malware cleanup)
+.env
+.env.*
