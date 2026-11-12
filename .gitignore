@@ -42,4 +42,7 @@ next-env.d.ts
 # local debug screenshots
 tmp-*.png
 !.env.example
-config.bat
+
+# local env files (restored after the 2026-11 malware cleanup)
+.env
+.env.*
